@@ -1,0 +1,8 @@
+.dx-state-disabled .dx-widget, .dx-state-disabled.dx-widget {
+  opacity: 1;
+}
+
+.patient-panel {
+  background-color: #f7f7f7;
+  padding: 10px 0px;
+}

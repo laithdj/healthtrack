@@ -1,0 +1,177 @@
+<div class="notes-container">
+  <div class="row" style="padding: 0px, 30px, 0px, 30px;">
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <div class="patient-panel"
+            style="margin-right: 30px; margin-left: 30px; margin-bottom:0px; margin-top: 30px;">
+            <div class="row">
+              <div class="col">
+                <div *ngIf="create==true" class="long-title">
+                  <h3>Add New Product</h3>
+                </div>
+                <div *ngIf="create==false" class="long-title">
+                    <h3>Edit Product</h3>
+                </div>
+                <div id="form-container" class="mt-4">
+                  <dx-form #createForm id="form" [formData]="product" [colCount]="2">
+                    <dxi-item itemType="group" caption="Product">
+                      <!--<dxi-item [label]="{ text:'Status' }">
+                        <div>
+                          <dx-select-box [items]="status" [(value)]="status[0]" searchEnabled=true displayExpr="name">
+                             <dx-validator>
+                                            <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                             </dx-validator>
+                          </dx-select-box>
+                        </div>
+                      </dxi-item>-->
+                      <dxi-item [label]="{ text:'SPC/Model' }">
+                        <div>
+                          <dx-text-box [(value)]="product.model" [maxLength]="50">
+                             <dx-validator>
+                                  <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                             </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </dxi-item>
+                     <!-- <dxi-item [label]="{ text:'UPN' }">
+                        <div>
+                          <dx-text-box >
+                             <dx-validator>
+                                  <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                             </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </dxi-item>
+                      <dxi-item [label]="{ text:'LPC' }">
+                        <div>
+                          <dx-text-box >
+                             <dx-validator>
+                                 <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                              </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </dxi-item>-->
+                    </dxi-item>
+                    <dxi-item itemType="group" caption="Classification" class="mt-2">
+                      <dxi-item [label]="{ text:'Equipment Categories' }">
+                        <dx-drop-down-box  #categories_list [(value)]="this.categoryNumber" valueExpr="categoryId" displayExpr="categoryName"
+                          placeholder="Select a value..." [showClearButton]="true" [dataSource]="categories"
+                          (onValueChanged)="syncTreeViewSelection()">
+                          <div   *dxTemplate="let data of 'content'">
+                            <dx-tree-view  [dataSource]="categories" dataStructure="plain" keyExpr="categoryId"
+                              parentIdExpr="parentCategory" selectionMode="multiple" showCheckBoxesMode="normal"
+                              [selectNodesRecursive]="false" displayExpr="categoryName" [selectByClick]="true"
+                              (onContentReady)="syncTreeViewSelection($event)"
+                              (onItemSelectionChanged)="treeView_itemSelectionChanged($event)">
+                            </dx-tree-view>
+                          </div>
+                          <dx-validator>
+                              <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                            </dx-validator>
+                        </dx-drop-down-box>
+                      </dxi-item>
+                    </dxi-item>
+                    <dxi-item itemType="group">
+                      <dxi-item [label]="{ text:'Description' }">
+                        <div   >
+                          <dx-text-area [(value)]="product.description" [height]="90" [maxLength]="499">
+                             <dx-validator>
+                                            <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                                          </dx-validator>
+                          </dx-text-area>
+                        </div>
+                      </dxi-item>
+                      <dxi-item [label]="{ text:'Additional Description' }">
+                        <div   >
+                          <dx-text-area [height]="90" [(value)]="product.additionalDescription" [maxLength]="499">
+                             <!--<dx-validator>
+                                            <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                                          </dx-validator>-->
+                          </dx-text-area>
+                        </div>
+                      </dxi-item>
+                    </dxi-item>
+                    <dxi-item itemType="group" caption="Companies">
+                        <dxi-item [label]="{ text:'Manufacturer' }">
+                            <div   >
+                              <dx-select-box #manufacturer [items]="companies" searchEnabled=true [showClearButton]="true" displayExpr="companyName" valueExpr="company_ID" 
+                                [(value)]="product.manufacturerCompany.company_ID">
+                                 <dx-validator>
+                                          <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                                        </dx-validator>
+                              </dx-select-box>
+                            </div>
+                          </dxi-item>
+                      <dxi-item [label]="{ text:'Primary Supplier' }">
+                        <div>
+                          <dx-select-box #primary  [items]="companies" searchEnabled=true [showClearButton]="true" displayExpr="companyName" valueExpr="company_ID" 
+                            [(value)]="product.primarySupplier.company_ID">
+                             <dx-validator>
+                                      <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                                    </dx-validator>
+                          </dx-select-box>
+                        </div>
+                      </dxi-item>
+                      <dxi-item [label]="{ text:'Secondary Supplier' }">
+                        <div   >
+                          <dx-select-box [items]="companies" [showClearButton]="true" searchEnabled=true displayExpr="companyName" valueExpr="company_ID" 
+                            [(value)]="product.secondarySupplier.company_ID" >
+                             <!--<dx-validator>
+                                            <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                                          </dx-validator>-->
+                          </dx-select-box>
+                        </div>
+                      </dxi-item>
+                      <dxi-item [label]="{ text:'' }">
+                        <div   >
+                          <dx-button type="default" text="Edit Companies" 
+                          (onClick)="EditCompanies()" style="align-content: center; margin-left:130px" [width]="133" [height]="26"></dx-button>
+                          <dx-button type="default" text="Refresh Companies" 
+                          (onClick)="getAllCompanies()" style="align-content: center; margin-left:5px" [width]="133" [height]="26"></dx-button>
+                        </div>
+                      </dxi-item>
+                      
+                      <!--<dxi-item dataField="Manufacturer">
+                        <div   >
+                          <dx-text-box [(value)]="product.manufacturer">
+                             <dx-validator>
+                                            <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                                          </dx-validator>
+                          </dx-text-box>
+                        </div>
+                      </dxi-item>-->
+                    </dxi-item>
+                  </dx-form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="create==false" class="row mb-5 ml-2 mt-2" style="padding: 0px, 30px, 0px, 30px;">
+    <div class="col" style="float: right; margin-right: 30px; margin-left:9px">
+    <hms-button-set-save [includeDeleteButton]="true"
+    (saveClicked)="updateProduct(product)"
+    (cancelClicked)="cancel()"
+    (deleteClicked)="deleteProduct(product.productId, product.model)" >
+    </hms-button-set-save>
+    </div>
+    </div>
+    
+    <div *ngIf="create==true" class="row mb-5 ml-2 mt-2" style="padding: 0px, 30px, 0px, 30px;">
+      <div class="col" style="float: right; margin-right: 30px; margin-left:9px">
+  
+      <hms-button-set-save [includeDeleteButton]="false"
+      (saveClicked)="createProduct(product)"
+      (cancelClicked)="cancel()"
+      >
+      </hms-button-set-save>
+      </div>
+      </div>
+</div>
+
+
+

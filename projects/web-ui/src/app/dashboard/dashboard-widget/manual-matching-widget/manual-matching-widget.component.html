@@ -1,0 +1,35 @@
+<div style="height: 168px">
+  <div class="manual-matching-header">
+    Manual Matching
+  </div>
+  <div style = "display: flex" class="manual-matching-explanation"> Unprocessed records need matching:</div>
+  <div class="manual-matching-content">
+    <div class="outer">
+      <div class="left-content">
+        <dx-button [width]="85" [height]="85"
+          [disabled]="inactive"
+          class="icon-button" 
+          (onClick)="openWindow()"
+          icon='data:image/gif;base64,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'>
+        </dx-button>
+      </div>
+      <div style="width: 100%"></div>
+      <div class="right-content">
+          <dx-form
+          [formData]="(manualMatchingData$ | async)"
+          [readOnly]="true">
+          <dxi-item dataField="totalDocuments"
+            editorType="dxNumberBox"
+            [editorOptions]="{ width: 40 }">
+            <dxo-label
+              location="left"
+              alignment="right">
+            </dxo-label>
+          </dxi-item>
+        </dx-form>
+      </div>
+    </div>
+  </div>
+</div>
+
+

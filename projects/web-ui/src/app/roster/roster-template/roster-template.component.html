@@ -1,0 +1,285 @@
+<div *ngIf="!(loading$ | async) && (templateSets$ | async)?.length > 0" id="roster-management">
+  <div style="display: flex">
+    <div style="width: auto; padding: 0px">
+      <div class="config-menu-container">
+        <app-roster-template-set></app-roster-template-set>
+        <div *ngIf="(selectedSet$ | async)" style="padding-top: 10px; padding-bottom: 10px">
+          <div *ngFor="let week of (selectedSet$ | async)?.weeks" style="display: flex">
+            <div class="week-label">
+              {{ week }}:
+            </div>
+            <div *ngFor="let day of daysInWeek" style="margin-right: 1px; margin-left: 1px">
+              <dx-button
+                [width]="34" type="default"
+                [text]="getDayOfWeek(day)"
+                [disabled]="(schedulerView$ | async) === 'Cycle'"
+                (onClick)="selectedDayChanged(week, day)"
+                [stylingMode]="((selectedDay$ | async) === day && (selectedWeek$ | async) === week) ? 'contained' : 'outlined'">
+              </dx-button>
+            </div>
+          </div>
+        </div>
+        <dx-form *ngIf="!(loading$ | async)" [width]="270">
+          <dxi-item editorType="dxRadioGroup"
+            [label]="{ text: 'Slot Size' }"
+            [editorOptions]="{ value: selectedDurationOption, items: durationOptions,
+              layout: 'horizontal', onValueChanged: onDurationChanged }">
+          </dxi-item>
+          <dxi-item editorType="dxRadioGroup"
+            [label]="{ text: 'View', visible: true }"
+            [editorOptions]="{ value: selectedSchedulerOption, items: schedulerOptions,
+              layout: 'horizontal', onValueChanged: onSchedulerViewChanged }">
+          </dxi-item>
+          <dxi-item editorType="dxRadioGroup"
+            [label]="{ text: '&zwnj;', visible: true, showColon: false }"
+            [editorOptions]="{ value: selectedView, items: viewOptions,
+              layout: 'horizontal', onValueChanged: onSelectedViewChanged }">
+          </dxi-item>
+        </dx-form>
+        <div *ngIf="(selectedView$ | async) === 'Location/Room'" style="padding-bottom: 5px">
+          <div style="font-size: 12px">Location/Room:</div>
+          <dx-select-box
+            [width]="'100%'"
+            [items]="(locationRooms$ | async)"
+            displayExpr="displayName"
+            [searchEnabled]="false"
+            [noDataText]="'No locations/rooms available'"
+            [value]="(selectedLocationRoom$ | async)"
+            (onValueChanged)="onLocationRoomChanged($event)">
+          </dx-select-box>
+        </div>
+        <div *ngIf="(selectedView$ | async) === 'Doctor/Staff'"
+          style="display: flex; padding-bottom: 4px; padding-top: 2px">
+          <div style="width: 52px"></div>
+          <dx-radio-group #dsRadioGroup
+            [items]="dsViewOptions"
+            layout="horizontal"
+            [(value)]="selectedDSOption"
+            (onValueChanged)="onDSViewChanged($event)">
+          </dx-radio-group>
+        </div>
+        <div *ngIf="(selectedView$ | async) === 'Doctor/Staff' && selectedDSOption === 'Staff'"
+          style="padding-bottom: 5px;">
+          <div style="font-size: 12px">Role:</div>
+          <dx-select-box [items]="(bookingRoles$ | async)"
+            [value]="(selectedBookingRole$ | async)" displayExpr="displayName"
+            (onValueChanged)="onSelectedBookingRoleChanged($event)">
+          </dx-select-box>
+        </div>
+        <div *ngIf="(selectedView$ | async) === 'Location/Room'" class="add-shift">
+          <div class="add-template-header">Add Template</div>
+          <div style="font-size: 12px">Doctor:</div>
+          <div style="padding-bottom: 5px">
+            <dx-select-box [width]="'100%'"
+              [items]="(doctors$ | async)"
+              displayExpr="doctorName"
+              [showClearButton]="true"
+              [searchEnabled]="false"
+              [noDataText]="'No doctors available'"
+              [(value)]="selectedDoctor"
+              [placeholder]="'Select a Doctor...'"
+              (onValueChanged)="onSelectedDoctorChanged($event)">
+            </dx-select-box>
+          </div>
+          <div style="font-size: 12px">Staff:</div>
+          <div *ngIf="(bookingRoles$ | async)?.length === 4" style="padding-bottom: 2px">
+            <dx-select-box
+              [width]="'100%'"
+              [items]="(staff1List$ | async)"
+              [(value)]="selectedStaff1"
+              displayExpr="staffName"
+              [searchEnabled]="false"
+              [showClearButton]="true"
+              [placeholder]="getStaffPlaceholder(1)"
+              [noDataText]="'No staff available'"
+              (onValueChanged)="onSelectedStaffChanged(1)">
+            </dx-select-box>
+          </div>
+          <div *ngIf="(bookingRoles$ | async)?.length === 4" style="padding-bottom: 2px">
+            <dx-select-box
+              [width]="'100%'"
+              [items]="(staff2List$ | async)"
+              [(value)]="selectedStaff2"
+              displayExpr="staffName"
+              [searchEnabled]="false"
+              [showClearButton]="true"
+              [placeholder]="getStaffPlaceholder(2)"
+              [noDataText]="'No staff available'"
+              (onValueChanged)="onSelectedStaffChanged(2)">
+            </dx-select-box>
+          </div>
+          <div *ngIf="(bookingRoles$ | async)?.length === 4" style="padding-bottom: 2px">
+            <dx-select-box
+              [width]="'100%'"
+              [items]="(staff3List$ | async)"
+              [(value)]="selectedStaff3"
+              displayExpr="staffName"
+              [searchEnabled]="false"
+              [showClearButton]="true"
+              [placeholder]="getStaffPlaceholder(3)"
+              [noDataText]="'No staff available'"
+              (onValueChanged)="onSelectedStaffChanged(3)">
+            </dx-select-box>
+          </div>
+          <div *ngIf="(bookingRoles$ | async)?.length === 4" style="padding-bottom: 2px">
+            <dx-select-box
+              [width]="'100%'"
+              [items]="(staff4List$ | async)"
+              [(value)]="selectedStaff4"
+              displayExpr="staffName"
+              [showClearButton]="true"
+              [searchEnabled]="false"
+              [placeholder]="getStaffPlaceholder(4)"
+              [noDataText]="'No staff available'"
+              (onValueChanged)="onSelectedStaffChanged(4)">
+            </dx-select-box>
+          </div>
+          <div style="padding-top: 3px" class="widget-container">
+            <div style="font-size: 12px">Session:</div>
+            <div>
+              <dx-radio-group
+                [items]="(sessions$ | async)"
+                [(value)]="selectedSession"
+                (onValueChanged)="onSessionChanged($event)"
+                itemTemplate="sessionTemplate">
+                <div style="display: flex" *dxTemplate="let session of 'sessionTemplate'">
+                  <div *ngIf="session.sessionId !== 0">
+                    {{ session.sessionId }}: {{ session.displayName }}
+                  </div>
+                  <div *ngIf="session.sessionId === 0"
+                    style="padding-top: 4px; padding-right: 4px">
+                    {{ session.displayName }}
+                  </div>
+                  <div style="padding: 0px 2px" *ngIf="session.sessionId === 0">
+                    <dx-date-box type="time" [width]="88"
+                      [disabled]="selectedSession.sessionId !== 0"
+                      [(value)]="customStart" [useMaskBehavior]="true"
+                      [valueChangeEvent]="'change keyup'"
+                      (onValueChanged)="customStartChanged($event)">
+                    </dx-date-box>
+                  </div>
+                  <div *ngIf="session.sessionId === 0"
+                    style="padding-top: 4px; padding-left: 2px; padding-right: 2px">
+                    -
+                  </div>
+                  <div style="padding: 0px 2px" *ngIf="session.sessionId === 0">
+                    <dx-date-box type="time" [width]="88"
+                      [disabled]="selectedSession.sessionId !== 0"
+                      [(value)]="customEnd" [useMaskBehavior]="true"
+                      [valueChangeEvent]="'change keyup'"
+                      (onValueChanged)="customEndChanged($event)">
+                    </dx-date-box>
+                  </div>
+                </div>
+              </dx-radio-group>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="(selectedView$ | async) === 'Doctor/Staff'" class="add-shift">
+          <div class="add-template-header">Add Template</div>
+          <div style="padding-bottom: 5px">
+            <div style="font-size: 12px">Location/Room:</div>
+            <dx-select-box
+              [width]="'100%'"
+              [items]="(locationRooms$ | async)"
+              displayExpr="displayName"
+              [searchEnabled]="false"
+              [value]="(selectedLocationRoom$ | async)"
+              (onValueChanged)="onLocationRoomChanged($event)"
+              [noDataText]="'No locations/rooms available'">
+            </dx-select-box>
+          </div>
+          <div style="padding-top: 3px; display: flex" class="widget-container">
+            <div style="font-size: 12px; padding-top: 3px; padding-right: 5px">Custom:</div>
+            <div style="padding: 0px 2px">
+              <dx-date-box type="time"
+                [width]="96" [(value)]="customStart"
+                [valueChangeEvent]="'change keyup'"
+                (onValueChanged)="customStartChanged($event)"
+                [useMaskBehavior]="true">
+              </dx-date-box>
+            </div>
+            <div style="padding-left: 2px; padding-right: 2px">
+              -
+            </div>
+            <div style="padding: 0px 2px">
+              <dx-date-box type="time"
+                [width]="96" [(value)]="customEnd"
+                [valueChangeEvent]="'change keyup'"
+                (onValueChanged)="customEndChanged($event)"
+                [useMaskBehavior]="true">
+              </dx-date-box>
+            </div>
+          </div>
+        </div>
+        <div style="padding: 5px; display: flex">
+          <div style="padding-right: 5px; width: 100%">
+            <dx-button [width]="'100%'" text="Undo"
+              icon="undo" type="default" (onClick)="onUndoChanges()">
+            </dx-button>
+          </div>
+          <div style="padding-left: 5px; width: 100%">
+            <dx-button [width]="'100%'" text="Save"
+              icon="save" type="success" (onClick)="onSave()">
+            </dx-button>
+          </div>
+        </div>
+        <div style="padding: 5px;">
+          <div>
+            <dx-button text="Diary Actions" type="default" [width]="'100%'"
+              (onClick)="onDiaryActionsClicked()">
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width: calc(100% - 280px); padding: 0px">
+      <app-roster-template-scheduler
+        [selectedDay]="(selectedDay$ | async)"
+        [selectedWeek]="(selectedWeek$ | async)">
+      </app-roster-template-scheduler>
+    </div>
+  </div>
+</div>
+<div *ngIf="!(loading$ | async) && (!(templateSets$ | async) || (templateSets$ | async)?.length === 0)" class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <h3 style="padding: 50px 20px 20px 20px">No Roster Template Sets Found</h3>
+      <p>Please create a template set in order to use the roster template manager.</p>
+      <dx-form style="padding: 10px"
+        [width]="'100%'">
+        <dxi-item [label]="{ text: 'Set Name' }">
+          <div *dxTemplate>
+            <dx-text-box [(value)]="newTemplateSetName">
+              <dx-validator>
+                <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-box>
+          </div>
+          <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+        </dxi-item>
+        <dxi-item itemType="empty"></dxi-item>
+        <dxi-item
+          editorType="dxRadioGroup"
+          [label]="{ text: 'Cycle Length in Days' }"
+          [editorOptions]="{ items: cycleOptions, value: selectedCycleOption,
+            layout: 'horizontal', onValueChanged: onCycleChanged }">
+          <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+        </dxi-item>
+      </dx-form>
+      <dx-button style="float: right; margin-right: 20px"
+        text="Save" icon="save" type="success"
+        (onClick)="saveNewSetClicked()"
+        [useSubmitBehavior]="true">
+      </dx-button>
+    </div>
+  </div>
+</div>
+<dx-load-panel #loadPanel
+  [position]="{ of: '#roster-management' }"
+  [visible]="(loading$ | async)"
+  [showIndicator]="(loading$ | async)"
+  [showPane]="(loading$ | async)"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>
+<app-roster-template-apply></app-roster-template-apply>

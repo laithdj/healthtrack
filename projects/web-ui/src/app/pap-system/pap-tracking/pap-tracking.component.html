@@ -1,0 +1,163 @@
+<div class="container-fluid">
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col">
+      <app-patient-summary [patient]="patient"></app-patient-summary>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col"></div>
+    <div class="col-auto">
+      <dx-button text='Assign New Asset'
+        icon="add" [type]="'default'"
+        (onClick)="assign(patient.patient_ID)">
+      </dx-button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-panel">
+        <div style="display: flex;">
+          <div style="width: 50%;"></div>
+          <div>
+            <dx-form>
+              <dxi-item itemType="group" caption="Asset Transaction Filters">
+              </dxi-item>
+            </dx-form>
+            <div style="display: flex;">
+              <div style="margin-right: 10px; margin-top: 8px;">
+                <dx-form [width]="200">
+                  <dxi-item itemType="group">
+                    <dxi-item [label]="{text:'Issued From'}">
+                      <dx-date-box [(value)]="searchCriteria.inputDate" (onEnterKey)="search()"
+                        [useMaskBehavior]="true" type="date" showClearButton="true">
+                      </dx-date-box>
+                    </dxi-item>
+                    <dxi-item [label]="{text:'Issued To'}">
+                      <dx-date-box [(value)]="searchCriteria.inputDate2"
+                        (onEnterKey)="search()" [useMaskBehavior]="true" 
+                        type="date" showClearButton="true">
+                      </dx-date-box>
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+              </div>
+              <div style="margin-right: 10px; white-space: nowrap; margin-left: 10px;">
+                <dx-form>
+                  <dxi-item itemType="group" [colSpan]="2" >
+                    <dxi-item>
+                      <div>
+                        <dx-radio-group [items]="currentPastOptions" [value]="currentPast"
+                          (onValueChanged)="handleRadioGroup($event)"></dx-radio-group>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+              </div>
+              <div style="margin-right: 10px; margin-top: 8px; margin-left: 10px;">
+                <dx-form [width]="300">
+                  <dxi-item itemType="group" [colSpan]="3">
+                    <dxi-item [label]="{ text:'Type' }">
+                      <dx-select-box [items]="papTypes"
+                        searchEnabled=false displayExpr="categoryName"
+                        (onValueChanged)="updateSearchCriteriaType()"
+                        [(value)]="searchCriteria.equipmentType">
+                      </dx-select-box>
+                    </dxi-item>
+                    <dxi-item [label]="{text:'Model'}">
+                      <dx-select-box [items]="displayModels" searchEnabled='true'
+                        [(value)]="searchCriteria.model" displayExpr="model" valueExpr="model"></dx-select-box>
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+              </div>
+              <div style="margin-top: 8px; margin-left: 10px; margin-right: 10px;">
+                <dx-form [width]="250">
+                  <dxi-item itemType="group" [colSpan]="3">
+                    <dxi-item [label]="{ text:'Payment Status' }">
+                      <dx-select-box [items]="paymentStatuses"
+                        [(value)]="searchCriteria.paymentStatus"
+                        displayExpr="statusName" valueExpr="statusId">
+                      </dx-select-box>
+                    </dxi-item>
+                    <dxi-item [label]="{ text:'Dependency Levels' }">
+                      <dx-select-box [items]="dependency" displayExpr="displayValue"
+                        valueExpr="value" [(value)]="searchCriteria.dependencyLevel">
+                      </dx-select-box>
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+              </div>
+              <div style="margin-top: 7px; margin-right: 10px;">
+                <div>
+                  <dx-button text='Search' [type]="'default'" [width]="90"
+                    icon="search" (onClick)="search()">
+                  </dx-button>
+                </div>
+                <div style="margin-top: 3px;">
+                  <dx-button text='Reset' [type]="'default'" [width]="90"
+                    icon="refresh" (onClick)="reset()">
+                  </dx-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="width: 50%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <dx-data-grid #tracking_grid id="gridContainer"
+        [columnAutoWidth]="false"
+        [columnHidingEnabled]="false"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [hoverStateEnabled]="true"
+        [rowAlternationEnabled]="true"
+        (onRowClick)="doubleClickRow($event)"
+        [cellHintEnabled]='true'
+        [noDataText]="'No Transactions Found'"
+        [dataSource]="transactions"
+        [showBorders]="true">
+        <dxo-paging [pageSize]="20"></dxo-paging>
+        <dxo-pager 
+            [showPageSizeSelector]="false"
+            [showInfo]="true">
+        </dxo-pager>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-state-storing [enabled]="true" type="localStorage" storageKey="tracking_storage"></dxo-state-storing>
+        <dxi-column dataField="issuingDate" [width]="100" sortOrder=desc></dxi-column>
+        <dxi-column dataField="returnDate" [width]="85"></dxi-column>
+        <dxi-column dataField="manufacturer.companyName" caption="Manufacturer"></dxi-column>
+        <dxi-column dataField="model"></dxi-column>
+        <dxi-column cellTemplate="equipmentTypeCellTemplate" dataField="equipmentType" caption="Equipment Type" [width]="180">
+          <div *dxTemplate="let cell of 'equipmentTypeCellTemplate'">
+            {{combineEquipmentTypes(cell.data.equipmentType)}}
+          </div>
+        </dxi-column>
+        <dxi-column dataField="serialNumber" [width]="85" caption="Asset No"caption="Serial No"></dxi-column>
+        <dxi-column dataField="equipmentNumber" [width]="85" caption="Asset No"></dxi-column>
+        <dxi-column cellTemplate="paymentCellTemplate" dataField="paymentStatus" alignment="left" caption="Payment Status" [width]="125">
+          <div *dxTemplate="let cell of 'paymentCellTemplate'">
+            {{convertPaymentStatus(cell.data.paymentStatus)}}
+          </div>
+        </dxi-column>
+        <dxi-column cellTemplate="dependencyCellTemplate" dataField="dependencyLevel" alignment="left" caption="Dependency" [width]="110">
+          <div *dxTemplate="let cell of 'dependencyCellTemplate'">
+            {{getDependencyDisplay(cell.data.dependencyLevel)}}
+          </div>
+        </dxi-column>
+        <dxi-column cellTemplate="actionsCellTemplate" [width]="75" caption="Actions">
+          <div *dxTemplate="let cell of 'actionsCellTemplate'">
+            <div *ngIf="cell.data.Returned == null || cell.data.Assigned < cell.data.Returned">
+              <hms-button-edit
+              (editClicked)="edit(cell.data.transactionID)"></hms-button-edit>
+            </div>
+          </div>
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

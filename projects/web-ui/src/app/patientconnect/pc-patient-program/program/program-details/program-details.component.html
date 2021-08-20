@@ -1,0 +1,304 @@
+<div *ngIf="selectedProgram && selectedProgram.definition">
+  <div class="row" *ngIf="patient">
+    <div class="col">
+      <div class="pc-header">
+        {{ programType }}: {{ selectedProgram?.definition?.reason }}      
+      </div>
+    </div>
+  </div>
+  <div class="row"  >
+    <div class="col">
+      <div class="pc-body">
+        <dx-form>
+          <dxi-item itemType="group" *ngIf="selectedProgram">
+            <dxi-item itemType="tabbed" [tabPanelOptions]="{ deferRendering: false }">
+              <dxi-tab title="Details" style="padding: 10px;">
+                <dxi-item>
+                <dx-form [colCount]="5" id="form" [formData]="selectedProgram" [readOnly]="!editMode">
+                  <dxi-item [colSpan]="3" *ngIf="selectedProgram.deleted" [label]="{ text:'Deleted By' }"
+                    [disabled]="true">
+                    <div *dxTemplate>
+                      <dx-text-box [value]="selectedProgram.userDeleted"></dx-text-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item *ngIf="selectedProgram.deleted"
+                    [colSpan]="2"
+                    dataField="dateDeleted"
+                    [label]="{ text:'Deleted On' }"                
+                    [cssClass]="'highlightedField'"
+                    [disabled]="true">
+                  </dxi-item>
+                  <dxi-item [colSpan]="3" [label]="{ text: programType }">
+                    <div *dxTemplate="let data of 'content'" style="display: flex;">
+                      <div style="width: 100%">
+                        <dx-text-box [width]="'100%'" [readOnly]="true"
+                          [value]="selectedProgram.definition.reason">
+                        </dx-text-box>
+                    </div>
+                      <div style="margin-left: 10px;">
+                        <dx-button [disabled]="!editMode || (editMode && programCommenced)"
+                          [width]="60" [type]="'default'"
+                          [text]="'Select'" (onClick)="onSelectProgramClicked()">
+                        </dx-button>
+                      </div>
+                    </div>
+                  </dxi-item>
+                  <dxi-item [colSpan]="2"
+                    [label]="{ text:'Status' }"
+                    [cssClass]="statusClass(selectedProgram.connectStatus)">
+                      <div *dxTemplate style="display: flex;">
+                        <dx-select-box
+                          [items]="connectStatuses"
+                          [displayExpr]="'statusName'"
+                          [valueExpr]="'connectStatus'"
+                          [searchEnabled]="true"
+                          [width]="'100%'"
+                          [value]="selectedProgram?.connectStatus"
+                          [disabled]="true">
+                        </dx-select-box>
+                        <div *ngIf="selectedProgram.connectStatus === connectStatus.Error" style="padding-left: 5px;">
+                          <dx-button
+                            [type]="'default'"
+                            [text]="'Retry'"
+                            [width]="70"
+                            (onClick)="clearErrorStatus()">
+                          </dx-button>
+                        </div>                        
+                      </div>
+                  </dxi-item>
+                  <dxi-item [colSpan]="3" dataField="attendingDoctorId"
+                    [label]="{ text: 'Attending MO' }"
+                    editorType="dxSelectBox"
+                    [editorOptions]="{ items:doctors, displayExpr:'displayname',
+                      valueExpr:'doctorId', searchEnabled:'true' }">
+                  </dxi-item>
+                  <dxi-item [colSpan]="2" dataField="enrollmentDate"
+                    [label]="{ text:'Enrolment Date' }"
+                    editorType="dxDateBox"
+                    [editorOptions]="{ onValueChanged: onEnrolmentDateChanged, disabled: !newProgram }">
+                  </dxi-item>
+                  <dxi-item [colSpan]="3" [label]="{ text:'Location' }">
+                    <div *dxTemplate>
+                      <dx-select-box #locationSelectRef
+                        [(value)]="selectedProgram.locationId"
+                        [items]="locations"
+                        valueExpr="locationId"
+                        displayExpr="name"
+                        searchEnabled = "true"
+                        [readOnly]="!editMode">
+                      </dx-select-box>
+                    </div>
+                  </dxi-item>
+                  <dxi-item
+                    [colSpan]="2"
+                    dataField="referenceDate"
+                    editorType="dxDateBox"
+                    [label]="{ text: 'Reference Date' }"
+                    [editorOptions]="{ onValueChanged: referenceDateChanged }">
+                  </dxi-item>
+                  <dxi-item [colSpan]="1"
+                    dataField="frequencyValue"
+                    editorType="dxNumberBox"
+                    [label]="{ text: 'Frequency'}"
+                    [editorOptions]="{ showSpinButtons: true, min: 1, format:'#0', width: '50px',
+                      onValueChanged: onFreqValueChange }">
+                  </dxi-item>
+                  <dxi-item
+                    dataField="frequencyUnit"
+                    [colSpan]="4"
+                    editorType="dxRadioGroup"
+                    [label]="{ visible: false }"
+                    [editorOptions]="{ items:frequencyRadioGroupItems, displayExpr: 'name', valueExpr: 'id',
+                      layout: 'horizontal', onValueChanged: onFreqUnitChange }">
+                  </dxi-item>
+                  <dxi-item [colSpan]="4"
+                    dataField="bookingTypes"
+                    [visible]="selectedProgram.definition.bookingToCompleteType === 2"
+                    [editorOptions]="{readOnly:true}"
+                    >
+                  </dxi-item>
+                  <dxi-item [visible]="selectedProgram.definition.bookingToCompleteType === 2">
+                    <div *dxTemplate="let data of 'content'">
+                      <dx-button
+                        text="Select" type="default" [width]="90"
+                        (onClick)="onSelectBookingTypesClicked()"
+                        [disabled]="!editMode">
+                      </dx-button>
+                    </div>
+                  </dxi-item>
+                  <dxi-item [colSpan]="5"
+                    dataField="noteText"
+                    [label]="{ text: 'Notes' }">
+                    <div *dxTemplate>
+                      <dx-text-area [readOnly]="!editMode" [maxLength]="200"
+                        [height]="100" [(value)]="selectedProgram.noteText">
+                      </dx-text-area>
+                    </div>
+                  </dxi-item>
+                  <dxi-item
+                    dataField="cycleCount"
+                    editorType="dxNumberBox"
+                    [label]="{ text:'Cycle' }"
+                    [disabled]="true"
+                    [editorOptions]="{ showSpinButtons:false, format:'#0', width: '50px' }">
+                  </dxi-item>
+                  <dxi-item
+                    dataField="cyclesToComplete"
+                    editorType="dxNumberBox"
+                    [label]="{ text:'Of' }"
+                    [disabled]="selectedProgram?.definition?.type === 3 || selectedProgram?.definition?.type === 4"
+                    [editorOptions]="{ showSpinButtons:true, format:'#0', min:1, width: '60px' }">
+                  </dxi-item>
+                  <dxi-item>
+                    <div *dxTemplate>
+                      <dx-button
+                        text="Complete Cycle"
+                        type="default"
+                        (onClick)="onCompleteCycle()"
+                        [disabled]="!editMode || newProgram || (selectedProgram.connectStatus > 3)">
+                      </dx-button>
+                    </div>
+                  </dxi-item>
+                </dx-form>
+                <div style="display: flex; margin-top: 2px">
+                  <div style="padding: 0px 10px 0px 5px">
+                    Steps&nbsp;in&nbsp;Cycle:
+                  </div>
+                  <div>
+                    <dx-data-grid id="stepsGrid"
+                      [rowAlternationEnabled]="true"
+                      [showRowLines]="true"
+                      [showBorders]="true"
+                      (onContextMenuPreparing)="onContextMenuPreparing($event)"
+                      [dataSource]="selectedProgram?.definition?.actions">
+                      <dxo-sorting mode="none"></dxo-sorting>
+                      <dxi-column
+                        caption="Step #"
+                        dataField="step"
+                        alignment="right"
+                        [width]="50"
+                        dataType="string"
+                        [allowResizing]="false">
+                      </dxi-column>
+                      <dxi-column
+                        dataField="isNextAction"
+                        dataType="string"
+                        caption="Next"
+                        cellTemplate="cellTemplate"
+                        [width]="40">
+                        <div *dxTemplate="let data of 'cellTemplate'">
+                          <div *ngIf="data?.value === true" style="margin-left: 4px;">
+                            <i class="dx-icon-check" aria-hidden="true" style="font-size: 20px!important;"></i>
+                          </div>
+                        </div>
+                      </dxi-column>
+                      <dxi-column
+                        dataField="id"
+                        [visible]="editMode"
+                        [cellTemplate]="'editTemplate'"
+                        [allowEditing]="false"
+                        caption=""
+                        [width]="'auto'"
+                        [allowSorting]="false">
+                        <div *dxTemplate="let data of 'editTemplate'">
+                          <dx-button [type]="'default'"
+                            [disabled]="!editMode || selectedProgram.nextStep === data.value"
+                            [icon]="'chevronleft'"
+                            (onClick)="moveToNextStep(data)">
+                          </dx-button>
+                        </div>
+                      </dxi-column>
+                      <dxi-column
+                        dataField="actionDate"
+                        dataType="date"
+                        [width]="80"
+                        [allowResizing]="false">
+                      </dxi-column>
+                      <dxi-column
+                        dataField="actionName"
+                        caption="Action"
+                        dataType="string">
+                      </dxi-column>
+                      <dxi-column
+                        dataField="description"
+                        dataType="string">
+                      </dxi-column>
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </dxi-item>
+              </dxi-tab>
+              <dxi-tab title="Reply Content" style="padding: 10px;">
+                <dxi-item>
+                <app-reply-content
+                  [editMode]="editMode"
+                  [username]="username"
+                  [patient]="patient"
+                  [graphSeries]="graphSeries"
+                  [selectedProgram]="selectedProgram">
+                </app-reply-content>
+              </dxi-item>
+              </dxi-tab>
+              <dxi-tab title="History" style="padding: 10px;">
+                <dxi-item>
+                <app-history
+                  [selectedLog]="selectedLog"
+                  [selectedProgram]="selectedProgram">
+                </app-history>
+              </dxi-item>
+              </dxi-tab>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+      </div>
+    </div>
+  </div>
+  <dx-popup
+    class="popup"
+    [width]="500"
+    [height]="'auto'"
+    [showTitle]="true"
+    title="Patient Connect Confirmation"
+    [dragEnabled]="true"
+    [closeOnOutsideClick]="true"
+    [(visible)]="showConfirmAddProgram">
+    <div *dxTemplate="let data of 'content'">
+      <dx-form *ngIf="selectedProgram"
+        [formData]="selectedProgram"
+        (onFieldDataChanged)=onConfirmAddNewProgramChanged($event)>
+        <dxi-item [label]="{ text:'Patient' }">
+          <div *dxTemplate>
+            <dx-text-box value="{{ patient.surname }}, {{ patient.firstName }}" [disabled]="true"></dx-text-box>
+          </div>
+        </dxi-item>
+        <dxi-item dataField="definition.reason"
+          [label]="{ text:'Program' }" [disabled]="true" >
+        </dxi-item>
+        <dxi-item dataField="referenceDate"
+          [label]="'Reference Date'"
+          #referenceDateRef editorType="dxDateBox">
+        </dxi-item>
+        <dxi-item  [label]="{ text:'First Action Sent' }" >
+          <div *dxTemplate>
+            <dx-text-box value="{{ selectedProgram.nextConnectDue | date: 'fullDate' }}"  [disabled]="true" ></dx-text-box>
+          </div>
+        </dxi-item>
+      </dx-form>
+      <div class="row">
+        <div class="col-12">
+          <hms-button-set-save
+            [includeDeleteButton]="false"
+            (saveClicked)="onConfirmSavePatientProgram()"
+          (cancelClicked)="cancelPopup()">
+          </hms-button-set-save>
+        </div>
+      </div>
+    </div>
+  </dx-popup>
+  <app-select-booking-types  
+    [showPopup]="showBookingTypesPopup"
+    [programBookingTypes]="selectedProgram.bookingTypes"
+    (popupClosed)="bookingPopupClosed($event)"
+    (bookingTypesUpdated)="bookingTypesUpdated($event)">
+  </app-select-booking-types>
+</div>

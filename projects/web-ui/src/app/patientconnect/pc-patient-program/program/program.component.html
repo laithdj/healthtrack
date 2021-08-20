@@ -1,0 +1,118 @@
+<div *ngIf="!loading" class="row custom" style="margin-bottom: 50px;">
+  <div class="col" style="padding-right: 0px;padding-left: 10px;">
+    <div style="padding: 5px 15px 5px 0px;float:right">
+      <dx-form [disabled]="(editMode$ | async)">
+        <dxi-item [label]="{ text:'Bookings and Referrals' }">
+          <div *dxTemplate>
+            <dx-check-box
+              (onValueChanged)="onFilterChanged()"
+              [disabled]="(editMode$ | async)"
+              [(value)]="includeBookingReferral">
+            </dx-check-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Completed and Deleted' }">
+          <div *dxTemplate>
+            <dx-check-box
+              (onValueChanged)="onFilterChanged()"
+              [(value)]="includeCompletedDeleted"
+              [disabled]="(editMode$ | async)">
+            </dx-check-box>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <dx-data-grid
+      [disabled]="(editMode$ | async)"
+      [width]="'100%'"
+      class="float-left"
+      id="dataGridContainer" #dataGrid
+      [dataSource]="listedPrograms"
+      [showRowLines]="true"
+      [showBorders]="true"
+      [keyExpr]="'id'"
+      [selectedRowKeys]="selectedRowKeys"
+      (onSelectionChanged)="onSelectionChanged($event)"
+      (onContentReady)="gridContentReady()"
+      (onRowPrepared)="onRowPrepared($event)"
+      [rowAlternationEnabled]="true">
+      <dxo-selection mode="single"></dxo-selection>
+      <dxi-column dataField="nextConnectDue"
+        caption="Next Action" [width]="80" >
+      </dxi-column>
+      <dxi-column
+        caption="Patient Connect"
+        dataField="definition.reason">
+      </dxi-column>
+    </dx-data-grid>
+  </div>
+  <div class="custom-col">
+    <app-program-details 
+      [patient]="patient"
+      [editMode]="(editMode$ | async)"
+      [selectedProgram]="selectedProgram"
+      [availablePrograms]="availablePrograms"
+      [lastBillingLocation]="(lastBillingLocation$ | async)"
+      [username]="(username$ | async)"
+      [programTypes]="programTypes"
+      (refreshPrograms)="refreshPrograms($event)"
+      (editModeToggled)="onEditModeToggled($event)"
+      (selectProgram)="onSelectPatientConnect($event)">
+    </app-program-details>
+  </div>
+</div>
+<div class="row" *ngIf="loading">
+  <div class="col"></div>
+  <div class="col-auto" style="text-align: center;">
+    <div style="margin-top: 100px;">Loading</div>
+    <dx-load-indicator style="margin: 20px 0px 60px 0px"
+      height="40" width="40">
+    </dx-load-indicator>
+  </div>
+  <div class="col"></div>
+</div>
+<div *ngIf="!loading" class="hms-buttons-footer">
+  <hms-button-new 
+    [isLast]="false"
+    [editMode]="(editMode$ | async)"
+    (saveClicked)="programDetails.onSaveClicked()"
+    (addNewClicked)="onNewProgramAdded()">
+  </hms-button-new>
+  <hms-button-edit *ngIf="selectedProgram"
+    [disabled]="!programDetails?.selectedProgram?.definitionId || programDetails?.selectedProgram?.deleted === true || programDetails?.selectedProgram?.complete === true"
+    (editClicked)="programDetails?.setEditMode(true)"
+    [isLast]="false"
+    [editMode]="(editMode$ | async)"
+    (cancelClicked)="programDetails?.setEditMode(false)">
+  </hms-button-edit>
+  <hms-button-delete *ngIf="!programDetails?.newProgram"
+    [disabled]="!programDetails?.selectedProgram?.id || programDetails?.selectedProgram?.id === 0 || !programDetails?.editMode"
+    (deleteClicked)="programDetails?.onDeleteClicked()">
+  </hms-button-delete>
+  <div style="width: 100%;"></div>
+  <div *ngIf="selectedProgram?.canPrintPreview" style="width: auto;  padding-left: 15px;">
+    <dx-button text="Preview Letter" type="default"
+      (onClick)="programDetails.onPreviewLetters()">
+    </dx-button>
+  </div>
+  <div *ngIf="selectedProgram?.connectStatus === PcAction.Sms && !newProgram" style="width: auto; padding-left: 15px;">
+    <dx-button text="Activate" [width]="90"
+      type="default" (onClick)="programDetails.onActivateProgram()"
+      [disabled]="!(editMode$ | async)">
+    </dx-button>
+  </div>
+  <div *ngIf="!newProgram && selectedProgram?.connectStatus !== PcAction.Sms" style="width: auto; padding-left: 15px;">
+    <dx-button text="Pause" type="default" [width]="90"
+      (onClick)="programDetails?.onPauseProgram()"
+      [disabled]="!programDetails?.editMode || newProgram || selectedProgram?.connectStatus !== PcAction.All">
+    </dx-button>
+  </div>
+</div>
+<app-new-patient-connect
+  [referralId]="referralId"
+  [newPatientConnect]="newPatientConnect"
+  [patientConnectTypeList]="programTypes"
+  [programs]="availablePrograms"
+  (addNewPatientConnect)="onConfirmAddNewProgram($event)"
+  (newPatientConnectPopupClosed)="newPatientConnectClosed()">
+</app-new-patient-connect>

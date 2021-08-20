@@ -1,0 +1,89 @@
+<div class="container-fluid">
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col">
+      <app-patient-summary [patient]="patient"></app-patient-summary>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div style="display: flex;" class="patient-panel">
+        <dx-form id="form" [width]="'calc(100vw - 30%)'">
+          <dxi-item itemType="group" [colCount]="3" caption="Filters">
+            <dxi-item [label]="{ text:'Type' }" [editorOptions]="{ width: 20 }">
+              <dx-select-box [items]="papTypes" searchEnabled=true displayExpr="categoryName"
+                (onValueChanged)="updateSearchCriteriaType()" [(value)]="searchCriteria.equipmentType">
+              </dx-select-box>
+            </dxi-item>
+            <dxi-item [label]="{text:'Manufacturer'}" [editorOptions]="{ width: 20 }">
+              <dx-select-box #make_selector  [items]="manufacturers" searchEnabled='true' [(value)]="searchCriteria.manufacturer"
+                (onSelectionChanged)="revaluateModels()" displayExpr="companyName" ></dx-select-box>
+            </dxi-item>
+            <dxi-item [label]="{text:'Model'}" [editorOptions]="{ width: 20 }">
+              <dx-select-box [items]="displayModels" displayExpr="model" valueExpr="model" searchEnabled='true'
+                [(value)]="searchCriteria.model"></dx-select-box>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+        <div style="margin-left: 20px; margin-top: 23px;">
+          <dx-button style="margin-right: 10px;" text='Search' [width]="90"
+            [type]="'default'" icon="search" (onClick)="search()" >
+          </dx-button>
+        </div>
+        <div style="margin-top: 23px;">
+          <dx-button text='Reset' [width]="90" (onClick)="reset()"
+            icon="refresh" [type]="'default'">
+          </dx-button>
+        </div>
+      </div>
+      <dx-data-grid #assign_grid id="gridContainer"
+        [columnAutoWidth]="false"
+        [allowColumnResizing]="true"
+        columnResizingMode="widget"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [hoverStateEnabled]="true"
+        [rowAlternationEnabled]="true"
+        [dataSource]="availableEquipment"
+        [noDataText]="'No Assets Found'"
+        [showBorders]="true"
+        [columnHidingEnabled]="false"
+        [rowAlternationEnabled]="true">
+        <dxo-paging [pageSize]="20"></dxo-paging>
+        <dxo-state-storing [enabled]="true" type="localStorage" storageKey="assign_storage"></dxo-state-storing>
+        <dxo-pager [showPageSizeSelector]="false" [showInfo]="true">
+        </dxo-pager>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxi-column dataField="manufacturer.companyName" caption="Manufacturer" sortOrder="asc" [width]="250" ></dxi-column>
+        <dxi-column dataField="model" sortOrder="asc"></dxi-column>
+        <dxi-column cellTemplate="equipmentTypeCellTemplate" caption="Equipment Type" dataField="equipmentType" [width]="180">
+          <div *dxTemplate="let cell of 'equipmentTypeCellTemplate'">
+            {{combineEquipmentTypes(cell.data.equipmentType)}}
+          </div>
+        </dxi-column>
+        <dxi-column dataField="serialNumber" [width]="120" caption="Asset No"caption="Serial No"></dxi-column>
+        <dxi-column dataField="equipmentNumber" [width]="120" caption="Asset No"></dxi-column>
+        <dxi-column cellTemplate="statusCellTemplate" caption="Status" dataField="status" alignment="left" [width]="75">
+          <div *dxTemplate="let cell of 'statusCellTemplate'">
+            {{equipmentStatuses.GetDisplayStatus(cell.data.status)}}
+          </div>
+        </dxi-column>
+        <dxi-column cellTemplate="actionsCellTemplate" [width]="90" caption="Actions">
+          <div *dxTemplate="let cell of 'actionsCellTemplate'">
+            <div *ngIf="cell.data.status == 1 && unassign === false">
+              <dx-button type="default" text="Assign" icon="add" (onClick)="assign(cell.data.equipment_ID)">
+              </dx-button>
+            </div>
+          </div>
+        </dxi-column>
+      </dx-data-grid>
+      <div style="margin-top: 10px; margin-left: 10px;">
+        <hms-button-edit
+          [editMode]="!editMode"
+          [isLast]="false"
+          (cancelClicked)="back()">
+        </hms-button-edit>
+      </div>
+    </div>
+  </div>
+</div>

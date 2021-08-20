@@ -1,0 +1,11 @@
+<dx-select-box
+  [searchEnabled]="searchEnabled"
+  [items]="items"
+  [displayExpr]="displayEx"
+  [acceptCustomValue]="acceptCustomValue"
+  (onCustomItemCreating)="customValue($event)"
+  [valueExpr]="valueEx"
+  [width]="width"
+  [value]="(normalizedResult$ | async)?.result"
+  (onValueChanged)="changeValue($event)">
+</dx-select-box>

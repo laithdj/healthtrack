@@ -1,0 +1,36 @@
+<div class="panel w-100">
+    <div class="main-details">
+        <div class="header">
+            <!--<div>
+                <img src="https://d3sjaxzllw9rho.cloudfront.net/clinic_images/clinic_profiles/8109/thumb_b07443e7a7c3a891e478c3251bcc6399.png"
+                    width="158" height="158">
+            </div>-->
+            <h5><p>Bartley Terrace Medical Centre</p></h5>
+            <div class="details" *ngIf="service.apt">
+                <span>Shop 8 , Level 1 , Wynnum Road </span>
+                <span>Brisbane, QLD 4000</span><br>
+                <span>1800 247 477</span>
+            </div>
+            <div class="details" *ngIf="!service.apt">
+                <span>1800 247 477</span>
+            </div>
+        </div>
+        <!--<div class="float-right mt-3 map">
+            <img src="https://maps.google.com/maps?q=83+Fairford+Terrace%2C+West+Lakes+Shore%2C+SA+5020%26ll%3D-34.8594376%2C138.4887085&z=13"
+                width="218" height="158">
+        </div>-->
+        <!--<div class="d-flex justify-content-center">
+            <dx-map 
+            provider="bing"
+            [zoom]="11" 
+            [height]="250" 
+            [width]="320" 
+            [controls]="true" 
+            [markerIconSrc]="mapMarkerUrl" 
+            [markers]="markers">
+        </dx-map>
+        </div>-->
+    </div>
+</div>
+
+<!---->

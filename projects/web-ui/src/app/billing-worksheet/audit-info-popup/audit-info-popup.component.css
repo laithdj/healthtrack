@@ -1,0 +1,19 @@
+table#audit-table, table#audit-table th, table#audit-table td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table#audit-table th {
+  text-align: right;
+  padding: 5px;
+  background-color: lightgray;
+}
+
+table#audit-table td {
+  padding: 5px;
+  background-color: white;
+}
+
+table#audit-table {
+  width: 100%;
+}

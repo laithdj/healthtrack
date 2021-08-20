@@ -1,0 +1,200 @@
+<div class="row">
+  <div class="col">
+    <div class="pc-body">
+      <dx-form>
+        <dxi-item itemType="group">
+          <dxi-item>
+            <dx-form [colCount]="5" id="form" cssClass="mb-30">
+              <dxi-item [colSpan]="3" dataField="attendingDoctorId" [label]="{ text: 'Fee Table' }">
+                <dx-text-box [width]="'100%'" [(value)]="healthfund_name" readOnly="true"></dx-text-box>
+              </dxi-item>
+              <dxi-item [colSpan]="2" dataField="enrollmentDate" [label]="{ text:'Fee Effective Date' }">
+                <dx-text-box [width]="'100%'" [(value)]="fee_effective_date" dataType="date" readOnly="true">
+                </dx-text-box>
+              </dxi-item>
+              <dxi-item cssClass="mb-30">
+              </dxi-item>
+            </dx-form>
+            <div style="display: inline; padding: 10px 4px 0px 10px;">
+              <div style="width: auto; float:right">
+                <dx-button text='Add Fee' icon="add" [disabled]="add_disabled" (onClick)="addFee()" [type]="'default'">
+                </dx-button>
+              </div>
+            </div>
+            <div style="display: flex; margin-top: 20px">
+              <div>
+                <dx-data-grid [rowAlternationEnabled]="true" [showRowLines]="true" [dataSource]="feesList"
+                  (onRowClick)="doubleClickRow($event)" [showBorders]="true">
+                  <dxo-sorting mode="none"></dxo-sorting>
+                  <dxi-column caption="Item No." dataField="itemNum" [width]="80" dataType="string"
+                    [allowResizing]="true">
+                  </dxi-column>
+                  <dxi-column dataField="healthFundCode" caption="HI-Code" dataType="string">
+                  </dxi-column>
+                  <dxi-column cellTemplate="feeInCellTemplate" caption="In Patient Fee" alignment="left"
+                    dataField="feeInPatient">
+                    <div *dxTemplate="let cell of 'feeInCellTemplate'">
+                      {{formatPatientFee(cell.data.feeInPatient)}}
+                    </div>
+                  </dxi-column>
+                  <dxi-column dataField="feePercentInPatient" caption="In Patient Fee %" dataType="double"
+                    [calculateCellValue]="getDisplayForInPercent" [allowResizing]="false">
+                  </dxi-column>
+                  <dxi-column cellTemplate="feeOutCellTemplate" caption="Out Patient Fee" alignment="left"
+                    dataField="feeOutPatient">
+                    <div *dxTemplate="let cell of 'feeOutCellTemplate'">
+                      {{formatPatientFee(cell.data.feeOutPatient)}}
+                    </div>
+                  </dxi-column>
+                  <dxi-column dataField="feePercentOutPatient" [calculateCellValue]="getDisplayForOutPercent"
+                    caption="Out Patient Fee %" dataType="string">
+                  </dxi-column>
+                  <dxi-column cellTemplate="actionsCellTemplate" caption="Actions" [width]="80">
+                    <div *dxTemplate="let cell of 'actionsCellTemplate'">
+                      <hms-button-edit (editClicked)="editFee(cell.data.feeTable_ID,cell.data.itemNum)">
+                      </hms-button-edit>
+                    </div>
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+</div>
+<dx-popup [height]="270" [width]="450" title="Add Fee" [showTitle]="true" [showCloseButton]="false" id="detailForm"
+  [visible]="add_fee">
+  <div id="form-container">
+    <dx-form #templateForm>
+      <dxi-item itemType="group">
+        <dxi-item [label]="{ text:'Item No.' }">
+          <div *dxTemplate>
+            <dx-select-box [searchExpr]="searchFields" 
+            [displayExpr]="'itemNumDisp'" [(value)]="fee.itemNum" [valueExpr]="'itemNumDisp'" [noDataText]="resultsText"
+            [dataSource]="{store:(services$ | async).billItems, paginate:true}"
+            [itemTemplate]="'item'" [searchEnabled]="true" [searchTimeout]="50" searchMode="startswith"
+            [dropDownOptions]="{ maxHeight: 300, paginate: true }">
+            <div *dxTemplate="let item of 'item'" title="{{item.description}}" style="display: flex;">
+              <div class="service-item-num">{{ item.itemNumDisp }}</div>
+              <div class="service-health-fund-code"></div>
+              <div class="service-description">{{ item.description }}</div>
+            </div>
+          </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Health Insurer Code' }">
+          <div *dxTemplate>
+            <div style="display:flex">
+              <dx-text-box valueChangeEvent="keyup" [(ngModel)]="fee.healthFundCode" [width]="150"
+                [ngClass]="{ 'is-invalid': (healthFundCode.dirty || healthFundCode.touched) && healthFundCode.invalid }"
+                required name="healthFundCode" #healthFundCode="ngModel"></dx-text-box>
+              <div>
+                <i *ngIf="fee.healthFundCode" class="dx-icon-check ml-1 icon-custom">
+                </i>
+                <i *ngIf="!fee.healthFundCode" class="dx-icon-clear ml-1 icon-custom-error" id="fund_error"
+                  (mouseenter)="toggleFundError()" (mouseleave)="toggleFundError()">
+                </i>
+                <dx-tooltip target="#fund_error" [(visible)]="fund_error" [closeOnOutsideClick]="false">
+                  <div *dxTemplate="let data = data of 'content'">
+                    Please ensure you enter a Health Fund (Insurer) Code if required.
+                  </div>
+                </dx-tooltip>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'In Patient Fee' }">
+          <div *dxTemplate>
+            <dx-number-box #in_value [(value)]="in_patient_value" format="#,##0.00" [width]="150" showClearButton=true>
+            </dx-number-box>
+            <dx-radio-group [items]="feeOptions" layout="horizontal" (onValueChanged)="InValueChange()"
+              [(value)]="inFeeOption"></dx-radio-group>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Out Patient Fee' }">
+          <div *dxTemplate>
+            <dx-number-box #out_value [(value)]="out_patient_value" format="#,##0.00" [width]="150"
+              showClearButton=true>
+            </dx-number-box>
+            <dx-radio-group [items]="feeOptions" layout="horizontal" (onValueChanged)="OutValueChange()"
+              [(value)]="outFeeOption"></dx-radio-group>
+          </div>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+    <div class="mt-3">
+      <hms-button-set-save [includeDeleteButton]="false" (saveClicked)="createFee(fee)" (cancelClicked)="cancelFee()">
+      </hms-button-set-save>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup [height]="270" [width]="450" title="Update Fee" [showTitle]="true" [showCloseButton]="false" id="detailForm"
+  [visible]="update_fee">
+  <div id="form-container">
+    <dx-form #templateForm2>
+      <dxi-item itemType="group">
+        <dxi-item [label]="{ text:'Item No.' }">
+          <div *dxTemplate>
+            <dx-select-box [searchExpr]="searchFields" 
+            [displayExpr]="'itemNumDisp'" [(value)]="fee.itemNum" [valueExpr]="'itemNumDisp'" [noDataText]="resultsText"
+            [dataSource]="{store:(services$ | async).billItems, paginate:true}"
+            [itemTemplate]="'item'" [searchEnabled]="true" [searchTimeout]="50" searchMode="startswith"
+            [dropDownOptions]="{ maxHeight: 300, paginate: true }">
+            <div *dxTemplate="let item of 'item'" title="{{item.description}}" style="display: flex;">
+              <div class="service-item-num">{{ item.itemNumDisp }}</div>
+              <div class="service-health-fund-code"></div>
+              <div class="service-description">{{ item.description }}</div>
+            </div>
+          </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Health Insurer Code' }">
+          <div *dxTemplate>
+            <div style="display:flex">
+              <dx-text-box valueChangeEvent="keyup" [(ngModel)]="fee.healthFundCode" [width]="150"
+                [ngClass]="{ 'is-invalid': (healthFundCode.dirty || healthFundCode.touched) && healthFundCode.invalid }"
+                required name="healthFundCode" #healthFundCode="ngModel"></dx-text-box>
+              <div>
+                <i *ngIf="fee.healthFundCode" class="dx-icon-check ml-1 icon-custom">
+                </i>
+                <i *ngIf="!fee.healthFundCode" class="dx-icon-clear ml-1 icon-custom-error" id="fund_error_edit"
+                  (mouseenter)="toggleFundError()" (mouseleave)="toggleFundError()">
+                </i>
+                <dx-tooltip target="#fund_error_edit" [(visible)]="fund_error_edit" [closeOnOutsideClick]="false">
+                  <div *dxTemplate="let data = data of 'content'">
+                    Please ensure you enter a Health Fund (Insurer) Code if required.
+                  </div>
+                </dx-tooltip>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'In Patient Fee' }">
+          <div *dxTemplate>
+            <dx-number-box #in_value_edit [(value)]="in_patient_value" format="#,##0.00" [width]="150"
+              showClearButton=true>
+            </dx-number-box>
+            <dx-radio-group [items]="feeOptions" layout="horizontal" (onValueChanged)="InValueChangeEdit()"
+              [(value)]="inFeeOption"></dx-radio-group>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Out Patient Fee' }">
+          <div *dxTemplate>
+            <dx-number-box #out_value_edit [(value)]="out_patient_value" format="#,##0.00" [width]="150"
+              showClearButton=true>
+            </dx-number-box>
+            <dx-radio-group [items]="feeOptions" layout="horizontal" (onValueChanged)="OutValueChangeEdit()"
+              [(value)]="outFeeOption"></dx-radio-group>
+          </div>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+    <div class="mt-3">
+      <hms-button-set-save [includeDeleteButton]="true" (saveClicked)="updateFee(fee)" (cancelClicked)="cancelEditfee()"
+        (deleteClicked)="deleteFee(fee)">
+      </hms-button-set-save>
+    </div>
+  </div>
+</dx-popup>

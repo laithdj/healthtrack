@@ -1,0 +1,10 @@
+<div [ngStyle]="{ 'margin-right': isLast ? '0px' : '10px' }">
+  <dx-button [width]="90"
+    [text]="'Save'"
+    [icon]="'save'"
+    [type]="'success'"
+    [disabled]="disabled"
+    [useSubmitBehavior]="true"
+    (onClick)="onSaveClicked()">
+  </dx-button>
+</div>

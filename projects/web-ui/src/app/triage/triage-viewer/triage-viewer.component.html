@@ -1,0 +1,10 @@
+<dx-form>
+<dxi-item cssClass="mt-3" [label]="{text:'Select Attachment'}">
+        <dx-select-box (onSelectionChanged)="SelectPdf($event)" displayExpr='displayStatus' displayExpr='name'
+         [dataSource]="array_of_pdf" class="box-width"
+        [searchEnabled]="false" [(value)]="some_pdf_url">
+       </dx-select-box>
+</dxi-item>
+</dx-form>
+<br>
+<iframe [src]="trustedUrl" class="viewer" frameborder="0"></iframe>

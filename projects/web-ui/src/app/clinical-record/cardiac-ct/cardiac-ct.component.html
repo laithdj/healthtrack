@@ -1,0 +1,109 @@
+<div class="container-fluid">
+  <div class="row ">
+    <div class="col patient-panel side-padding">
+      <app-patient-summary [patient]="patient$ | async"></app-patient-summary>      
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;" [ngClass]="(showReportBeside$ | async) ? 'row-custom' : ''">
+    <div class="col">
+      <div>
+        <dx-tabs #selectTab [dataSource]="tabs" [selectedIndex]="0" (onItemClick)="changeTab($event)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form' : 'w-100'" ></dx-tabs>
+        <div *ngIf="selectTab.selectedIndex === 0" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-clinical-details (contentReady)="contentReady()"></app-clinical-details>            
+        </div>
+        <div *ngIf="(selectTab.selectedIndex === 1)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-pre-admission [normalisedResults]="normalisedResults$ | async"></app-pre-admission>
+        </div>
+        <div *ngIf="(selectTab.selectedIndex === 2)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-nursing></app-nursing>
+        </div>
+        <div *ngIf="(selectTab.selectedIndex === 3)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-radiographer></app-radiographer>
+        </div>
+        <div *ngIf="(selectTab.selectedIndex === 4)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+            <app-coronaries [containerId]="containerId" [normalisedResults]="normalisedResults$ | async"></app-coronaries>
+        </div>
+        <div *ngIf="(selectTab.selectedIndex === 5)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-structural [normalisedResults]="normalisedResults$ | async"></app-structural>
+        </div>
+      <!--
+        <div *ngIf="(selectTab.selectedIndex === 7 && (showReportBeside$ | async) === false) ||
+          (selectTab.selectedIndex === 6 && (showReportBeside$ | async) === true)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-attachments></app-attachments>
+        </div>
+      -->
+        <div *ngIf="(selectTab.selectedIndex === 7 && (showReportBeside$ | async) === false) ||
+            (selectTab.selectedIndex === 6 && (showReportBeside$ | async) === true)" [ngClass]="(showReportBeside$ | async) ? 'fixed-form hms-tab-content' : 'hms-tab-content'">
+          <app-internal></app-internal>
+        </div>
+        <div *ngIf="((reportRender) || (selectTab.selectedIndex === 6 && (showReportBeside$ | async) === false))"
+          [ngClass]="(selectTab.selectedIndex === 6 && (showReportBeside$ | async) === false) ? 'hms-tab-content' : 'hide hms-tab-content'">
+          <lib-smart-text-report #reportInTab id="reportInTab"
+            [richEditorSize]="{ height: 'calc(100vh - 250px)', width: '815px' }"
+            [drawerHeight]="'calc(100vh - 275px)'"
+            [lowerListHeight]="'calc(75vh - 285px)'"
+            [showReportBeside]="showReportBeside$ | async"
+            [reportContent]="(report$ | async)?.fullStructuredReport"
+            [userName]="userName$ | async"
+            [showSmartText]="true"
+            [smartTextBundle]="smartTextBundle$ | async"
+            [measurements]="measurements"
+            [hmsLetterTemplateTagValues]="letterTemplateTagValues"
+            (openConfigScreen)="openSmartTextEditor()"
+            (fetchHMSLetterTagValues)="fetchLetterTagValues($event)"
+            (showReportBesideToggled)="toggleShowReportBeside($event)"
+            (refreshSmartText)="refreshSmartText()">
+          </lib-smart-text-report>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showReportBeside$ | async" class="report" style="padding-left: 0px;">
+      <div>
+        <lib-smart-text-report #reportBeside id="reportBeside"
+          [richEditorSize]="{ height: 'calc(100vh - 195px)', width: '100%' }"
+          [drawerHeight]="'calc(100vh - 210px)'"
+          [lowerListHeight]="'calc(75vh - 230px)'"
+          [reportContent]="(report$ | async)?.fullStructuredReport"
+          [userName]="userName$ | async"
+          [showSmartText]="false"
+          [showReportBeside]="showReportBeside$ | async"
+          [smartTextBundle]="smartTextBundle$ | async"
+          [measurements]="measurements"
+          [hmsLetterTemplateTagValues]="letterTemplateTagValues"
+          (openConfigScreen)="openSmartTextEditor()"
+          (fetchHMSLetterTagValues)="fetchLetterTagValues($event)"
+          (showReportBesideToggled)="toggleShowReportBeside($event)"
+          (refreshSmartText)="refreshSmartText()">
+        </lib-smart-text-report>
+      </div>      
+    </div>
+  </div>
+  <div class="hms-buttons-footer d-flex-unset">
+    <hms-button-set-save
+      [includeDeleteButton]="editMode"
+      (saveClicked)="saveRecord()"
+      (cancelClicked)="cancel()"
+      (deleteClicked)="deleteRecord()">
+    </hms-button-set-save>
+  </div>
+</div>
+<dx-load-panel
+  #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [(visible)]="loadingVisible"
+  [message]='loadMessage'
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>
+<dx-load-panel
+  #OnInItLoad
+  shadingColor="rgba(0,0,0,0.4)"
+  [(visible)]="loading"
+  [message]='"Loading Record"'
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>

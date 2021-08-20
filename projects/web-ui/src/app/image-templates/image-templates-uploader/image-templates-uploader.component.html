@@ -1,0 +1,44 @@
+
+<div *dxTemplate="let data of 'content'">
+  <dx-scroll-view direction="vertical">
+    <div>
+      <div style="padding: 5px;">
+        <dx-button (onClick)="showImportedImages = !showImportedImages"
+          [text]="showImportedImages ? 'Hide' : 'View Imported Images'">
+        </dx-button>
+      </div>
+      <div *ngIf="showImportedImages">
+        <dx-list
+          [dataSource]="images"
+          [height]="150"
+          [searchEnabled]="true">
+        </dx-list>
+        <div *dxTemplate="let data of 'item'">
+          <div>{{data}}</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding: 5px;" id="messageDiv" *ngIf="messageDivVisible">
+      {{ message }}
+      <dx-button [visible]="uploadSuccess" text="Import More Images" (onClick)="resetPopup()"></dx-button>
+    </div>
+    <div id="messageDiv" *ngIf="uploadOverwriteVisible">
+      {{ message }} <br/> Do you wish to overwrite the existing file? <br/>
+      <dx-button id="imageTemplateButtons" text="Overwrite" (onClick)="onUploadOverwrite()"></dx-button>
+      <dx-button id="imageTemplateButtons" text="Cancel" (onClick)="onUploadOverwriteCancel()"></dx-button>
+    </div>
+    <div *ngIf="fileUploaderVisible">
+      <dx-file-uploader [labelText]="'or drag and drop image file(s) here.'"
+        [accept]="'image/*'" [selectButtonText]="'Import Images'"
+        [uploadButtonText]="'Import'"
+        [multiple]="true"
+        [width]="400"
+        [allowCanceling]="true"
+        (onUploaded)="onImageUploaded($event)"
+        (onUploadError)="onImageUploadError($event)"
+        [uploadMode]="'useButtons'"
+        [uploadUrl]="uploadURL">
+      </dx-file-uploader>
+    </div>
+  </dx-scroll-view>
+</div>

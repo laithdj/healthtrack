@@ -1,0 +1,98 @@
+::ng-deep .dx-toast-content {
+  min-width: 300px;
+  max-width: 400px;
+  padding: 10px;
+}
+
+.header {
+  padding: 15px;
+}
+
+.dashboard-title {
+  padding: 10px 0px;
+  font-size: 20px;
+  background-color: #DEEAF5;
+}
+
+.has-border {
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.configuration-editor {
+  background-color: #DEEAF5;
+  padding: 0px;
+  margin: 0px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.configuration {
+  background-color: #f7f7f7;
+  border-style: solid;
+  padding: 15px;
+  margin: 0px 0px 15px 15px;
+  border-width: 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.configuration-label {
+  padding-right: 5px;
+}
+
+.configuration-content {
+  padding: 0px 15px 0px 0px;
+}
+
+.widget-preview {
+  padding: 15px;
+  background-color: white;
+}
+
+.widget-preview-container {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #333;
+  margin: 5px 0px 0px 0px;
+}
+
+.dashboard-container {
+  padding: 0px;
+  text-align: left;
+  justify-content: left;
+  margin: 0px 15px 15px 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.dashboard {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #333;
+  margin: 0px;
+  text-align: left;
+  padding: 0px 15px;
+  display: inline-block;
+  background-color: #E3F1FE;
+
+}
+
+.rowcol-container {
+  padding:  0px 15px, 0px, 15px;
+  text-align: left;
+  justify-content: left;
+  font-size: 16px;
+}
+
+::ng-deep .popup{
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.widget-list {
+  margin-right: -30px;
+  background-color: white;
+}

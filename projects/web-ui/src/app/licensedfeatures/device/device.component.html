@@ -1,0 +1,20 @@
+<dx-form *ngIf="(selectedFeature$ | async)">
+  <dxi-item itemType="group" [colCount]="5" cssClass="form-panel" >
+    <dxi-item>
+      <app-device-list></app-device-list>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2">
+      <app-device-details></app-device-details>
+      <app-device-settings></app-device-settings>
+    </dxi-item>
+    <dxi-item>
+      <app-bookingtype-list></app-bookingtype-list>
+    </dxi-item>
+    <dxi-item>
+      <app-locationroom-list></app-locationroom-list>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item [colSpan]="5">
+    <app-worklist-test></app-worklist-test>
+  </dxi-item>
+</dx-form>

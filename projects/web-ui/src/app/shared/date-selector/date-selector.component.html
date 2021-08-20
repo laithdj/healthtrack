@@ -1,0 +1,32 @@
+<div>
+  <div style="display: flex;">
+    <dx-button class="btn-date-range" text='<' (onClick)='onClickPrevDay()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='Yesterday' (onClick)='onClickYesterday()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='Today' (onClick)='onClickToday()'></dx-button>
+    <dx-button class="btn-date-range" text='>' (onClick)='onClickNextDay()'></dx-button>
+  </div>
+  <div style="display: flex;">
+    <dx-button class="btn-date-range" text='<' (onClick)='onClickPrevWeek()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='Last Week' (onClick)='onClickLastWeek()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='This Week' (onClick)='onClickThisWeek()'></dx-button>
+    <dx-button class="btn-date-range" text='>' (onClick)='onClickNextWeek()'></dx-button>
+  </div>
+  <div style="display: flex;">
+    <dx-button class="btn-date-range" text='<' (onClick)='onClickPrevMonth()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='Last Month' (onClick)='onClickLastMonth()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='This Month' (onClick)='onClickThisMonth()'></dx-button>
+    <dx-button class="btn-date-range" text='>' (onClick)='onClickNextMonth()'></dx-button>
+  </div>
+  <div style="display: flex;">
+    <dx-button class="btn-date-range" text='<' (onClick)='onClickPrevYear()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='Last Year' (onClick)='onClickLastYear()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='This Year' (onClick)='onClickThisYear()'></dx-button>
+    <dx-button class="btn-date-range" text='>' (onClick)='onClickNextYear()'></dx-button>
+  </div>
+  <div style="display: flex;">
+    <dx-button class="btn-date-range" text='<' (onClick)='onClickPrevFinYear()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='Last Fin. Year' (onClick)='onClickLastFinYear()'></dx-button>
+    <dx-button class="btn-date-range" [width]='90' text='This Fin. Year' (onClick)='onClickThisFinYear()'></dx-button>
+    <dx-button class="btn-date-range" text='>' (onClick)='onClickNextFinYear()'></dx-button>
+  </div>
+</div>

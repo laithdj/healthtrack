@@ -1,0 +1,55 @@
+::ng-deep .large-button .dx-button-content .dx-icon {
+  font-size: 40px;
+}
+
+::ng-deep .icon-button .dx-button-content .dx-icon {
+  font-size: 40px;
+  background-size: 35px;
+  background-attachment: fixed;
+  background-position: center;
+  width:100% !important;
+  height:100% !important;
+  /* background-image: url('CalendarSearch.png'); */
+}
+
+::ng-deep .small-button .dx-button-content .dx-icon {
+    font-size: 15px;
+  }
+  
+  .patient-header {
+    font-size: 20px;
+    background-color: #ffb98b;
+    padding: 0px 10px 5px 10px;
+    justify-content: left;
+ }
+  
+  .patient-content {
+    background-color: #f7f7f7;
+    font-size: 14px;
+    padding: 4px 10px;
+    height: 103px;
+  }
+
+  .patient-explanation {
+    background-color: #f7f7f7;
+    font-size: 12px;
+    padding: 1px 13px;
+    height: 10px;
+  }
+  
+  .top-left-content {
+    margin-top: 5px;
+    margin-left: 15px;
+  }
+  
+  .top-right-content {
+    margin-top: 5px;
+    margin-left: 45px;
+  }
+
+  .bottom-content {
+    margin-top: 12px;
+    margin-left: 15px;
+  }
+  
+  

@@ -1,0 +1,344 @@
+<div class="container-fluid">
+  <div class="row justify-content-left">
+    <div class="col header">
+      <div class="row">
+        <div class="col-auto" style="padding-right: 0px">
+          Dashboard:
+        </div>
+        <div class="col-auto" style="padding: 0px 15px 0px 5px">
+          <dx-select-box #dashboardSelectBox [width]="'auto'" [items]="dashboards" [(value)]="selectedDashboard"
+            (onValueChanged)="clickNewDashboard()" displayExpr="dashboardName">
+          </dx-select-box>
+        </div>
+        <div class="col-auto" style="padding: 0px">
+          <dx-button text="Duplicate Dashboard" (onClick)="duplicateDashboard()" type="default" style="margin-right:5px">
+          </dx-button>
+        </div>
+        <div class="col-auto" style="padding: 0px">
+          <dx-button text="New" icon="add" (onClick)="addNewDashboard()" type="success">
+          </dx-button>
+        </div>
+        <div class="col"></div>
+        <div class="col-auto">
+          <dx-button text="Default Dashboard Settings" (onClick)="editRoleDashboards()" type="default">
+          </dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="editDashboard" class="row justify-content-left configuration-editor">
+    <div class="col">
+      <div class="row justify-content-left dashboard-title">
+        <div class="col-auto">
+          {{ editDashboard.dashboardName }}
+        </div>
+        <div class="col-auto">
+          <dx-button text="Rename" type="default" (onClick)="renameDashboardClicked()"
+            [disabled]="editDashboard.systemDefault">
+          </dx-button>
+        </div>
+        <div *ngIf="editDashboard.systemDefault" class="col-auto">
+          <span style="color: #d9534f">System Default Dashboard - cannot be edited.</span>
+        </div>
+        <div class="col"></div>
+        <div class="col-auto" style="padding: 0px">
+          <dx-button text="Save" icon="save" type="success" style="margin-right:5px"
+            [disabled]="!dashboardChanged || editDashboard.systemDefault" (onClick)="saveDashboardClicked()">
+          </dx-button>
+        </div>
+        <div style="padding: 0px" class="col-auto">
+          <dx-button text="Undo Changes" icon="revert" [disabled]="!dashboardChanged || editDashboard.systemDefault"
+            (onClick)="undoDashboardChangedClicked()" type="default" style="margin-right:5px">
+          </dx-button>
+        </div>
+        <div class="col-auto" style="padding: 0px 10px 0px 0px">
+          <dx-button text="Delete" icon="remove" (onClick)="confirmDeleteDashboard()" type="danger"
+            [disabled]="editDashboard.systemDefault">
+          </dx-button>
+        </div>
+      </div>
+      <div class="row justify-content-left" style="padding-left: 5px; padding-bottom: 5px">
+      <div class="row justify-content-left">
+        <div class="col-auto ">
+          <div class="row">
+        <div class="col-auto">
+          Users: {{ editDashboard.numUsers }}
+        </div>
+        <div *ngIf="editDashboard.roles.length > 0" class="col-auto" style="display: flex">
+          Roles:&nbsp;
+          <div *ngFor="let role of editDashboard.roles">
+            {{ role.roleName }}&nbsp;
+          </div>
+        </div>
+        <div *ngIf="!editDashboard.roles || editDashboard.roles.length === 0" class="col-auto">
+          Roles: None
+        </div>
+            </div>
+          <div class="row">
+            <div class="col configuration">
+                <div class="row">
+            <div class="col-auto configuration-button-right"></div>
+          </div>
+          <div class="row col" style="padding-top: 15px">
+              Widgets:
+          </div>
+          <div class="row col">
+                  <dx-list #list class="widget-list" [dataSource]="widgets" [searchEnabled]="true" [width]="350"
+                    [height]="300" [disabled]="editDashboard.systemDefault" searchExpr="displayName"
+                    searchMode="contains" (keyup)="onKey($event)" (onSelectionChanged)="onSelectionChanged($event)"
+                    selectionMode="single" showScrollbar="onHover" [selectedItemKeys]="[]">
+              <div *dxTemplate="let data of 'item'" class="has-border" style="display: flex;">
+                <div style="font-size: 0.9rem; padding-top: 4px">
+                            {{ data.displayName }}
+                </div>
+                <div style="margin-left: auto; margin-right: 0">
+                </div>
+              </div>
+            </dx-list>
+          </div>
+          <div *ngIf="selectedWidget && selectedWidget === 'LocationDiary'" class="row-auto">
+            <div class="col-auto" style="padding: 15px 0px 0px 0px; display: flex">
+              <div style="padding-right: 5px">Location:</div>
+                    <dx-select-box [width]="'auto'" [items]="locations" displayExpr="name"
+                      [(value)]="lastBillingLocation" valueExpr="locationId">
+              </dx-select-box>
+            </div>
+          </div>
+          <div class="row" style="padding-top: 15px">
+            <div class="col" *ngIf="selectedWidget">
+              Widget Preview:
+              <div class="widget-preview-container">
+                <app-widget-blurb [widget]="selectedWidget"></app-widget-blurb>
+                <div class="widget-preview">
+                        <app-dashboard-widget [widget]="selectedWidget" [editMode]="false" [inactive]="true"
+                          [systemDefault]="editDashboard.systemDefault" [selectedLocationId]="lastBillingLocation"
+                    [noRelocateButtons]="true">
+                  </app-dashboard-widget>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+                <div class="col-auto rowcol-container">
+                    <div class="row">
+                  <div class="col-auto configuration-label">
+                        Columns:
+                      </div>
+                      <div class="col-auto configuration-content">
+                    <dx-number-box [width]="50" [(value)]="editDashboard.numColumns" [min]="1" [max]="5" format="0"
+                      (onOptionChanged)="colNumChanged()" [disabled]="editDashboard.systemDefault"
+                          [showSpinButtons]="true">
+                        </dx-number-box>
+                      </div>
+                      <div class="col-auto configuration-label">
+                        Rows:
+                      </div>
+                      <div class="col-auto configuration-content">
+                    <dx-number-box [width]="50" [(value)]="editDashboard.numRows" [min]="1" [max]="5" format="0"
+                      (onOptionChanged)="rowNumChanged()" [disabled]="editDashboard.systemDefault"
+                          [showSpinButtons]="true">
+                        </dx-number-box>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+            <div class="row">
+        <div class="col dashboard-container">
+          <div class="dashboard">
+                  <div style="display: flex" *ngFor="let row of this.editDashboard.dashboardContents; let i = index">
+              <div style="padding: 15px"
+                *ngFor="let widget of this.editDashboard.dashboardContents[i]; let j = index">
+                      <app-dashboard-widget [widget]="widget" [rowNumber]="i" [columnNumber]="j" [inactive]="true"
+                        [editMode]="editMode" [systemDefault]="editDashboard.systemDefault"
+                        [selectedLocationId]="getWidgetLocation(i,j)" [noRelocateButtons]="editDashboard.systemDefault"
+                        (widgetAdded)="widgetAdded($event)" (widgetDeleted)="widgetDeleted($event)"
+                        (widgetMoved)="widgetMoved($event)" [widgetConfigurations]="editDashboard.widgetConfigurations">
+                </app-dashboard-widget>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      </div>
+    </div>
+  </div>
+</div>
+<dx-popup class="popup" [width]="'400'" [height]="'auto'" title="Add New Dashboard" [showTitle]="true"
+  [dragEnabled]="true" [(visible)]="showNewDashboardPopup">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div class="row justify-content-left">
+      <div class="col-auto configuration-label" style="padding: 0px 0px 0px 5px">
+        Dashboard Name:
+      </div>
+      <div class="col configuration-content" style="padding: 0px 5px">
+        <dx-text-box [(value)]="editDashboardName" [width]="'auto'" [maxLength]="49" valueChangeEvent="keyup"
+          (onValueChanged)="valueChanged($event)">
+        </dx-text-box>
+      </div>
+    </div>
+    <div class="row justify-content-left" style="margin-top: 10px">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+        <dx-button text="Cancel" (onClick)="showNewDashboardPopup = false" type="default">
+        </dx-button>
+      </div>
+      <div class="col"></div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="Add" [disabled]="!enableSaveButton" (onClick)="confirmAddNewDashboard()" type="success">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="'400'" [height]="'auto'" title="Add New Dashboard" [showTitle]="true"
+  [dragEnabled]="true" [(visible)]="showDuplicatePopup">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div class="row justify-content-left">
+      <div class="col-auto configuration-label" style="padding: 0px 0px 0px 5px">
+        Dashboard Name:
+      </div>
+      <div class="col configuration-content" style="padding: 0px 5px">
+        <dx-text-box [(value)]="editDashboardName" [width]="'auto'" [maxLength]="49" valueChangeEvent="keyup"
+          (onValueChanged)="valueChanged($event)">
+        </dx-text-box>
+      </div>
+    </div>
+    <div class="row justify-content-left" style="margin-top: 10px">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+        <dx-button text="Cancel" (onClick)="showDuplicatePopup = false" type="default">
+        </dx-button>
+      </div>
+      <div class="col"></div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="Add" [disabled]="!enableSaveButton" (onClick)="confirmDuplicateDashboard()" type="success">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="'400'" [height]="'auto'" title="Rename Dashboard" [showTitle]="true"
+  [dragEnabled]="true" [(visible)]="showRenamePopup">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div *ngIf="editDashboard" class="row justify-content-left">
+      <div class="col-auto configuration-label" style="padding: 0px 0px 0px 5px">
+        Dashboard Name:
+      </div>
+      <div class="col configuration-content" style="padding: 0px 5px">
+        <dx-text-box [(value)]="editDashboardName" [width]="'auto'" valueChangeEvent="keyup"
+          (onValueChanged)="editNameValueChanged($event)">
+        </dx-text-box>
+      </div>
+    </div>
+    <div class="row justify-content-left" style="margin-top: 10px">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+        <dx-button text="Cancel" (onClick)="showRenamePopup = false" type="default">
+        </dx-button>
+      </div>
+      <div class="col"></div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="Save" [disabled]="!enableSaveButton" (onClick)="confirmRenameDashboard()" type="success">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+
+<!--
+
+<dx-popup class="popup" [width]="'400'" [height]="'auto'" title="Delete Dashboard" [showTitle]="true"
+  [dragEnabled]="true" [(visible)]="showDeletePopup">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div *ngIf="editDashboard" class="row justify-content-left">
+      <div class="col-auto configuration-label" style="padding: 0px 0px 0px 5px">
+        <p>{{ editDashboard.dashboardName }} will be deleted permanantly.</p>
+        <p *ngIf="editDashboard.numUsers && editDashboard.numUsers === 1">
+          {{ editDashboard.numUsers }} user is currently using this dashboard.
+          They will revert to the default dashboard if you proceed.
+        </p>
+        <p *ngIf="editDashboard.numUsers && editDashboard.numUsers > 1">
+          {{ editDashboard.numUsers }} users are currently using this dashboard.
+          They will revert to the default dashboard if you proceed.
+        </p>
+      </div>
+    </div>
+    <div class="row justify-content-left">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+        <dx-button text="Cancel" (onClick)="showDeletePopup = false" type="default">
+        </dx-button>
+      </div>
+      <div class="col"></div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="Delete" (onClick)="confirmDeleteDashboard()" type="danger">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+-->
+
+<!--
+<dx-popup class="popup" [width]="'400'" [height]="'auto'" title="Discard Changes?" [showTitle]="true"
+  [dragEnabled]="true" [(visible)]="showDiscardChangesPopup">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div *ngIf="editDashboard" class="row justify-content-left">
+      <div class="col-auto configuration-label" style="padding: 0px 0px 0px 5px">
+       You have unsaved changes. Do you wish to discard these changes?
+      </div>
+    </div>
+    <div class="row justify-content-left" style="margin-top: 10px">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+        <dx-button text="Cancel" (onClick)="showDiscardChangesPopup = false" type="default">
+        </dx-button>
+      </div>
+      <div class="col"></div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="Discard" (onClick)="onDashboardSelected()" type="success">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+
+-->
+
+<dx-popup class="popup" [width]="'400'" [height]="'auto'" title="Remove Widget(s)?" [showTitle]="true"
+  [dragEnabled]="true" [(visible)]="showRowColChangePopup" [showCloseButton]="false">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div *ngIf="editDashboard" class="row justify-content-left">
+      <div class="col-auto configuration-label" style="padding: 0px 0px 0px 5px;text-align: center;">
+        This action will remove widget(s) you have placed. Do you wish to continue?
+      </div>
+    </div>
+    <div class="row justify-content-center" style="margin-top: 10px;background-color: white;padding-left: -15px;width: 114%;height: 67%;position: relative;right: 9px;padding: 5px;">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+
+        <dx-button text="Yes" (onClick)="confirmRowColumnChange()" [width]="'100'">
+        </dx-button>
+      </div>&nbsp;
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="No" (onClick)="cancelRowColChange()" [width]="'100'">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+
+
+
+
+
+
+<!--<app-error></app-error>-->
+<app-role-default-dashboard [showPopup]="showRoleDefaultDashboard" [dashboards]="dashboards"
+  (rolesUpdated)="reloadData($event)">
+</app-role-default-dashboard>

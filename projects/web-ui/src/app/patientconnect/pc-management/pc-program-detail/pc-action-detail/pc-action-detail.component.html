@@ -1,0 +1,248 @@
+<dx-form [formData]="selectedAction"
+  [disabled]="!editMode" (onFieldDataChanged)="onActionChanged($event)" >
+  <dxi-item itemType="group" [colCount]="20" >
+    <dxi-item dataField="action" [colSpan]="10" editorType="dxSelectBox"
+      [editorOptions]="{ items: actionList, displayExpr: 'actionName', valueExpr: 'id', searchEnabled: true }">
+    </dxi-item>
+    <dxi-item dataField="pauseOnError" [colSpan]="10" editorType="dxCheckBox"></dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+    <dxi-item dataField="absActionDays" [colSpan]="7" [label]="{text: 'When'}" [disabled]="(selectedAction).actionBefore === 0"
+      editorType="dxNumberBox" [editorOptions]="{showSpinButtons:true, min:0, format:'#0'}">
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate style="padding-top:5px">
+        <label>Days</label>
+      </div>
+    </dxi-item>
+    <dxi-item dataField="actionBefore" [colSpan]="12" editorType="dxRadioGroup" [label]="{visible: false}"
+      [editorOptions]="{items:actionBeforeList, displayExpr:'display', valueExpr: 'actionBefore', layout: 'horizontal'}">
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" *ngIf="(selectedAction).action === pcAction.Sms" [colCount]="20" >
+    <dxi-item dataField="smsTemplate" [colSpan]="12" [label]="{ text: 'SMS Template' }"
+      editorType="dxSelectBox" [editorOptions]="{ items: smsTemplates, searchEnabled: true }">
+    </dxi-item>
+    <dxi-item [colSpan]="8" >
+      <div *dxTemplate>
+        <dx-button style="margin-right: 10px;"
+          [icon]="'refresh'" [type]="'default'"
+          (onClick)="onRefreshSMSTemplatesList()">
+        </dx-button>
+        <dx-button text="Manage SMS Templates" [type]="'default'" (onClick)="onManageSms()"></dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" *ngIf="(selectedAction).action === pcAction.EmailToPatient" [colCount]="20" >
+    <dxi-item dataField="smsTemplate" [colSpan]="12" [label]="{ text: 'Email Template' }"
+      editorType="dxSelectBox" [editorOptions]="{ items: emailTemplates }">
+    </dxi-item>
+    <dxi-item [colSpan]="8" >
+      <div *dxTemplate>
+        <dx-button style="margin-right: 10px;"
+          [icon]="'refresh'" [type]="'default'"
+          (onClick)="onRefreshEmailTemplatesList()">
+        </dx-button>
+        <dx-button text="Manage Email Templates" [type]="'default'" (onClick)="onManageSms()"></dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" *ngIf="(selectedAction).action === pcAction.Sms" [colCount]="20" >
+    <dxi-item dataField="content" [label]="{ text: 'Save Reply Content' }" 
+      [colSpan]="20" editorType="dxCheckBox" [disabled]="disableSaveReplyContent">
+    </dxi-item>
+    <dxi-item [colSpan]="20" [visible]="disableSaveReplyContent">Reply content can be saved for one action per program</dxi-item>
+    <dxi-item itemType="empty"  [colSpan]="20" ></dxi-item>
+    <dxi-item itemType="empty"  [colSpan]="4" ></dxi-item>
+    <dxi-item itemType="group" *ngIf="(selectedAction).content" [colSpan]="12"
+      caption="Reply Content Management" cssClass="form-panel" >
+      <dxi-item dataField="contentField" [label]="{text: 'Known Result Field'}"
+        editorType="dxSelectBox" [editorOptions]="{items:replyContentList, displayExpr:'content', valueExpr:'content'}">
+      </dxi-item>
+      <dxi-item dataField="contentRangeType" editorType="dxRadioGroup" [label]="{text: 'Range Type'}"
+        [editorOptions]="{items:contentTypeRadioGroupItems, displayExpr:'name', valueExpr:'contentRangeType', layout:'horizontal' }">
+      </dxi-item>
+      <dxi-item
+        dataField="contentRangeHigh" [label]="{text: 'Normal Range-High'}" editorType="dxNumberBox"
+        [editorOptions]="{ showSpinButtons: true, maxlength: 3, format:'#0' }">
+      </dxi-item>
+      <dxi-item dataField="contentRangeLow" [label]="{text: 'Normal Range-Low'}"
+        editorType="dxNumberBox" [editorOptions]="{ showSpinButtons: true, maxlength: 3, format:'#0' }">
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item *ngIf="(selectedAction).action === pcAction.LetterToPatient || (selectedAction).action === pcAction.LetterToGP"
+    itemType="group" [colCount]="20" style="padding-top:10px">
+    <dxi-item dataField="letterTemplateId" [colSpan]="12" editorType="dxSelectBox" [label]="{text: 'Letter Template'}"
+      [editorOptions]="{ items: letterTemplates, displayExpr: 'templateDescription', valueExpr: 'id'}">
+    </dxi-item>
+    <dxi-item [colSpan]="8" >
+      <div *dxTemplate>
+        <dx-button style="margin-right: 10px;"
+          [icon]="'refresh'" [type]="'default'"
+          (onClick)="onRefreshLetterTemplatesList()">
+        </dx-button>
+        <dx-button text="Manage Letter Templates" [type]="'default'" (onClick)="onManageLetters()"></dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+    <dxi-item dataField="printOption" [colSpan]="20" editorType="dxRadioGroup"
+      [editorOptions]="{ items:printOptionList, displayExpr:'printOption', valueExpr:'id' }">
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+  </dxi-item>
+  <dxi-item *ngIf="(selectedAction).action === pcAction.Portal"
+    itemType="group" [colCount]="20" style="padding-top: 10px">
+    <dxi-item [colSpan]="8" [label]="{ text: 'Message' }">
+      <div *dxTemplate>
+        <dx-select-box #portalMessageBox
+          [(value)]="selectedAction.portalConfiguration.messageList_ID"
+          [items]="allPortalMessages" [valueExpr]="'list_ID'"
+          [displayExpr]="'itemValue'" [width]="'100%'">
+        </dx-select-box>
+      </div>
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="12" ></dxi-item>
+    <dxi-item [colSpan]="8" [label]="{ text: 'Definition' }">
+      <div *dxTemplate>
+        <dx-select-box [disabled]="true"
+          [value]="selectedAction.portalConfiguration.messageList_ID"
+          [items]="allPortalMessages" [valueExpr]="'list_ID'"
+          [displayExpr]="'additionalNotesOrDescription'" [width]="'100%'">
+        </dx-select-box>
+      </div>
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="12" ></dxi-item>
+    <dxi-item itemType="empty" [colSpan]="8" ></dxi-item>
+    <dxi-item [colSpan]="7" [label]="{ text: '' }">
+      <div *dxTemplate style="margin-top: -63px; padding-left: 10px">
+        <div style="display: flex;">
+          <div>
+            <dx-data-grid [dataSource]="selectedAction.portalScreenList"
+              [(selectedRowKeys)]="selectedPortalScreenKeys"
+              [showRowLines]="true" [showBorders]="true" [height]="150">
+              <dxo-selection mode="single"></dxo-selection>
+              <dxi-column dataField="itemValue" [allowSorting]="false" [caption]="'Screen'"></dxi-column>
+              <dxi-column dataField="displayOrder" [allowSorting]="false" [caption]="'Ord'" [width]="50" [sortOrder]="'asc'"></dxi-column>
+            </dx-data-grid>
+          </div>
+          <div style="padding-left: 5px; padding-right: 5px;">
+            <div style="font-size: 10px; padding-bottom: 5px; padding-top: 51px;">
+              Up/Dwn
+            </div>
+            <div style="padding-bottom: 5px;">
+              <dx-button [icon]="'chevronup'" (onClick)="moveScreenUpClicked()"></dx-button>
+            </div>
+            <div>
+              <dx-button [icon]="'chevrondown'" (onClick)="moveScreenDownClicked()"></dx-button>
+            </div>
+          </div>
+        </div>        
+        <div style="padding-left: 27px; padding-top: 5px;">
+          <dx-button [text]="'Add Screen'" (onClick)="onAddScreenClicked()"
+            [icon]="'add'" [type]="'default'" [width]="150">
+          </dx-button>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item [colSpan]="5" [label]="{ text: '' }">
+      <div *dxTemplate style="margin-top: -63px; padding-right: 5px;">
+        <div>
+          <dx-data-grid [dataSource]="selectedAction.portalDocumentList"
+            [showBorders]="true" [height]="150" [showRowLines]="true">
+            <dxi-column dataField="itemValue" [allowSorting]="false" [caption]="'Document'"></dxi-column>            
+          </dx-data-grid>
+        </div>        
+        <div style="display: flex; padding-top: 5px;">
+          <div style="width: 50%"></div>
+          <div>
+            <dx-button [text]="'Add Document'" [icon]="'add'" [type]="'default'"
+              [width]="150" (onClick)="onAddDocumentClicked()">
+            </dx-button>
+          </div>
+          <div style="width: 50%"></div>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item itemType="empty" [colSpan]="20" ></dxi-item>
+  </dxi-item>
+</dx-form>
+<div *ngIf="actionDetailPopupVisible" style="display: flex;">
+  <hms-button-cancel (cancelClicked)="onActionCancelled()"></hms-button-cancel>
+  <div style="width: 100%;"></div>
+  <div>
+    <dx-button text="OK" [type]="'success'" [disabled]="!editMode"
+      (onClick)="onActionSaved(selectedAction)" [width]="90">
+    </dx-button>
+  </div>
+</div>
+<dx-popup class="popup"
+  [height]="300"
+  [width]="400"
+  title="Select Portal Screens"
+  [showTitle]="true"
+  (onHidden)="animationDone = false"
+  (onShown)="animationDone = true"
+  [(visible)]="showSelectScreen">
+  <div *dxTemplate="let data of 'content'">
+    <div *ngIf="animationDone">
+      <dx-data-grid [dataSource]="selectablePortalScreens" [showBorders]="true"
+        [showRowLines]="true" [(selectedRowKeys)]="selectedScreenKeys"
+        [height]="210" (onSelectionChanged)="onSelectedScreensChanged($event)">
+        <dxo-selection mode="multiple"></dxo-selection>
+        <dxi-column dataField="itemValue" [allowSorting]="false" [caption]="'Screen'"></dxi-column>
+        <dxi-column dataField="displayOrder" [caption]="'Order'"
+          [allowSorting]="false" [width]="70" [sortOrder]="'asc'">
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+    <div *ngIf="!animationDone" style="height: 210px;"></div>
+    <div style="display: flex; padding-top: 10px">
+      <div>
+        <hms-button-cancel (cancelClicked)="showSelectScreen = false"></hms-button-cancel>
+      </div>
+      <div style="width: 100%"></div>
+      <div>
+        <dx-button [width]="90" [text]="'OK'" [type]="'success'"
+          (onClick)="onConfirmAddScreenClicked()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup class="popup"
+  [height]="300"
+  [width]="400"
+  title="Select Portal Documents"
+  [showTitle]="true"
+  (onHidden)="animationDone = false"
+  (onShown)="animationDone = true"
+  [(visible)]="showSelectDocument">
+  <div *dxTemplate="let data of 'content'">
+    <div *ngIf="animationDone">
+      <dx-data-grid [dataSource]="selectablePortalDocuments" [showBorders]="true"
+        [showRowLines]="true" [(selectedRowKeys)]="selectedDocumentKeys"
+        [height]="210" (onSelectionChanged)="onSelectedDocumentsChanged($event)">
+        <dxo-selection mode="multiple"></dxo-selection>
+        <dxi-column dataField="itemValue" [allowSorting]="false" [caption]="'Document'"></dxi-column>
+        <dxi-column dataField="displayOrder" [caption]="'Order'" [visible]="false"
+          [allowSorting]="false" [width]="70" [sortOrder]="'asc'">
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+    <div *ngIf="!animationDone" style="height: 210px;"></div>
+    <div style="display: flex; padding-top: 10px">
+      <div>
+        <hms-button-cancel (cancelClicked)="showSelectDocument = false"></hms-button-cancel>
+      </div>
+      <div style="width: 100%"></div>
+      <div>
+        <dx-button [width]="90" [text]="'OK'" [type]="'success'"
+          (onClick)="onConfirmAddDocumentClicked()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

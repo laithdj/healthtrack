@@ -1,0 +1,94 @@
+<div class="outcome-panel">
+    <app-roster-details [roster]="roster"></app-roster-details>
+</div>
+<dx-form id="form" class="split-form">
+  <dxi-item itemType="group" [colCount]="10" caption="Add Break">
+    <dxi-item itemType="group"  class="ml-1" [colSpan]="3">
+      <dxi-item [label]="{ text:'Start Time' }" [editorOptions]="{ width: 70 }">
+        <dx-date-box
+        [(value)]="startBreak"
+        [width]="100"
+        type="time">
+    </dx-date-box>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group"  cssClass="move-duration" [colSpan]="2">
+      <dxi-item [label]="{ text:'Duration' }" [editorOptions]="{ width: 20 }">
+    <dx-number-box [showSpinButtons]="true" format="# minutes" [min]="1" [(value)]="duration" [width]="140"></dx-number-box>
+      </dxi-item>
+      <dxi-item >
+        <div><span style="margin-left:6px" >Push Back Finish Time:<dx-check-box #push_box class="left-8" [disabled]="false"  [value]="push_back_time" (onValueChanged)="pushBackTime($event)"></dx-check-box></span></div>
+    </dxi-item>
+    </dxi-item>
+  <dxi-item itemType="group"  style="float:right" cssClass="ml-3 left-10" [colSpan]="2">
+    <dx-button text='Split' [type]="'default'" class="ml-4" (onClick)="splitRoster()"  [width]="88">
+    </dx-button>
+  </dxi-item>
+  </dxi-item>
+</dx-form>
+<dx-form id="form" class="split-form outcome-panel" [formData]="roster_outcome" labelAlignment="left" [readOnly]="true">
+    <dxi-item itemType="group" [colCount]="4" caption="New Roster">
+      <dxi-item itemType="group"  class="mr-2">
+          <dxi-item dataField="startTime" [label]="{ text: 'Part 1 Date' }" editorType="dxDateBox"  [editorOptions]="{ width: 86 }" cssClass="mr-2"></dxi-item>
+          <dxi-item [label]="{ text: 'Part 2 Date' }"  editorType="dxDateBox" cssClass="mr-2 hide-data">
+            <dx-date-box
+            [value]="startBreak_outcome"
+            [width]="86"
+            [readOnly]="true">
+        </dx-date-box>
+          </dxi-item> 
+      </dxi-item>
+      <dxi-item itemType="group" cssClass="move-item-1">
+              <dxi-item [label]="{ text: 'Start' }">
+                  <dx-date-box
+                  [value]="roster_outcome.startTime"
+                  type="time"
+                  [width]="86"
+                  [readOnly]="true">
+              </dx-date-box>
+              </dxi-item>
+          <dxi-item [label]="{ text: 'Start' }" [editorOptions]="{ width: 90 }">
+              <dx-date-box
+              [value]="endBreak_outcome"
+              type="time"
+              [width]="86"
+              [readOnly]="true">
+          </dx-date-box>
+          </dxi-item>
+      </dxi-item>
+    <dxi-item itemType="group" cssClass="move-item-2">
+        <dxi-item [label]="{ text: 'Finish' }" >
+            <dx-date-box
+            [(value)]="start_break_display"
+            type="time"
+            [width]="86"
+            [readOnly]="true">
+        </dx-date-box>
+        </dxi-item>
+            <dxi-item [label]="{ text: 'Finish' }">
+                <dx-date-box
+                [value]="finish_time"
+                type="time"
+                [width]="86"
+                [readOnly]="true">
+            </dx-date-box>
+            </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" cssClass="move-item-3">
+      <dxi-item [label]="{ text: 'Duration' }">
+      <dx-text-box  [readOnly]="true" [(value)]="part1_duration" [width]="86"></dx-text-box>
+      </dxi-item>
+          <dxi-item [label]="{ text: 'Duration' }">
+              <dx-text-box  [readOnly]="true" [(value)]="part2_duration" [width]="86"></dx-text-box>
+            </dxi-item>
+  </dxi-item>
+    </dxi-item>
+  </dx-form>
+<dx-form id="form" class="split-form">
+    <dxi-item itemType="group" [colCount]="4" cssClass="margin">
+    <hms-button-set-save [includeDeleteButton]="false"
+    (saveClicked)="saveRoster(duration)"
+    (cancelClicked)="cancel()">
+    </hms-button-set-save>
+      </dxi-item>
+  </dx-form>

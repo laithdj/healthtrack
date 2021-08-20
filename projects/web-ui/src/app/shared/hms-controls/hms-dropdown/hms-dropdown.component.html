@@ -1,0 +1,13 @@
+<dx-select-box [searchEnabled]="searchEnabled"
+  [class]="class"
+  [items]="items" 
+  [displayExpr]="displayExp"
+  (onValueChanged)="onValueChangedClicked($event)" 
+  [value]="value" 
+  [valueExpr]="valueExp"
+  itemTemplate="item">
+    <div *dxTemplate="let data of 'item'; let i = index" title="{{data[displayExp]}}">
+        <div style="display:inline-block" >
+            {{data[displayExp]}}</div>
+    </div>
+</dx-select-box>

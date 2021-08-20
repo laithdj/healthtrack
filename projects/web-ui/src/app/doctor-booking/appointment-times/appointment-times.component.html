@@ -1,0 +1,135 @@
+<div class="background">
+  <div class="main">
+    <!-- <div class="left" >
+            <dx-list class="list" [dataSource]="dataSource" [grouped]="true" [width]="'100%'"  [searchEnabled]="true"
+                selectionMode="single" [selectedItemKeys]="[currentDoctor.Id]"
+                (onSelectionChanged)=listSelectionChanged($event)>
+                <div *dxTemplate="let item of 'item'">
+                    <div>
+                        <div class="hotel w-100" style="padding-top: 15px;padding-bottom: 15px;">
+                            <div class="name">{{item.Doctor_Name}}</div>
+                            <div class="Occupation">{{item.Occupation}}</div>
+                        </div>
+                    </div>
+                </div>
+            </dx-list>
+        </div>-->
+    <div class="right">
+      <div class="header">
+        <div class="name-container">
+          <div class="name">Dr John Smith</div>
+          <div>General Medical Practitioner
+          </div>
+        </div>
+        <div class="price-container">
+        </div>
+      </div>
+      <div class="dx-field mt-1" style="display: flex;">
+        <div class="dx-field-label label-width">Time of Day:</div>
+        <dx-select-box [dataSource]="times" [value]="times[0]" class="select-time">
+        </dx-select-box>
+        <div class="w-100"></div>
+        <dx-button id="button" text="Prev" icon="chevrondoubleleft" [width]="100" class="ml-1" type="default"
+          [useSubmitBehavior]="true">
+        </dx-button>
+        <dx-button id="button" text="First Available" [width]="100" class="ml-1" type="default" [useSubmitBehavior]="true">
+        </dx-button>
+        <div class="test">
+          <dx-button id="button" text="Next" icon="chevrondoubleright" [width]="68" class="ml-1" type="default"
+            [useSubmitBehavior]="true">
+          </dx-button>
+        </div>
+      </div>
+      <div class="dx-field mt-1 fl float-right" style="display: flex;">
+        <div class="dx-field-label">Specific Date:</div>
+        <div style="z-index: 100;">
+          <input (click)="openCal()" [width]="150" type="default" [(value)]="formattedDate" class="custom-input" />
+        </div>
+      </div>
+      <dx-list #tree class="times mt-1" [dataSource]="dataSource" [height]="'calc(100vh - 151px)'" [grouped]="true"
+        [width]="'100%'" [searchEnabled]="false">
+        <dxo-paging [enabled]="true" [pageSize]="10">
+        </dxo-paging>
+        <div *dxTemplate="let item of 'item'">
+          <div>
+            <div class="hotel w-100" style="padding-top: 15px;padding-bottom: 15px;">
+              <div class="Occupation">{{item.Date}}</div>
+                <div>
+                  <div class="row">
+                    <div *ngFor="let key of getItemKeys(item.Time)" class="description" style="display: flex;">
+                    <div class="col-sm">
+                      <dx-button id="button" text="{{item.Time[key]}}" [width]="100" class="ml-1" type="default"
+                        (onClick)="open()" [useSubmitBehavior]="true">
+                      </dx-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dx-list>
+
+      <!--<div class="mt-2">
+                <dx-button id="button" text="Book Appointment" [width]="'50%'" type="success"
+                    [useSubmitBehavior]="true">
+                </dx-button>
+            </div>-->
+    </div>
+  </div>
+</div>
+ 
+<dx-popup [width]="300" [height]="250" [showTitle]="true" title="Confirm Booking" [showCloseButton]="true"
+  [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="confirmBooking">
+  <div>
+    <i class="dx-icon-event"></i>
+    <strong>
+      Tuesday,
+      12 May 2020
+    </strong>
+    <p class="ml-3">
+      10:30 AM
+      <small>
+        (Adelaide time)
+      </small>
+    </p>
+  </div>
+  <div>
+    <i class="dx-icon-user"></i>
+    <strong>
+      Dr Peter Rogers
+    </strong>
+    <p class="ml-3">
+      Reason: Telehealth (Phone Consult) <small>(15 min)</small>
+    </p>
+  </div>
+  <div>
+    <i class="dx-icon-map"></i>
+    <strong>
+      Bartley Terrace Medical Centre
+    </strong>
+    <p class="ml-3">
+      83 Fairford Terrace
+    </p>
+    <p>
+    </p>
+  </div>
+</dx-popup>
+
+<dx-popup [width]="260" [height]="320" [showTitle]="true" title="Select Date" [showCloseButton]="false"
+  [dragEnabled]="true" [closeOnOutsideClick]="false" [(visible)]="calander">
+  <div class="widget-container">
+    <dx-calendar #calendar
+        id="calendar-container" 
+        [disabled]="false"
+        [(value)]="currentDate"
+        >
+    </dx-calendar>
+</div>
+<dx-button id="button" text="Cancel" [width]="80" class="mt-3" (onClick)="cancelDate()" type="default"
+[useSubmitBehavior]="true">
+</dx-button>
+<dx-button id="button" text="Search" [width]="80" class="mt-3 float-right" (onClick)="selectDate()" type="default"
+[useSubmitBehavior]="true">
+</dx-button>
+</dx-popup>

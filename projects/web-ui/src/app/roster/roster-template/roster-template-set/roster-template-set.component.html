@@ -1,0 +1,94 @@
+<div *ngIf="!(loading$ | async)">
+  <div class="widget-container">
+    <div style="font-size: 12px">Template Set:</div>
+    <div style="display: flex">
+      <dx-select-box [width]="'100%'" [items]="(templateSets$ | async)"
+        displayExpr="templateSetName" [searchEnabled]="false"
+        [value]="(selectedSet$ | async)"
+        (onValueChanged)="onSetChanged($event)">
+      </dx-select-box>
+      <dx-button style="margin-left: 4px"
+        icon="preferences" type="default"
+        (onClick)="onManageSetsClicked()">
+      </dx-button>
+    </div>
+  </div>
+</div>
+<dx-popup [(visible)]="showSetPopup"
+  [showTitle]="true" [title]="popupTitle"
+  [width]="550" [height]="'auto'"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <dx-form style="padding-bottom: 10px"
+      [width]="'100%'" [colCount]="5"
+      [readOnly]="!editMode" [(formData)]="editRosterSet">
+      <dxi-item [colSpan]="5" [label]="{ text: 'Set Name' }"
+        dataField="templateSetName">
+      </dxi-item>
+      <dxi-item [colSpan]="5" editorType="dxRadioGroup"
+        [label]="{ text: 'Cycle Length (Days)' }"
+        [editorOptions]="{ items: cycleOptions, value: selectedCycleOption,
+          layout: 'horizontal', onValueChanged: onCycleChanged }">
+      </dxi-item>
+      <dxi-item *ngIf="editMode && isNew" [colSpan]="5"
+        [label]="{ text: 'Duplicate Set' }">
+        <div *dxTemplate>
+          <dx-select-box [items]="(rosterTemplateSets$ | async)"
+            [(value)]="selectedSet" [showClearButton]="true"
+            (onValueChanged)="onDuplicateSetChanged()"
+            displayExpr="templateSetName">
+          </dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item *ngIf="!editMode"
+        itemType="empty" [colSpan]="5">
+      </dxi-item>
+      <dxi-item *ngIf="!editMode" [colSpan]="3"
+        [label]="{ text: 'Created By' }"
+        dataField="userCreated">
+      </dxi-item>
+      <dxi-item *ngIf="!editMode" [colSpan]="2" [label]="{ text: 'At' }"
+        editorType="dxDateBox" dataField="dateCreated"
+        [editorOptions]="{ showDropDownButton: false, width: '100%', type: 'datetime' }">
+      </dxi-item>
+      <dxi-item *ngIf="!editMode" [colSpan]="3"
+        [label]="{ text: 'Last Modified By' }"
+        dataField="userLastModified">
+      </dxi-item>
+      <dxi-item *ngIf="!editMode" [label]="{ text: 'At' }" [colSpan]="2"
+        editorType="dxDateBox" dataField="dateLastModified"
+        [editorOptions]="{ showDropDownButton: false, width: '100%', type: 'datetime' }">
+      </dxi-item>
+      <dxi-item *ngIf="editRosterSet.dateLastRun && !editMode" [colSpan]="3"
+        [label]="{ text: 'Last Run By' }" dataField="userLastRun">
+      </dxi-item>
+      <dxi-item *ngIf="editRosterSet.dateLastRun && !editMode" [label]="{ text: 'At' }"
+        [colSpan]="2" editorType="dxDateBox" dataField="dateLastRun"
+        [editorOptions]="{ showDropDownButton: false, width: '100%', type: 'datetime' }">
+      </dxi-item>
+      <dxi-item *ngIf="editRosterSet.lastRunFrom && !editMode" [label]="{ text: 'Last Run From' }"
+        [colSpan]="3" dataField="lastRunFrom" editorType="dxDateBox"
+        [editorOptions]="{ showDropDownButton: false, width: '100%', type: 'datetime' }">
+      </dxi-item>
+      <dxi-item *ngIf="editRosterSet.lastRunTo && !editMode" [label]="{ text: 'To' }"
+        dataField="lastRunTo" editorType="dxDateBox" [colSpan]="2"
+        [editorOptions]="{ showDropDownButton: false, width: '100%', type: 'datetime' }">
+      </dxi-item>
+    </dx-form>
+    <div *ngIf="selectedSet" style="padding-bottom: 10px;">
+      The new Set will contain duplicates of all templates in the <span style="font-weight: bold;">{{ selectedSet.templateSetName }}</span>
+      Set.<br>This set has a Cycle Length of <span style="font-weight: bold;">{{ selectedSet.cycleLength | number }} Days</span>,
+      changing the Cycle Length may result in Templates being unable to be duplicated.
+    </div>
+    <hms-button-set
+      [editMode]="editMode"
+      [addNew]="isNew"
+      (editClicked)="editMode = true"
+      (cancelClicked)="onCancelChangesClicked()"
+      (deleteClicked)="onDeleteSetClicked()"
+      (saveClicked)="onSaveClicked()"
+      (addNewClicked)="onNewSetClicked()"
+      (closeClicked)="onCloseClicked()">
+    </hms-button-set>
+  </div>
+</dx-popup>

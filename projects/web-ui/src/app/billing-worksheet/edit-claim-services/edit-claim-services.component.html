@@ -1,0 +1,540 @@
+<div *ngIf="worksheetItems && worksheetItems.length > 0" class="worksheet-form">
+  <div style="width: 50%;"></div>
+  <div style="width: auto;">
+    <dx-form [width]="1018" [formData]="worksheetItems[0]" [colCount]="2" [readOnly]="true">
+      <dxi-item itemType="group" caption="Patient" [colCount]="2">
+        <dxi-item [label]="{ text: 'Patient' }" [dataField]="'patientDisplayName'" [colSpan]="2"></dxi-item>
+        <dxi-item [label]="{ text: 'DOB' }" [dataField]="'dateTimePatientDateOfBirth'"></dxi-item>
+        <dxi-item [label]="{ text: 'Patient ID' }">
+          <div *dxTemplate="let patId of 'patientIDTemplate'" style="display: flex;">
+            <div style="width: 100%;">
+              <dx-text-box [readOnly]="true" [value]='worksheetItems[0].patientId' [width]="'100%'">
+              </dx-text-box>
+            </div>
+            <div style="margin-left: 5px;">
+              <dx-button [text]="''" [icon]="'user'" [type]="'default'" id="patientTip"
+                (mouseenter)="togglePatientTip(true)" (mouseleave)="togglePatientTip(false)"
+                (onClick)='onGoToPatient(worksheetItems[0].patientId)'>
+              </dx-button>
+            </div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" [colCount]="2">
+        <dxi-item itemType="group" [colSpan]="2">
+          <div *dxTemplate="let something of 'someTemplate'">
+            <div class="dx-field" style="margin-top: -5px; display: flex">
+              <div style="margin-left: 25px; margin-right: 5px; margin-top: 5px">Invoice To:</div>
+              <div class="dx-field-value" style="padding: 0px 5px;">
+                <dx-radio-group
+                  [items]="invoiceToOptions"
+                  (onValueChanged)="onInvoiceToChanged()"
+                  [(value)]="invoiceToSelection"
+                  layout="horizontal">
+                </dx-radio-group>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item *ngIf="invoiceToSelection === invoiceToOptions[0]" [label]="{ text: 'Insurer' }" [colSpan]="2">
+          <div *dxTemplate="let ins of 'insurerTemplate'" style="display: flex;">
+            <div [ngClass]="(worksheetItems[0]?.insurer === 'None') ? 'insurer-field' : ''" style="width: 100%;">
+              <dx-text-box [readOnly]="true" [value]='worksheetItems[0]?.insurer'
+                [ngClass]="(worksheetItems[0]?.insurer === 'None') ? 'red-background' : ''" [width]="'100%'">
+              </dx-text-box>
+            </div>
+            <div style="margin-left: 5px;">
+              <dx-button [text]="''" [icon]="'refresh'" [type]="'default'"
+                (onClick)="updateHealthInsurer()" id="refreshTip"
+                (mouseenter)="toggleRefresh(true)" (mouseleave)="toggleRefresh(false)">
+              </dx-button>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item *ngIf="invoiceToSelection === invoiceToOptions[0]" [label]="{ text: 'Policy Number' }" [dataField]="'insurerCardNumber'"></dxi-item>
+        <dxi-item *ngIf="invoiceToSelection === invoiceToOptions[0]" [label]="{ text: 'Method' }"
+          [dataField]="'insurerDefaultMethod'" [editorType]="'dxTextBox'">
+        </dxi-item>
+        <dxi-item *ngIf="invoiceToSelection === invoiceToOptions[1]" [label]="{ text: 'Company' }" [colSpan]="2">
+          <div *dxTemplate="let ins of 'insurerTemplate'" style="display: flex; margin-bottom: 35px;">
+            <div [ngClass]="(worksheetItems[0]?.insurer === 'None') ? 'insurer-field' : ''" style="width: 100%;">
+              <dx-select-box #companySelectBox id="companySelectBox"
+                [items]="companies$ | async"
+                [searchEnabled]="true"
+                [displayExpr]="'companyName'" [valueExpr]="'company_ID'"
+                [(value)]="worksheetItems[0].companyId">
+              </dx-select-box>
+            </div>
+            <div style="margin-left: 5px;">
+              <dx-button [text]="''" [icon]="'refresh'" [type]="'default'"
+                (onClick)="refreshCompaniesList()" id="refreshCompaniesTip"
+                (mouseenter)="toggleRefreshCompanies(true)" (mouseleave)="toggleRefreshCompanies(false)">
+              </dx-button>
+            </div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" caption="Booking" [colCount]="4" [colSpan]="2">
+        <dxi-item [label]="{ text: 'Date' }" [editorType]="'dxDateBox'" [dataField]="'dateTimeBookingDate'"
+          [editorOptions]="{ width: '100%', useMaskBehavior: true, displayFormat: 'shortDateShortTime' }">
+        </dxi-item>
+        <dxi-item [label]="{ text: 'Doctor' }" [dataField]="'doctorDisplayName'"></dxi-item>
+        <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+        <dxi-item [label]="{ text: 'Type' }" [dataField]="'bookingType'"></dxi-item>        
+        <dxi-item [label]="{ text: 'Location' }" [dataField]="'locationDisplayName'"></dxi-item>
+        <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+      </dxi-item>
+    </dx-form>
+    <div style="margin-top: -60px; margin-left: 515px;">
+      <dx-form [width]="502" [formData]="worksheetItems[0]" [readOnly]="true">
+        <dxi-item>
+          <div *dxTemplate="let data of 'template'" style="width: 100%; display: flex;">
+            <div style="width: auto; text-align: right; margin-right: 10px; margin-top: 4px;">
+              <!-- Booking&nbsp;<br>Notes: -->
+              Notes:
+            </div>
+            <div style="width: 100%">
+              <dx-text-area
+                [height]="57" [readOnly]="true" [width]="'100%'"
+                [value]="worksheetItems[0].bookingNotes">
+              </dx-text-area>
+            </div>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+  <div style="width: 50%;"></div>
+</div>
+<div *ngIf="worksheetItems && worksheetItems.length > 0" style="padding: 10px 15px; width: 100%;">
+  <div style="width: 100%; display: flex;">
+    <div style="width: 50%;"></div>
+    <div style="width: auto;">
+      <dx-form [width]="987" *ngIf="worksheetItems && worksheetItems.length > 0" [formData]="worksheetItems[0]">
+        <dxi-item [itemType]="'group'" [caption]="'Worksheet Details'">
+          <dxi-item [label]="{ text: 'Status' }" [dataField]="'status'" [editorType]="'dxSelectBox'"
+            [editorOptions]="{ items: (statuses$ | async), displayExpr:'statusDisplayName', valueExpr:'status', width: 170 }">
+          </dxi-item>
+          <dxi-item [label]="{ text: 'ACC Related' }" [dataField]="'accRelated'" [editorType]="'dxCheckBox'">
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div>
+      <div style="margin-left: 5px; margin-top: -6px">
+        <dx-button [icon]="'info'" [type]="'default'" (onClick)="openAudit()" id="auditTip"
+          (mouseenter)="toggleAuditTip(true)" (mouseleave)="toggleAuditTip(false)">
+        </dx-button>
+      </div>
+    </div>
+    <div style="width: 50%;"></div>
+  </div>
+  <div style="width: 100%; display: flex; margin-top: -60px">
+    <div style="width: 50%;"></div>
+    <div style="width: 1018px; padding-left: 255px;">
+      <dx-form [width]="762" *ngIf="worksheetItems && worksheetItems.length > 0" [formData]="worksheetItems[0]" [colCount]="5">
+        <dxi-item [colSpan]="2">
+          <div *dxTemplate="let data of 'template'" style="width: 100%; display: flex;">
+            <div style="width: auto; text-align: right; margin-right: 10px; margin-top: 4px;">
+              Reason&nbsp;for&nbsp;<br>Service:
+              <!-- Reason for Service: -->
+            </div>
+            <div style="width: 100%">
+              <dx-text-area
+                [height]="62" [width]="'100%'"
+                [(value)]="worksheetItems[0].serviceReason">
+              </dx-text-area>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [colSpan]="3">
+          <div *dxTemplate="let data of 'template'" style="width: 100%; display: flex;">
+            <div style="width: auto; text-align: right; margin-right: 10px; margin-top: 4px;">
+              <!-- Claim&nbsp;<br>Notes: -->
+              Notes:
+            </div>
+            <div style="width: 100%">
+              <dx-text-area
+                [height]="62" [width]="'100%'"
+                [(value)]="worksheetItems[0].claimNotes">
+              </dx-text-area>
+            </div>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div style="width: 50%;"></div>
+  </div>
+  <div style="width: 100%; display: flex; margin-bottom: -3px;">
+    <div style="width: 50%;"></div>
+    <div style="width: auto;">
+      <dx-form [width]="1018" [formData]="worksheetItems[0]">
+        <dxi-item caption="Services" itemType="group" [colCount]="5">   
+          <dxi-item *ngIf="(servicesList$ | async) && (servicesList$ | async).length > 0"
+            [colSpan]="3" [label]="{ text: '' }">
+            <div *dxTemplate style="display: flex;">
+              <div style="width: 100%;">
+                <dx-form [width]="'100%'" [formData]="serviceCode">
+                  <dxi-item [label]="{ text: 'Add Service' }" [width]="'100%'">
+                    <div *dxTemplate>
+                      <dx-select-box (onBlur)="focusOnItem($event)" [noDataText]="resultsText"
+                        [dataSource]="{ store: (servicesList$ | async)[0]?.billItems, paginate: true }"
+                        [searchExpr]="searchFields" [displayExpr]="'itemNumDisp'" [(value)]="serviceCode"
+                        [searchTimeout]="50" [valueExpr]="'itemNumDisp'" [itemTemplate]="'item'" [searchEnabled]="true"
+                        searchMode="startswith" (onEnterKey)="addService()" [dropDownOptions]="{ maxHeight: 300 }">
+                        <div *dxTemplate="let item of 'item'" title="{{item.description}}" style="display: flex;">
+                          <div class="service-item-num">{{ item.itemNumDisp }}</div>
+                          <div class="service-health-fund-code">{{ item.healthFundCode }}</div>
+                          <div class="service-description">{{ item.description }}</div>
+                        </div>
+                      </dx-select-box>
+                    </div>
+                  </dxi-item>
+                </dx-form>
+              </div>
+              <div style="width: auto; padding-left: 5px; padding-right: 10px">
+                <dx-button [icon]="'add'" [type]="'default'" [text]="'Add'" [width]="80" (onClick)="addService()">
+                </dx-button>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item *ngIf="invoiceToSelection === invoiceToOptions[0]" [label]="{ text: 'Cover %' }"
+            [dataField]="'insurerDefaultCover'">
+            <div *dxTemplate="let data of 'template'" style="display: flex;">
+              <div>
+                <dx-number-box
+                  [(value)]="worksheetItems[0].insurerDefaultCover"
+                  [showClearButton]="true"
+                  [min]="0" [max]="1" [format]="'#0.##%'" [width]="90">
+                </dx-number-box>
+              </div>
+              <div style="padding-left: 5px">
+                <dx-button [icon]="'check'" [type]="'default'" id="applyTip"
+                  (onClick)="onInsurerDefaultCoverChanged()"
+                  (mouseenter)="toggleApplyMessage(true)" (mouseleave)="toggleApplyMessage(false)">
+                </dx-button>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item *ngIf="invoiceToSelection !== invoiceToOptions[0]" itemType="empty"></dxi-item>
+          <dxi-item *ngIf="invoiceToSelection !== invoiceToOptions[0]" itemType="empty"></dxi-item>
+          <dxi-item *ngIf="invoiceToSelection === invoiceToOptions[0]" [dataField]="'excess'" [editorOptions]="{ width: 90 }">
+            <div *dxTemplate="let data of 'template'" style="display: flex;">
+              <div>
+                <dx-number-box
+                  [(value)]="worksheetItems[0].excess"
+                  [showClearButton]="true"
+                  (onValueChanged)="onExcessValueChanged($event)"
+                  (onEnterKey)="onExcessChanged()"
+                  [min]="0" [format]="'$#0.##'" [width]="90">
+                </dx-number-box>
+              </div>
+              <div style="padding-left: 5px">
+                <dx-button [icon]="'check'" [type]="'default'" id="applyTip2"
+                  (onClick)="onExcessChanged()"
+                  (mouseenter)="toggleApplyMessage2(true)" (mouseleave)="toggleApplyMessage2(false)">
+                </dx-button>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item *ngIf="!(servicesList$ | async) || (servicesList$ | async).length === 0"
+            [colSpan]="3" [label]="{ text: '' }">
+            <div *dxTemplate style="margin-top: 34px; margin-bottom: -3px; margin-left: -100px;">
+              Loading Services ...
+            </div>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div style="width: 50%;"></div>
+  </div>
+  <div style="margin-top: 3px; width: 100%; display: flex;">
+    <div style="width: 50%;"></div>
+    <div style="width: auto;">
+      <dx-data-grid #servicesGrid id="servicesGrid" *ngIf="editWorksheetItems"
+        [disabled]="!editWorksheetItems[0]?.serviceId"
+        [dataSource]="editWorksheetItems"
+        (onCellHoverChanged)="toggleToolTip($event)"
+        [rowAlternationEnabled]="true"
+        [noDataText]="'No Services Found'"
+        [showBorders]="true"
+        [showRowLines]="true"
+        (onRowPrepared)="onRowPrepared($event)"
+        [height]="insidePopup ? (editWorksheetItems.length > 4 ? 160 : 'auto') : 'auto'"
+        [width]="1018">
+        <dxo-editing mode="batch" [allowUpdating]="true" [allowAdding]="true" [selectTextOnEditStart]="true"
+          [startEditAction]="'click'">
+        </dxo-editing>
+        <dxo-scrolling [useNative]="true"></dxo-scrolling>
+        <dxi-column dataField="serviceCode" caption="Service" [allowEditing]="false" [width]="'auto'"></dxi-column>
+        <dxi-column dataField="description" caption="Description" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="billPracticeFee" caption="Retail" [width]="45" [allowSorting]="false"
+          [editCellTemplate]="'practiceFeeTemplate'" [dataType]="'boolean'">
+          <div *dxTemplate="let data of 'practiceFeeTemplate'" style="margin-left: -5px;">
+            <dx-check-box [(value)]="data.value"
+              (onValueChanged)="onBillPracticeFeeChanged($event, data)">
+            </dx-check-box>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="insurerCode" caption="HI Code" [allowEditing]="false" [width]="'auto'"></dxi-column>
+        <dxi-column dataField="fullFee" [width]="'auto'" [allowEditing]="false" [dataType]="'number'"
+          [format]="'$#0.00'">
+        </dxi-column>
+        <dxi-column dataField="cover" caption="Cover %" [editCellTemplate]="'editCoverTemplate'" [width]="'auto'"
+          [dataType]="'number'" [format]="'#0.##%'">
+          <div *dxTemplate="let data of 'editCoverTemplate'">
+            <dx-number-box [(value)]="data.value" [min]="0"
+              [format]="'#0.##%'" [max]="1"
+              (onValueChanged)="onCoverChanged($event, data)">
+            </dx-number-box>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="coverFee" [width]="'auto'" [dataType]="'number'" [allowEditing]="false"
+          [format]="'$#0.00'">
+        </dxi-column>
+        <dxi-column dataField="coPayment" caption="Co-Payment" [width]="'auto'" [format]="'$#0.00'"
+          [allowEditing]="false" [dataType]="'number'" [editorOptions]="{ min: 0, format: '$#0.00' }">
+        </dxi-column>
+        <dxi-column dataField="coPaymentOverride" caption="Override" [width]="'auto'"
+          [editCellTemplate]="'coPayTemplate'" [dataType]="'number'" [format]="'$#0.00'">
+          <div *dxTemplate="let data of 'coPayTemplate'">
+            <dx-number-box [format]="'$#0.00'" [min]="0" [showClearButton]="true"
+              [(value)]="data.value" (onValueChanged)="onOverrideChanged($event, data)">
+            </dx-number-box>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="claimId" caption="" [width]="'auto'" [cellTemplate]="'overrideTemplate'"
+          [allowSorting]="false" [allowEditing]="false">
+          <div *dxTemplate="let data of 'overrideTemplate'" style="display: flex;">
+            <dx-button [text]="'Zero'" [disabled]="!editWorksheetItems[0]?.serviceId"
+              [type]="'default'" (onClick)="onZeroOverride($event, data)" [width]="60">
+            </dx-button>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="serviceId" [cellTemplate]="'editTemplate'" caption="" [width]="'auto'"
+          [allowSorting]="false" [allowEditing]='false'>
+          <div *dxTemplate="let data of 'editTemplate'">
+            <dx-button [text]="''" [disabled]="!data?.value" [type]="'danger'"
+              [icon]="'remove'" (onClick)="onRemoveService(data)">
+            </dx-button>
+          </div>
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+    <div style="width: 50%;"></div>
+  </div>
+  <div style="margin-top: 10px; display: flex; width: 100%;">
+    <div style="width: 50%;"></div>
+    <div style="margin-right: 15px;">
+      <dx-form [width]="500" [formData]="worksheetItems[0]">
+        <dxi-item [itemType]="'group'" [caption]="'Claim Prior Approval'" [colCount]="2">
+          <dxi-item [label]="{ text: 'Claim Status' }" [editorType]="'dxRadioGroup'"
+            [editorOptions]="{ items: claimStatusItems, displayExpr: 'name', valueExpr: 'id',
+              layout: 'vertical', onValueChanged: onClaimStatusChanged, value: selectedClaimOption }">
+          </dxi-item>
+          <dxi-item [label]="{ text: 'Application No' }" [width]="'100%'"
+            [dataField]="'applicationNumber'" [editorType]="'dxTextBox'">
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div style="margin-left: 15px; width: auto;">
+      <dx-form [width]="468" [formData]="worksheetItems[0]">
+        <dxi-item [itemType]="'group'" [caption]="'Invoicing'">
+          <dxi-item [label]="{ text: 'Patient Billed' }">
+            <div *dxTemplate="let data of 'content'" style="display: flex;">
+              <div style="color: #5cb85c;"
+                *ngIf="(worksheetItems[0].invoiceNo_Patient && worksheetItems[0].invoiceNo_Patient > 0) || worksheetItems[0].patientNoCharge">
+                <i style="font-size: 20px" class="dx-icon-check"></i>
+              </div>
+              <div style="height: 18px; width: 35px;"
+                *ngIf="(!worksheetItems[0].invoiceNo_Patient || worksheetItems[0].invoiceNo_Patient === 0) && !worksheetItems[0]?.patientNoCharge">
+              </div>
+              <div style="margin-left: 15px;">
+                <dx-button [type]="'default'" [width]="130"
+                  (onClick)="(worksheetItems[0].invoiceNo_Patient) ? viewInvoice('P') : goToInvoice('P')"
+                  [disabled]="worksheetItems[0].patientNoCharge"
+                  [text]="(worksheetItems[0].invoiceNo_Patient) ? 'View Patient Invoice' : 'Invoice Patient'">
+                </dx-button>
+              </div>
+              <div *ngIf="worksheetItems[0].patientNoCharge" class="no-charge">
+                No Charge
+              </div>
+              <div style="width: 100%;"></div>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text: invoiceToSelection === invoiceToOptions[0] ? '      Insurer Billed' : 'Third Party Billed' }">
+            <div *dxTemplate="let data of 'content'" style="display: flex;">
+              <div style="color: #5cb85c;"
+                *ngIf="invoiceToSelection === invoiceToOptions[0] && ((worksheetItems[0].invoiceNo_HealthInsurer && worksheetItems[0].invoiceNo_HealthInsurer > 0) || worksheetItems[0].insurerNoCharge)">
+                <i style="font-size: 20px" class="dx-icon-check"></i>
+              </div>
+              <div style="height: 18px; width: 35px;"
+                *ngIf="invoiceToSelection !== invoiceToOptions[0] || ((!worksheetItems[0].invoiceNo_HealthInsurer || worksheetItems[0].invoiceNo_HealthInsurer === 0) && !worksheetItems[0]?.insurerNoCharge)">
+              </div>
+              <div *ngIf="invoiceToSelection === invoiceToOptions[0]" style="margin-left: 15px;">
+                <dx-button [type]="'default'" [width]="130" [disabled]="worksheetItems[0].insurerNoCharge"
+                  (onClick)="(worksheetItems[0].invoiceNo_HealthInsurer) ? viewInvoice('H') : goToInvoice('H')"
+                  [text]="(worksheetItems[0].invoiceNo_HealthInsurer) ? 'View Insurer Invoice' : 'Invoice Insurer'">
+                </dx-button>
+              </div>
+              <div *ngIf="invoiceToSelection !== invoiceToOptions[0]" style="margin-left: 15px;">
+                <dx-button [type]="'default'" [width]="130" [disabled]="worksheetItems[0].insurerNoCharge"
+                  (onClick)="(worksheetItems[0].invoiceNo_HealthInsurer) ? viewInvoice('H') : goToInvoice('H')"
+                  [text]="(worksheetItems[0].invoiceNo_HealthInsurer) ? 'View Third Party Invoice' : 'Invoice Third Party'">
+                </dx-button>
+              </div>
+              <div *ngIf="invoiceToSelection === invoiceToOptions[0] && worksheetItems[0].insurerNoCharge" class="no-charge">
+                No Charge
+              </div>
+              <div style="width: 100%;"></div>
+            </div>
+          </dxi-item>
+          <dxi-item *ngIf="!worksheetItems[0].insurerNoCharge && !worksheetItems[0].patientNoCharge
+            && !worksheetItems[0].invoiceNo_Patient && !worksheetItems[0].invoiceNo_HealthInsurer"
+            [label]="{ text: ' ', showColon: false }">
+            <div *dxTemplate="let data of 'content'" style="display: flex;">
+              <div style="width: 35px">
+              </div>
+              <div style="margin-left: 15px;">
+                <dx-button [type]="'default'" [width]="130"
+                  (onClick)="goToInvoice('B')"
+                  [text]="'Issue Both Invoices'">
+                </dx-button>
+              </div>
+              <div *ngIf="worksheetItems[0].insurerNoCharge" class="no-charge">
+                No Charge
+              </div>
+              <div style="width: 100%;"></div>
+            </div>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div style="width: 50%;"></div>
+  </div>
+  <div [ngClass]="insidePopup ? 'button-inside-popup' : 'regular-print-button'">
+    <dx-button [text]="'Print Form'" [type]="'default'" [width]="120"
+      [icon]="'print'" (onClick)="onPrintFormClicked()">
+    </dx-button>
+  </div>
+  <div style="padding-top: 50px; display: flex; width: 100%;">
+    <div style="width: 50%;"></div>
+    <div style="width: 1018px; display: flex;">
+      <div style="width: auto; margin-right: 10px;">
+        <dx-button [icon]="'save'" [type]="'success'" [text]="'Save'"
+          [width]="90" (onClick)="onSaveClicked()">
+        </dx-button>
+      </div>
+      <hms-button-delete (deleteClicked)="deleteWorkSheet(worksheetItems[0])"></hms-button-delete>
+      <div style="width: 700px"></div>
+      <div>
+        <dx-button [text]="getSaveAsText()" [type]="'success'"
+          [icon]="'save'" (onClick)="saveAndProcess()">
+        </dx-button>
+      </div>
+      <div *ngIf="insidePopup" style="width: 100%"></div>
+      <div *ngIf="insidePopup" style="width: auto; margin-left: 10px;">
+        <dx-button [type]="'default'" [text]="'Close'"
+          [width]="90" (onClick)="onCancelClicked()">
+        </dx-button>
+      </div>
+    </div>
+    <div style="width: 50%;"></div>
+  </div>
+</div>
+<dx-tooltip #tooltip [(visible)]="message" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Co-Payment Override
+  </div>
+</dx-tooltip>
+<dx-tooltip target="#refreshTip" [(visible)]="refreshMessage" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Refresh Insurer Details
+  </div>
+</dx-tooltip>
+<dx-tooltip target="#patientTip" [(visible)]="patientMessage" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Go To Patient
+  </div>
+</dx-tooltip>
+<dx-tooltip target="#auditTip" [(visible)]="auditMessage" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Audit Details
+  </div>
+</dx-tooltip>
+<dx-tooltip target="#applyTip" [(visible)]="applyMessage" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Apply to All Services
+  </div>
+</dx-tooltip>
+<dx-tooltip target="#applyTip2" [(visible)]="applyMessage2" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Apply
+  </div>
+</dx-tooltip>
+<dx-tooltip target="#refreshCompaniesTip" [(visible)]="companiesMessage" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'">
+    Refresh Companies List
+  </div>
+</dx-tooltip>
+<app-audit-info-popup
+  [showPopup]="showAuditInfo"
+  (popupClosed)="showAuditInfo = false">
+</app-audit-info-popup>
+<hms-confirm
+  [showPopup]="showRemoveServiceConfirm"
+  [title]="'Delete Service'"
+  [content]="'This service will be permanently deleted.<br>Deleted services cannot be restored.<br><br>Do you wish to continue?'"
+  (popupClosed)="showRemoveServiceConfirm = false"
+  (cancelClicked)="showRemoveServiceConfirm = false"
+  (confirmClicked)="confirmRemoveService()">
+</hms-confirm>
+<hms-confirm
+  [showPopup]="showDeleteWorksheetConfirm"
+  [title]="'Delete Billing Details'"
+  [content]="'All billing details for this booking will be deleted.<br><br>Do you wish to continue?'"
+  (popupClosed)="showDeleteWorksheetConfirm = false"
+  (confirmClicked)="confirmDeleteWorksheet()"
+  (cancelClicked)="showDeleteWorksheetConfirm = false">
+</hms-confirm>
+<hms-confirm
+  [showPopup]="showNoChargePatientConfirm"
+  [title]="'No Charge Patient Invoice'"
+  [content]="'The patient invoice does not have any chargeable services.<br><br>HealthTrack will instead No Charge this invoice for you.'"
+  (popupClosed)="showNoChargePatientConfirm = false"
+  (confirmClicked)="confirmNoChargePatient()"
+  (cancelClicked)="showNoChargePatientConfirm = false">
+</hms-confirm>
+<hms-confirm
+  [showPopup]="showNoChargeInsurerConfirm"
+  [title]="'No Charge Insurer Invoice'"
+  [content]="'The insurer invoice does not have any chargeable services.<br><br>HealthTrack will instead No Charge this invoice for you.'"
+  (popupClosed)="showNoChargeInsurerConfirm = false"
+  (confirmClicked)="confirmNoChargeInsurer()"
+  (cancelClicked)="showNoChargeInsurerConfirm = false">
+</hms-confirm>
+<hms-confirm
+  [showPopup]="showPatientNoChargeInvoiceInsurer"
+  [title]="'No Charge Patient Invoice'"
+  [content]="'The patient invoice does not have any chargeable services.<br><br>HealthTrack will instead No Charge this invoice for you.'"
+  (popupClosed)="showPatientNoChargeInvoiceInsurer = false"
+  (confirmClicked)="confirmNoChargePatientChargeInsurer()"
+  (cancelClicked)="showPatientNoChargeInvoiceInsurer = false">
+</hms-confirm>
+<hms-confirm
+  [showPopup]="showInsurerNoChargeInvoicePatient"
+  [title]="'No Charge Insurer Invoice'"
+  [content]="'The insurer invoice does not have any chargeable services.<br><br>HealthTrack will instead No Charge this invoice for you.'"
+  (popupClosed)="showInsurerNoChargeInvoicePatient = false"
+  (confirmClicked)="confirmNoChargeInsurerChargePatient()"
+  (cancelClicked)="showInsurerNoChargeInvoicePatient = false">
+</hms-confirm>
+<hms-confirm
+  [showPopup]="showBothNoChargeConfirm"
+  [title]="'No Charge Both Invoices'"
+  [content]="'Both the insurer and patient invoices do not have any chargeable services.<br><br>HealthTrack will instead No Charge both of these invoices for you.'"
+  (popupClosed)="showBothNoChargeConfirm = false"
+  (confirmClicked)="confirmNoChargeBoth()"
+  (cancelClicked)="showBothNoChargeConfirm = false">
+</hms-confirm>

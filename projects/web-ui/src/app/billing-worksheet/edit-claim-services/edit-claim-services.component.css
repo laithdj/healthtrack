@@ -1,0 +1,92 @@
+::ng-deep .dx-datagrid-header-panel {
+  visibility: hidden;
+  padding: 0px;
+  height: 0px;
+}
+
+.no-charge {
+  margin-left: 15px;
+  color: #5cb85c;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.worksheet-form {
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: rgba(221, 221, 221, 0.6);
+  padding: 10px 15px;
+  background-color: #F7F7F7;
+  display: flex;
+}
+
+.red-background {
+  background: #d9534f;
+  color: #ffffff !important;
+}
+
+.insurer-field ::ng-deep .dx-texteditor-input {
+  color: #ffffff !important;
+}
+
+.billing-checkbox {
+  margin-top: -3px;
+}
+
+.service-description {
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  width: calc(100% - 170px);
+  padding-left: 4px;
+  /* border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: rgba(193, 193, 193); */
+}
+
+.service-item-num {
+  font-weight: bold;
+  width: 80px;
+  padding-right: 4px;
+  /* border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: rgba(193, 193, 193); */
+}
+
+.service-health-fund-code {
+  font-weight: bold;
+  width: 100px;
+  padding-left: 4px;
+  /* border-style: solid;
+  border-width: 0px 1px;
+  border-color: rgba(193, 193, 193); */
+}
+
+.button-inside-popup {
+  margin-top: -63px;
+  margin-left: 365px;
+}
+
+@media screen and (max-width: 1050px) {
+  .regular-print-button {
+    margin-top: -63px;
+    margin-left: 365px;
+  }
+}
+
+@media screen and (min-width: 1051px) {
+  .regular-print-button {
+    margin-top: -63px;
+    margin-left: calc(50vw - 522px + 365px);
+  }
+}
+
+::ng-deep .percent-invalid {
+  text-decoration: line-through;
+  background-color: #f0ad4e !important;
+}
+
+::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+  margin: 0px 20px 0px 0px!important;
+}

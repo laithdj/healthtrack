@@ -1,0 +1,68 @@
+<dx-popup [(visible)]="showPopup"
+  [showTitle]="true" [title]="'Audit Details'"
+  [width]="650" [height]="'auto'"
+  (onHiding)="onPopupHiding()"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <div style="padding-left: 5px;">
+      <span style="font-weight: bold;">Claim ID:</span> {{ (billWorksheetAuditInfo$ | async)?.claimId }}
+    </div>
+    <div style="padding-top: 10px;">
+      <table id="audit-table">
+        <tr>
+          <th style="width: 170px;">Last Modified</th>
+          <td style="width: calc(100% - 320px);">{{ (billWorksheetAuditInfo$ | async)?.userLastModified }}</td>
+          <td style="width: 150px;">{{ ((billWorksheetAuditInfo$ | async)?.dateLastModified | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Created</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userCreated }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.dateCreated | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Booking</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userBooking }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.dateBooking | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Coded</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userCoded }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.dateCoded | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Waiting</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userWaiting }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.dateWaiting | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Pending Invoice: Patient</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userPendingPatient }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.datePendingPatient | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Pending Invoice: Insurer</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userPendingHI }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.datePendingHI | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr>
+          <th>Complete</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userComplete }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.dateComplete | dateTimeDO) | date: 'dd/MM/yyyy, h:mm aa' }}</td>
+        </tr>
+        <tr *ngIf="(billWorksheetAuditInfo$ | async)?.userDeleted && (billWorksheetAuditInfo$ | async)?.userDeleted.trim().length > 0">
+          <th style="background-color: #C92626;">Deleted</th>
+          <td>{{ (billWorksheetAuditInfo$ | async)?.userDeleted }}</td>
+          <td>{{ ((billWorksheetAuditInfo$ | async)?.dateDeleted | dateTimeDO) | date }}</td>
+        </tr>
+      </table>
+    </div>
+    <div style="padding-top: 10px; display: flex;" *ngIf="(billWorksheetAuditInfo$ | async)?.invoiceNoPatient || (billWorksheetAuditInfo$ | async)?.invoiceNoInsurer">
+      <div *ngIf="(billWorksheetAuditInfo$ | async)?.invoiceNoPatient" style="width: 50%; padding-left: 5px;">
+        <span style="font-weight: bold;">Invoice No. Patient:</span> {{ (billWorksheetAuditInfo$ | async)?.invoiceNoPatient }}
+      </div>
+      <div *ngIf="(billWorksheetAuditInfo$ | async)?.invoiceNoInsurer" style="width: 50%; padding-left: 5px;">
+        <span style="font-weight: bold;">Invoice No. Insurer:</span> {{ (billWorksheetAuditInfo$ | async)?.invoiceNoInsurer }}
+      </div>
+    </div>
+  </div>
+</dx-popup>

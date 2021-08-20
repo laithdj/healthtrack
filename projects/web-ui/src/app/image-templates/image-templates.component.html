@@ -1,0 +1,88 @@
+<div *ngIf="imageTemplates && imageFileNames" class="container-fluid page-top-padding">
+  <dx-data-grid [dataSource]="imageTemplates"
+    [showColumnLines]="true"
+    [showBorders]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+    [hoverStateEnabled]="true"
+    (onInitNewRow)="onRowAdded($event)">
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[20, 50, 100]"
+      [showInfo]="true">
+    </dxo-pager>
+    <dxo-filter-row [visible]="showFilter"></dxo-filter-row>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-editing mode="batch" [allowUpdating]="true"
+      [allowAdding]="true" [allowDeleting]="true">
+    </dxo-editing>
+    <dxi-column dataField="displayOrder" [allowFiltering]="false"
+      caption="Order" width="auto" sortOrder="asc"
+      alignment="center" dataType="number">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="description" caption="Template Name"
+      dataType="string" sortOrder="asc">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="fileName">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+      <dxo-lookup [dataSource]="imageFileNames"></dxo-lookup>
+    </dxi-column>
+  </dx-data-grid>
+  <div class="hms-buttons-footer">
+    <div style="width: 50%; display: flex;">
+      <div style="margin-right: 10px;">
+        <dx-button
+          [type]="'default'"
+          [text]="'New Template'"
+          [icon]="'add'"
+          (onClick)="onAddNewImage()">
+        </dx-button>
+      </div>
+      <div>
+        <dx-button
+          [type]="'default'"
+          [text]="'Undo Changes'"
+          [icon]="'undo'"
+          (onClick)="onCancelChanges()">
+        </dx-button>
+      </div>
+      <div style="width: 100%;"></div>  
+    </div>
+    <div>
+      <dx-button
+        [type]="'default'"
+        text="Import Images"
+        (onClick)="showPopup = true">
+      </dx-button>
+    </div>
+    <div style="width: 50%; display: flex;">
+      <div style="width: 100%;"></div>
+      <hms-button-save
+        (saveClicked)="onSaveImageTemplatesChanges()">
+      </hms-button-save>
+    </div>    
+  </div>
+  <div *ngIf="imageFileNames">
+    <dx-popup class="popup"
+      [width]="500"
+      [height]="400"
+      [showTitle]="true"
+      title="Import Images"
+      [dragEnabled]="true"
+      [visible]="showPopup"
+      (onHiding)="showPopup = false"
+      [closeOnOutsideClick]="true">
+      <app-image-templates-uploader [images]="imageFileNames"
+        (imageUploaded)="onImageUploaded($event)">
+      </app-image-templates-uploader>
+    </dx-popup>
+  </div>
+</div>
+<div *ngIf="!(imageTemplates && imageFileNames)">
+  <div style="display: inline-block; margin-top: 100px; text-align: center">
+    <dx-load-indicator  [height]="40" [width]="40"></dx-load-indicator>
+  </div>
+</div>

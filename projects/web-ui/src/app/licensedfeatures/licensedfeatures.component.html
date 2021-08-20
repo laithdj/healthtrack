@@ -1,0 +1,32 @@
+<div class="container-fluid page-top-padding" >
+  <dx-form id="form">
+    <dxi-item itemType="group" [colCount]="5" >
+      <dxi-item style="padding-left: 20px; padding-bottom: 10px" >
+        <dx-select-box id="featureSelector"
+          [dataSource]="(features$ | async)"
+          [deferRendering]="false"
+          [placeholder]="'No Features'"
+          displayExpr="displayFeature"
+          valueExpr="id"
+          [noDataText]="'No Features'"
+          (onSelectionChanged)="onLicensedFeatureChanged($event)"
+          (onContentReady)="onContentReady()"
+          [disabled]="(editMode$ | async)"
+          [searchEnabled]="false">
+        </dx-select-box>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<div class="hms-buttons-footer">
+  <hms-button-edit [editMode]="(editMode$ | async)" [isLast]="true" [disabled]="!(selectedFeature$ | async)"
+    (editClicked)="onToggleEdit()" (cancelClicked)="onCancel$.next()">
+  </hms-button-edit>
+  <div style="width: 100%;"></div>
+  <hms-button-save [disabled]="!(editMode$ | async) || (editingDevice$ | async)?.name?.length === 0 || !(selectedFeature$ | async)"
+    (saveClicked)="onSave()" [isLast]="true">
+  </hms-button-save>
+</div>

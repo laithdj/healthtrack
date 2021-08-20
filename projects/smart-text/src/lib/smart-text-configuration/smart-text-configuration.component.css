@@ -1,0 +1,27 @@
+.richTextHeader {
+  float: left;
+  z-index: 3;
+  position: absolute;
+  background-color: #E3F1FE;
+  height: 25px;
+  width: 715px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.config-editor-drawer-template {
+  padding-right: 10px;
+  min-width: 250px;
+  width: 100%;
+  height: calc(100vh - 180px);
+  max-width: calc(100vw - 745px);
+}
+
+.editor-content {
+  padding: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+  background-color: #DEEAF5;
+}

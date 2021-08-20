@@ -1,0 +1,16 @@
+::ng-deep div .dx-button {
+  margin-right: 0px;
+}
+
+::ng-deep .dx-popup-content {
+  background-color: white;
+}
+
+.roster-header {
+  margin-left: 252px;
+  margin-top: 6px;
+  z-index: 3;
+  position: absolute;
+  font-size: 22px;
+  display: flex;
+}

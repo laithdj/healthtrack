@@ -1,0 +1,319 @@
+<dx-form [width]="'100%'" [colCount]="2" [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+  <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="CT" cssClass=" mt-3">
+        <dxi-item [colSpan]="5" [label]="{ text: 'Hospital Site' }">
+      <div *dxTemplate>
+          <dx-select-box [items]="hospitalLocations$ | async" [displayExpr]="'name'" [valueExpr]="'locationId'" 
+          [width]="(showReportBeside$ | async) ? '' : 300" [value]="selectedLocation$ | async" (onValueChanged)="onHospitalSiteChanged($event)">
+            </dx-select-box>
+      </div>
+        </dxi-item>
+        <dxi-item [colSpan]="5" [label]="{ text: 'Scanner Model' }" >
+            <hms-select-box [items]="scannerModels$ | async" [displayEx]="'itemValue'" [valueEx]="'itemID'" [width]="(showReportBeside$ | async) ? '' : 300"
+          [referenceId]="17044">
+        </hms-select-box>
+        </dxi-item>
+        <dxi-item cssClass="mt-1" [colSpan]="10" editorType="dxRadioGroup"
+        [label]="{text: 'Calcium Score Scan Performed'}">
+        <hms-radio-group [referenceId]="17045" [items]="calciumOptions" [default]="true"
+            [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+        </hms-radio-group>
+        </dxi-item>
+        <!--
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Image Quality'}" editorType="dxRadioGroup">
+          <hms-radio-group [referenceId]="17046" [items]="imgOptions" [displayEx]="'name'" [valueEx]="'id'"
+              [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+      </dxi-item>
+      <dxi-item [colSpan]="2" [label]="{ text:'Reduced Image Quality Reason'}">
+          <div style="display: flex;">
+              <div class="d-flex flex-column mr-2">
+                  <hms-check-box [text]="'Motion'" [referenceId]="17047"></hms-check-box>
+                  <hms-check-box [text]="'Noise'" [referenceId]="17049"></hms-check-box>
+              </div>
+              <div class="d-flex flex-column mr-2">
+                  <hms-check-box [text]="'Step Artefact'" [referenceId]="17048"></hms-check-box>
+                  <hms-check-box [text]="'Poor Contrast Opacification'" [referenceId]="17050"></hms-check-box>
+              </div>
+          </div>
+      </dxi-item>
+        -->
+        <!--
+                      <div style="display: flex;">
+              <div class="d-flex flex-column mr-2">
+                  <hms-check-box [text]="'Motion'" [referenceId]="17047"></hms-check-box><br>
+                  <hms-check-box [text]="'Noise'" [referenceId]="17049"></hms-check-box>
+              </div>
+              <div class="d-flex flex-column">
+                  <hms-check-box [text]="'Step Artefact'" [referenceId]="17048"></hms-check-box><br>
+                  <hms-check-box [text]="'Poor Contrast Opacification'" [referenceId]="17050"></hms-check-box>
+              </div>
+          </div>
+      -->
+        <dxi-item itemType="group" [colSpan]="10" cssClass="mt-3">
+            <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+                <dxi-item [colSpan]="1" itemType="group">
+              <div class="dx-field-label w-100 font-weight-bold" style="text-align: left">
+                Acquisition Observations
+                    </div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">Heart Rate:</div>
+                        <div class="dx-field-value">
+                            <div>
+                                <hms-number-box [width]="70" [includeUnit]="true" [unit]="'bpm'" [referenceId]="17051">
+                                </hms-number-box>
+                            </div>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="1">
+            <div *dxTemplate>
+              <div class="dx-field-label">Cardiac Rhythm:</div>
+              <div class="dx-field-value" style="margin-top: 3px;">
+              <!-- <dxi-item cssClass="mt-1" [colSpan]="2" editorType="dxRadioGroup"
+              [label]="{text: 'Calcium Score Scan Performed'}" cssClass="radio-width"> -->
+                <hms-radio-group [referenceId]="17719" [items]="cardiacRhythmOptions"
+                  [default]="true" [displayEx]="'name'" [valueEx]="'id'"
+                  [layout]="'horizontal'">
+                </hms-radio-group>
+              </div>
+            </div>
+                    <!--
+                  <div *dxTemplate>
+                      <div class="dx-field-label">Blood Pressure:</div>
+                      <div class="dx-field-value">
+                          <div class="d-flex flex-row">
+                              <hms-number-box [width]="40" [referenceId]="17052"></hms-number-box><span
+                                  class="dash-style">/</span>
+                              <hms-number-box [width]="40" [referenceId]="17053"></hms-number-box>
+                          </div>
+                      </div>
+                  </div>-->
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="1">
+                </dxi-item>
+            </dxi-item>
+
+            <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div class="dx-field-label w-100 font-weight-bold" style="text-align: left">IV Contrast</div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">Contrast Volume:</div>
+                        <div class="dx-field-value">
+                            <div>
+                                <hms-number-box [referenceId]="17054" [width]="70" [includeUnit]="true"
+                                    [unit]="'mL (1mL/kg)'"></hms-number-box>
+                            </div>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">Contrast Rate:</div>
+                        <div class="dx-field-value">
+                            <hms-number-box [referenceId]="17055" [width]="70"></hms-number-box>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate [ngClass]="(showReportBeside$ | async) ? 'mr-2p' : ''">
+                        <div class="dx-field-label">Saline Volume:</div>
+                        <div class="dx-field-value">
+                            <div>
+                                <hms-number-box [referenceId]="17056" [width]="70" [includeUnit]="true" [unit]="'mL'">
+                                </hms-number-box>
+                            </div>
+                        </div>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div class="dx-field-label w-100 font-weight-bold" style="text-align: left">Xray Factors</div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">kV:</div>
+                        <div class="dx-field-value">
+                            <hms-number-box [referenceId]="17057" [width]="70"></hms-number-box>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">mA:</div>
+                        <div class="dx-field-value">
+                            <hms-number-box [width]="70" [referenceId]="17058"></hms-number-box>
+                        </div>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+                <dxi-item [colSpan]="3" itemType="group"
+                    [cssClass]="(showReportBeside$ | async) ? 'scan-radio-margin' : ''">
+                    <div *dxTemplate [ngClass]="(showReportBeside$ | async)? 'ml-2p':'ml-s'">
+                        <div class="dx-field-label custom-label">Scan Technique:</div>
+                        <div class="dx-field-value custom-value">
+                        <hms-radio-group [referenceId]="17059" [items]="scanOptions"
+                          [default]="true" [displayEx]="'name'" [width]="400"
+                          [valueEx]="'id'" [layout]="'horizontal'">
+                        </hms-radio-group>
+                        </div>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+                <dxi-item [colSpan]="3" itemType="group">
+                    <div *dxTemplate [ngClass]="(showReportBeside$ | async) ? 'ml-3p' : 'ml-12'">
+                        <div class="dx-field-label">Heart Beats Acquired:</div>
+                        <div class="dx-field-value">
+                            <hms-number-box [referenceId]="17060" [width]="70" [includeUnit]="true"
+                                [unit]="'(Canon only)'"></hms-number-box>
+                        </div>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div class="dx-field-label w-100 font-weight-bold" style="text-align: left">Acquisition Window</div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">Start:</div>
+                        <div class="dx-field-value">
+                            <hms-number-box [referenceId]="17061" [width]="70"></hms-number-box>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                    <div *dxTemplate>
+                        <div class="dx-field-label">End:</div>
+                        <div class="dx-field-value">
+                            <hms-number-box [referenceId]="17062" [width]="70"></hms-number-box>
+                        </div>
+                    </div>
+                </dxi-item>
+                <dxi-item [colSpan]="1" itemType="group">
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+  <dxi-item itemType="group" caption="Radiation Doses" [colSpan]="2" [colCount]="10" cssClass=" mt-3">
+    <dxi-item itemType="group" [colSpan]="10" cssClass="mt-3">
+        <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+                    <div class="dx-field-label">CTDiVol:</div>
+                    <div class="dx-field-value">
+                        <div class="d-flex flex-row">
+                            <hms-number-box [referenceId]="17063" [width]="70" [includeUnit]="true" [unit]="'mGy'">
+                            </hms-number-box>
+                        </div>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+
+                    <div class="dx-field-label">DLP:</div>
+                    <div class="dx-field-value">
+                        <div class="d-flex flex-row">
+                            <hms-number-box [referenceId]="17064" [width]="70" [includeUnit]="true" [unit]="'mGy.cm'" (resultChange)="updateTotalDLP()">
+                            </hms-number-box>
+                        </div>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+
+    </dxi-item>
+  <dxi-item itemType="group" caption="Calcium Score Xray and Radiation Details"  [colSpan]="2" [colCount]="10" cssClass=" mt-3">
+    <dxi-item itemType="group" [colSpan]="10" cssClass="mt-3">
+        <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+            <!--<dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+                    <div class="dx-field-label">kV:</div>
+                    <div class="dx-field-value">
+                        <hms-number-box [width]="70" [referenceId]="17065"></hms-number-box>
+                    </div>
+                </div>
+            </dxi-item>-->
+            <dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+
+                    <div class="dx-field-label">mA:</div>
+                    <div class="dx-field-value">
+                        <hms-number-box [width]="70" [referenceId]="17066"></hms-number-box>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+        </dxi-item>
+
+        <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+                    <div class="dx-field-label">CTDiVol:</div>
+                    <div class="dx-field-value">
+                        <div class="d-flex flex-row">
+                            <hms-number-box [width]="70" [referenceId]="17067" [includeUnit]="true" [unit]="'mGy'">
+                            </hms-number-box>
+                        </div>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+
+                    <div class="dx-field-label">DLP:</div>
+                    <div class="dx-field-value">
+                        <div class="d-flex flex-row">
+                            <hms-number-box [width]="70" [referenceId]="17068" [includeUnit]="true" [unit]="'mGy.cm'" (resultChange)="updateTotalDLP()">
+                            </hms-number-box>
+                        </div>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+
+    </dxi-item>
+  <dxi-item itemType="group" caption="Total Radiation Dose" [colSpan]="2" [colCount]="10" cssClass=" mt-3">
+    <dxi-item itemType="group" [colSpan]="10" cssClass="mt-3">
+        <dxi-item [colCount]="4" itemType="group" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+                <div *dxTemplate>
+
+                    <div class="dx-field-label">Total DLP:</div>
+                    <div class="dx-field-value">
+                        <div class="d-flex flex-row">
+                            <hms-number-box [width]="70" [referenceId]="17069" [includeUnit]="true" [unit]="'mGy.cm'" [readOnly]="true">
+                            </hms-number-box>
+                        </div>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+            <dxi-item [colSpan]="1" itemType="group">
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    </dxi-item>
+</dx-form>

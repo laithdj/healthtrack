@@ -1,0 +1,25 @@
+<dx-popup
+  class="popup"
+  [width]="580"
+  [height]="580"
+  title="{{ selectedProgramDO?.reason }} Timeline"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [(visible)]="programTimelinePopupVisible">
+  <div>
+    <dx-data-grid
+      [dataSource]="programTimeline"
+      [showRowLines]="true"
+      [showBorders]="true"
+      [rowAlternationEnabled]="true">
+      <dxo-sorting mode="none"></dxo-sorting>
+      <dxo-scrolling mode="standard" showScrollbar="never"></dxo-scrolling>
+      <dxo-paging [enabled]="true" pageSize="24" ></dxo-paging>
+      <dxi-column dataField="cycle" [width]="60" [fixed]="true"></dxi-column>
+      <dxi-column dataField="step" [width]="60" [fixed]="true"></dxi-column>
+      <dxi-column dataField="action" [width]="140" [fixed]="true"></dxi-column>
+      <dxi-column dataField="actionDate" [width]="80" [fixed]="true" dataType="date" ></dxi-column>
+      <dxi-column dataField="delay" [width]="100" [fixed]="true"></dxi-column>
+    </dx-data-grid>
+  </div>
+</dx-popup>

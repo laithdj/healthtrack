@@ -1,0 +1,297 @@
+@import url("../../../node_modules/devexpress-richedit/dist/dx.richedit.css");
+
+ You can add global styles to this file, and also import other style files 
+label,
+input,
+div,
+p,
+span,
+button,
+select,
+textarea {
+  font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
+}
+
+::ng-deep table tbody tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-selection.dx-row > td {
+  background-color: chartreuse !important;
+}
+@font-face {
+  font-family: DXIcons;
+  src: url('../../../node_modules/devextreme/dist/css/icons/dxicons.woff2') format("woff2"),url('../../../node_modules/devextreme/dist/css/icons/dxicons.woff') format("woff"),url('../../../node_modules/devextreme/dist/css/icons/dxicons.ttf') format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+.container {
+  background-color: #E3F1FE;
+}
+
+.hms-popup-content {
+  background-color: #DEEAF5;
+  margin: -10px;
+  width: calc(100% + 20px)!important;
+  height: calc(100% + 20px)!important;
+  padding: 10px;
+}
+
+::ng-deep .hms-highlight table tbody tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-selection.dx-row > td {
+  background-color: lawngreen !important;
+}
+
+.w-600 {
+  width:600px;
+}
+
+.w-220 {
+  width:220px;
+}
+
+.h-35 {
+  height: 35px;
+}
+
+.left-13 {
+  position: relative;
+  left:180px;
+}
+
+.left-10 {
+  position:relative;
+  left:221px;
+}
+
+.shift-right {
+  position: relative;
+  left:32px;
+  padding-right: 32px;
+}
+
+.shift-dates {
+  position: relative;
+  left:27px;
+  padding-right: 32px;
+}
+
+.shift-type{
+  position: relative;
+  left:17px;
+}
+
+.left-26 {
+  position: relative;
+  left: 26px;
+}
+
+@media only screen and (min-width: 1400px) {
+  .filterDropDown{
+      width: 80%;
+  }
+}
+@media only screen and (min-width: 1700px) {
+  .filterDropDown{
+      width: 50%;
+  }
+}
+
+.hms-buttons-footer {
+  background-color: #f7f7f7;
+  width: 100%;
+  padding: 5px 15px 17px 15px;
+  display: flex;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  border-style: solid;
+  border-width: 1px 0px 0px 0px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.padding {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.mb-30 {
+  margin-bottom: 35px;
+}
+
+.mt-4{
+  margin-top: 4px;
+}
+
+/* For content of dx-tabs when using form tabs is not possible */
+.hms-tab-content {
+  padding: 10px;
+  height: calc(100vh - 213px);
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+  background-color: #DEEAF5;
+  margin-top: -1px;
+  overflow-y: auto;
+}
+
+.group-height {
+  height: 180px !important;
+}
+
+.padding-20{
+  padding-left:15%;
+  padding-right:15%;
+}
+
+/* Clinical Record Common Styles */
+.cr-header {
+  padding: 5px 10px;
+  background-color: #f7f7f7;
+  border-style: solid;
+  border-width: 1px 1px 0px 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.ml-10p-s{
+  margin-left:5%
+}
+.ml-10p{
+  margin-left:10%
+}
+.ml-15{
+  margin-left:15% !important;
+}
+.mr-10p{
+  margin-right:10%
+}
+.mr-10p-s{
+  margin-right:0%
+}
+.ml-7-c{
+  margin-left: 9.7%;
+}
+.ml-40p{
+  margin-left:79%;
+}
+.mb-11{
+  position: relative;
+  bottom: 11px;
+}
+.mb5{
+  position: relative;
+  bottom:5px;
+}
+.p12{
+  position: relative;
+  bottom:12px;
+}
+.mb-10{
+  position: relative;
+  bottom: 6px;
+}
+.title{
+  position: relative;
+  bottom:6px;
+}
+.details{
+  position: relative;
+  right: 5px;
+}
+.ml{
+  margin-left:30%;
+}
+.ml-4r {
+  margin-left:4.4rem!important;
+}
+.ml-4-1r {
+  margin-left:4.1rem!important;
+}
+.med-notes{
+  margin-right: 21.5%;
+}
+.ml-5r {
+  margin-left:5.4rem!important;
+}
+.ml-3r{
+  padding-left: 3rem!important;
+}
+.margin-custom{
+  position: relative;
+  right: 13.5%;
+}
+@media screen and (min-width: 1230px) {
+
+.margin-custom {
+  position: relative;
+  right: 11.4%;
+}
+}
+@media screen and (min-width: 1455px) {
+
+  .mr-10p-s{
+    margin-right:10%
+  }
+  }
+  @media screen and (min-width: 1700px) {
+
+    .mr-10p-s{
+      margin-right:0%
+    }
+    }
+    @media screen and (min-width: 1950px) {
+
+      .mr-10p-s{
+        margin-right:10%
+      }
+      }
+
+/*  CT Responsive CSS */
+.left-padding{
+  padding-left:5%
+}
+@media screen and (min-width: 1700px) {
+
+  .side-padding{
+    padding-left:15% !important;
+    padding-right:15% !important;
+  }
+}
+@media screen and (max-width: 1700px) {
+
+  .ml-15{
+    margin-left:9% !important;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .med-width{
+      width:50%
+  }
+}
+
+.ml-5-c{
+  margin-left:5rem;
+}
+
+@media screen and (max-width: 2000px) {
+  .scan-radio-margin{
+      margin-left:25%
+  }
+}
+
+.w-420{
+  width:420px;
+  display: none;
+}
+
+.cr-content {
+  padding: 15px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.d-flex-unset{
+  display: unset !important;
+}

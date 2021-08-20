@@ -1,0 +1,38 @@
+<div class="background">
+    <div style="padding:10px;height: 37%;text-align: center;">
+        <form action="your-action">
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">Booking Details</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Booking Type:</div>
+                    <div class="dx-field-value">
+                        <dx-select-box [dataSource]="bookingTypeList">
+                        </dx-select-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Doctor:</div>
+                    <div class="dx-field-value">
+                        <dx-select-box [dataSource]="doctorList">
+                        </dx-select-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Locations:</div>
+                    <div class="dx-field-value">
+                        <dx-select-box [dataSource]="locationsList">
+                        </dx-select-box>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="dx-fieldset w-100 bottom-buttons" >
+            <dx-button id="button" text="Back" class="submit dx-field-btn" [width]="150" type="default" (onClick)="back()" [useSubmitBehavior]="true">
+            </dx-button>
+            <div class="w-100"></div>
+            <dx-button id="button" text="Next" class="submit dx-field-btn" [width]="150" type="default" (onClick)="next()" [useSubmitBehavior]="true">
+            </dx-button>
+    </div>
+</div>
+<!---->

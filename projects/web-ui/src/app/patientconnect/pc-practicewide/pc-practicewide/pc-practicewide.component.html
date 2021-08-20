@@ -1,0 +1,185 @@
+<div class="container-fluid">
+  <div class="row" style="padding-top: 10px;">
+    <div class="col">
+      <app-practicewide-filter style="width: 100%"></app-practicewide-filter>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 10px;">
+    <div class="col">
+      <dx-form style="width: 100%;">
+        <dxi-item>
+          <dx-data-grid
+            id="gridContainer"
+            [dataSource]="loadedPatientConnects"
+            (onEditorPrepared)="editorPrepared()"
+            [columnAutoWidth]="true"
+            [allowColumnResizing]="true"
+            columnResizingMode="widget"
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [showBorders]="true"
+            [hoverStateEnabled]="true"
+            (onRowClick)="openPatientConnect($event)"
+            [rowAlternationEnabled]="true"
+            (onContextMenuPreparing)="onContextMenuPreparing($event)">
+            <dxo-paging [pageSize]="10"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true"
+              [allowedPageSizes]="[10, 20, 30, 40]" [showInfo]="true">
+            </dxo-pager>
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+            <dxo-load-panel [enabled]="true" [showIndicator]="filter?.isLoading"></dxo-load-panel>
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxi-column dataField="isSelected" caption="" [visible]="isLiveData"
+              [width]="30" [allowResizing]="false" >
+            </dxi-column>
+            <dxi-column dataField="batchId" [visible]="!isLiveData"
+              [width]="60" [allowResizing]="false">
+            </dxi-column>
+            <dxi-column dataField="status" [width]="65"
+              [allowEditing]="false" [minWidth]="65">
+            </dxi-column>
+            <dxi-column dataField="nextConnectDue" caption="Date" [width]="80"
+              [allowResizing]="false" [allowEditing]="false" sortOrder="asc">
+            </dxi-column>
+            <dxi-column dataField="patientName" [allowEditing]="false" [minWidth]="80"></dxi-column>
+            <dxi-column dataField="program" [width]="150" [minWidth]="80" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="attendingMO" [width]="150" [minWidth]="80" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="locationName" caption="Location" [allowEditing]="false" [minWidth]="80" [width]="150">
+            </dxi-column>
+            <dxi-column dataField="nextActionDescription"
+              caption="Action" [allowEditing]="false" [width]="120" [minWidth]="80">
+            </dxi-column>
+            <dxi-column dataField="nextStepDescription"
+              caption="Description" [allowEditing]="false" [width]="150" [minWidth]="80">
+            </dxi-column>
+          </dx-data-grid>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 5px; margin-bottom: 25px">
+    <div class="col">
+      <dx-form style="width: 100%">
+        <dxi-item itemType="group">
+          <dxi-item itemType="group" [colCount]="10" >
+            <dxi-item itemType="group">
+              <div *dxTemplate style="display: flex;">
+                <div style="margin-right: 5px;">
+                  <dx-button icon="todo" (onClick)="onAllSelected(true)"
+                    [disabled]="!loadedPatientConnects">
+                  </dx-button>
+                </div>
+                <div>                
+                  <dx-button icon="remove" (onClick)="onAllSelected(false)"
+                    [disabled]="!loadedPatientConnects">
+                  </dx-button>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item  [label]="{ text:'Count' }">
+              <div *dxTemplate>
+                <dx-text-box value="{{ queryCount }}" [width]="60" [disabled]="true"></dx-text-box>
+              </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8" >
+              <div *dxTemplate [align]="'right'" style="padding-right:20px;">
+                <dx-button icon="download" text="To Worklist" style="margin-right: 5px;"
+                  (click)="selectedToWorkList()"
+                  [disabled]="selectedCount === 0">
+                </dx-button>
+                <dx-button icon="print" style="margin-right: -20px;"
+                  text='Print List' (click)="onPrintList()"
+                  [disabled]="selectedCount === 0">
+                </dx-button>
+              </div>
+            </dxi-item>
+          </dxi-item>
+          <dxi-item itemType="group" title="Perform Action">
+            <dxi-item [visible]="!isLiveData"  >
+              <div *dxTemplate style="margin-left: 20px; margin-right: 50px">
+                <dx-text-box value="{{ batchDetail }}" style="font-weight: bold"></dx-text-box>
+              </div>
+            </dxi-item>
+            <dxi-item itemType="group">
+              <div *dxTemplate >
+                <dx-button icon="download" style="margin-right: 5px;"
+                  text="Export Merge File (csv)"
+                  (click)="onProcessConfirm('Export')"
+                  [disabled]="selectedCount === 0">
+                </dx-button>
+                <dx-button icon="print" text='Print Letters'
+                  (click)="onProcessConfirm('Print')" style="margin-right: 5px;"
+                  [disabled]="selectedCount === 0 || !filter.lettersAction">
+                </dx-button>
+                <dx-button icon="pulldown" text='Complete Cycle'
+                  (click)="onProcessConfirm('Complete')"
+                  [disabled]="selectedCount === 0 || !isLiveData">
+                </dx-button>
+              </div>
+            </dxi-item>
+          </dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+</div>
+<dx-popup
+  class="popup"
+  [width]="400"
+  [height]="'auto'"
+  [showTitle]="true"
+  title="Patient Connect Batch Tracker"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="showBatchPopup">
+  <div *dxTemplate="let data of 'content'">
+    <dx-form *ngIf="filter" [formData]="filter" [readOnly]="true">
+      <dxi-item dataField="selectedProgramName" [label]="{ text:'Program' }"></dxi-item>
+      <dxi-item dataField="selectedMOName" [label]="{ text:'Attending MO' }"></dxi-item>
+      <dxi-item dataField="selectedLocation" [label]="{ text:'Location' }"></dxi-item>
+      <dxi-item *ngIf="selectedCount" [label]="{ text:'Selected Count' }">
+        <div *dxTemplate>
+          <dx-text-box value="{{ selectedCount }}" [readOnly]="true"></dx-text-box>
+        </div>
+      </dxi-item>
+      <dxi-item  dataField="filter.dueFrom" [label]="{ text:'Due From' }"></dxi-item>
+      <dxi-item dataField="filter.dueTo" [label]="{ text:'Due To' }"></dxi-item>
+      <dxi-item *ngIf="username"  [label]="{ text:'Created By' }">
+        <div *dxTemplate>
+          <dx-text-box value="{{ username }}" [readOnly]="true"></dx-text-box>
+        </div>
+      </dxi-item>
+      <dxi-item *ngIf="maxNumberToProcess" [label]="{ text:'Maximum Number to Process' }">
+        <div *dxTemplate>
+          <dx-number-box value="{{ maxNumberToProcess }}"
+            [min]="0" [max]="9999"
+            [showSpinButtons]="true">
+          </dx-number-box>
+        </div>
+      </dxi-item>
+      <dxi-item *ngIf="note" [label]="{ text:'Note' }">
+        <div *dxTemplate>
+          <dx-text-box value="{{ note }}" ></dx-text-box>
+        </div>
+      </dxi-item>
+    </dx-form>
+    <hr/>
+    <div class="row">
+      <div class="col-sm-12">
+        <div style="width:100%;display:inline-block">
+          <div style="float:left">
+            <dx-button [width]="90" [text]="'Cancel'" [icon]="'arrowleft'"
+              [type]="'default'" (onClick)="cancelBatchPopUp()">
+            </dx-button>
+          </div>
+          <div style="float:right">
+            <dx-button [width]="90" [text]="'OK'" [type]="'default'"
+              (onClick)="onProcessing()">
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</dx-popup>

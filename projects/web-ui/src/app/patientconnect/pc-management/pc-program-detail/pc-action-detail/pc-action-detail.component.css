@@ -1,0 +1,3 @@
+::ng-deep table tbody tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-selection.dx-row > td {
+  background-color: chartreuse !important;
+}

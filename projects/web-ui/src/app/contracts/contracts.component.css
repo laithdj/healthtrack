@@ -1,0 +1,14 @@
+.instruction {
+  margin:10px 0px 0px 0px;
+}
+hr {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  margin-top: 1px;
+  margin-bottom: 5px;
+}
+
+.padding{
+  padding-left:50px;
+  padding-right:50px;
+}

@@ -1,0 +1,10 @@
+<dx-form [width]="'100%'" [colCount]="2" 
+  [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+  <dxi-item itemType="group" [colSpan]="2" cssClass="mt-3" caption="Internal Notes">
+      <dxi-item>
+        <dx-text-area [width]="'100%'" [height]="'calc(100vh - 350px)'"
+          [value]="notes$ | async" (onValueChanged)="onNotesChanged($event)">
+        </dx-text-area>
+      </dxi-item>
+  </dxi-item>
+</dx-form>

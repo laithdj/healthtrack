@@ -1,0 +1,112 @@
+<div class="row" style="margin-right: 0px!important; margin-bottom: 40px!important;">
+    <div class="col-auto" style="padding-left: 15px; margin: 5px 0px 0px 15px;padding-top:15px">
+      <div class="row">
+        <div class="col"></div>
+        <div class="col-auto">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div>
+            <dx-data-grid
+              [width]="300"
+              id="dataGridContainer"
+              [dataSource]="healthinsurer_list"
+              [showRowLines]="true"
+              [showBorders]="true"
+              [keyExpr]="'feeTable_ID'"
+              [selectedRowKeys]="selectedRowKeys"
+              (onSelectionChanged)="onSelectionChanged($event)"
+              (onRowPrepared)="onRowPrepared($event)"
+              (onContentReady)="gridContentReady()"
+              [rowAlternationEnabled]="true">
+              <dxo-selection mode="single"></dxo-selection>
+              <dxi-column dataField="feeTableName"
+                caption="Fee Table" [width]="150" >
+              </dxi-column>
+              <dxi-column
+                caption="Fee Effective Date" [width]="140"
+                dataField="feeTableEffective">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col" style="padding-top:19px">
+      <app-healthfund-fees-details>
+      </app-healthfund-fees-details>
+    </div>
+  </div>
+  
+  <div class="hms-buttons-footer padding-bottom">
+    <hms-button-new (addNewClicked)="addHealthInsurer()">
+    </hms-button-new>
+    &nbsp;
+    <hms-button-edit (editClicked)="editHealthInsurer()" [disabled]="btn_disabled">
+    </hms-button-edit>
+    &nbsp;
+    <hms-button-delete #delete_button (deleteClicked)="deleteFeeTable()" [disabled]="btn_disabled">
+    </hms-button-delete >
+    &nbsp;
+    <div style="width: 100%;"></div>
+  </div>
+
+  <dx-popup
+  class="popup"
+  [width]="300"
+  [height]="250"
+  [showTitle]="true"
+  title="Add Fee Table"
+  [showCloseButton]="false"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="add_health_insurer">
+  <div>
+    <div style="text-align: left; margin: 10px;">
+      <div class="reply-content-field">
+        <div style="line-height: 20px;">Fee Table: </div>
+        <dx-text-box [maxLength]="50" [(value)]="healthinsurer_table.feeTableName"></dx-text-box>
+      </div>
+      <div class="reply-content-field mt-2">
+        <div style="line-height: 20px;">Fee Effective Date: </div>
+        <dx-date-box [(value)]="healthinsurer_table.feeTableEffective" [useMaskBehavior]="true"></dx-date-box>
+      </div>
+      <hr class="rc-hr">
+      <div><div></div>
+        <hms-button-set-save [includeDeleteButton]="false" (saveClicked)="createFeeTable(healthinsurer_table)"
+        (cancelClicked)="cancelAddPopup()">
+      </hms-button-set-save>
+      </div>
+  </div>
+  </div>
+</dx-popup>
+<dx-popup
+class="popup"
+[width]="300"
+[height]="250"
+[showTitle]="true"
+[showCloseButton]="false"
+title="Edit Fee Table"
+[dragEnabled]="true"
+[closeOnOutsideClick]="false"
+[(visible)]="edit_health_insurer">
+<div>
+  <div style="text-align: left; margin: 10px;">
+        <div class="reply-content-field">
+          <div style="line-height: 20px;">Fee Table: </div>
+          <dx-text-box [maxLength]="50" [(value)]="healthinsurer_table.feeTableName"></dx-text-box>
+        </div>
+        <div class="reply-content-field mt-2">
+          <div style="line-height: 20px;">Fee Effective Date: </div>
+          <dx-date-box [(value)]="healthinsurer_table.feeTableEffective" [useMaskBehavior]="true"></dx-date-box>
+        </div>
+        <hr class="rc-hr">
+        <div><div></div>
+          <hms-button-set-save [includeDeleteButton]="false" (saveClicked)="updateFeeTable(healthinsurer_table)"
+          (cancelClicked)="cancelEditPopup()">
+        </hms-button-set-save>
+        </div>
+    </div>
+</div>
+</dx-popup>

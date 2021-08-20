@@ -1,0 +1,193 @@
+<div style="padding: 10px 15px; width: 100%; display: flex; height: calc(100vh - 93px);">
+  <div *ngIf="!showTemplates || !editMode" style="width: calc(100vw - 760px); min-width: 250px; max-width: 600px;">
+    <div style="display: flex;">
+      <div>
+        <dx-tree-list
+          [dataSource]="selectList"
+          [width]="'100%'" [height]="'auto'"
+          [autoExpandAll]="true"
+          [showColumnLines]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [disabled]="editMode"
+          [showColumnHeaders]="false"
+          [focusedRowEnabled]="true"
+          (onFocusedRowChanged)="selectionChanged($event)"
+          [focusedRowKey]="1">
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-sorting [mode]="'single'"></dxo-sorting>
+          <dxo-selection [mode]="'single'"></dxo-selection>
+          <dxi-column [dataField]="'sortOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+          <dxi-column [dataField]="'displayValue'"></dxi-column>
+        </dx-tree-list>
+      </div>
+      <div style="margin-left: 10px; margin-top: 14px;">
+        <dx-button [icon]="'refresh'" [text]="'Reload'" [disabled]="editMode"
+          [type]="'default'" (onClick)="onReloadClicked()">
+        </dx-button>
+      </div>
+    </div>
+    <div style="margin-top: 10px; height: calc(100vh - 135px);">
+      <dx-tree-list *ngIf="!showTemplates" id="smartTextList"
+        [dataSource]="smartTextNodeList"
+        [keyExpr]="'navID'"
+        [width]="'100%'" [height]="'calc(100vh - 139px)'"
+        [rootValue]="-1"
+        [showBorders]="true"
+        [disabled]="editMode"
+        [showColumnLines]="true"
+        [columnAutoWidth]="true"
+        [showColumnHeaders]="false"
+        [noDataText]="'No Smart Text Found'"
+        [parentIdExpr]="'parentID'"
+        [focusedRowEnabled]="true"
+        [focusedRowIndex]="0"
+        [expandedRowKeys]="expandedRowKeys"
+        (onFocusedRowChanged)="onSmartTextSelected($event)">
+        <dxo-scrolling [useNative]="true"></dxo-scrolling>
+        <dxo-sorting [mode]="'single'"></dxo-sorting>
+        <dxo-selection [mode]="'single'"></dxo-selection>
+        <dxo-row-dragging [onDragChange]="onDragChange" [onReorder]="onReorder"
+          [allowDropInsideItem]="true" [allowReordering]="true" [showDragIcons]="true">
+        </dxo-row-dragging>
+        <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+        <dxi-column [dataField]="'shortDescription'"></dxi-column>
+      </dx-tree-list>
+      <dx-tree-list *ngIf="showTemplates" id="smartTextTemplateList"
+        [dataSource]="smartTextTemplateList"
+        [keyExpr]="'templateId'"
+        [width]="'100%'" [height]="'calc(100vh - 139px)'"
+        [autoExpandAll]="true"
+        [showBorders]="true"
+        [disabled]="editMode"
+        [showColumnLines]="true"
+        [columnAutoWidth]="true"
+        [noDataText]="'No Templates Found'"
+        [showColumnHeaders]="false"
+        [focusedRowEnabled]="true"
+        [(focusedRowKey)]="selectedTemplateId"
+        (onFocusedRowChanged)="onTemplateSelected($event)"
+        (onContentReady)="contentReady()">
+        <dxo-scrolling [useNative]="true"></dxo-scrolling>
+        <dxo-sorting [mode]="'single'"></dxo-sorting>
+        <dxo-selection [mode]="'single'"></dxo-selection>
+        <dxo-row-dragging [onReorder]="onTemplateReorder" [allowReordering]="true"
+          [showDragIcons]="true" [allowDropInsideItem]="false" >
+        </dxo-row-dragging>
+        <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+        <dxi-column [dataField]="'templateName'"></dxi-column>
+      </dx-tree-list>
+    </div>
+  </div>
+  <div *ngIf="editMode && showTemplates" style="width: calc(100vw - 835px); min-width: 250px; max-width: 600px;">
+    <dx-tree-list #selectTree id="selectTree"
+      [dataSource]="smartTextHeaderNodeList"
+      [keyExpr]="'navID'"
+      [width]="'100%'" [height]="'25vh'"
+      [rootValue]="-1"
+      [autoExpandAll]="true"
+      [showColumnLines]="true"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      [showColumnHeaders]="false"
+      [focusedRowEnabled]="true"
+      (onRowDblClick)="goToHeaderOrAddNew($event)"
+      (onFocusedRowChanged)="nodeListSelectionChanged($event)"
+      [focusedRowIndex]="0"
+      [parentIdExpr]="'parentID'">
+      <dxo-scrolling [useNative]="true"></dxo-scrolling>
+      <dxo-sorting [mode]="'single'"></dxo-sorting>
+      <dxo-selection [mode]="'single'"></dxo-selection>
+      <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+      <dxi-column [dataField]="'nodeText'"></dxi-column>
+    </dx-tree-list>
+    <div style="margin-top: 10px;">
+      <dx-tree-list id="smartTextList"
+        [dataSource]="smartTextChildren"
+        [keyExpr]="'navID'"
+        [width]="'100%'"
+        [height]="'calc(100vh - 325px)'"
+        [rootValue]="-1"
+        [showBorders]="true"
+        [autoExpandAll]="true"
+        [showColumnLines]="true"
+        [columnAutoWidth]="true"
+        [showColumnHeaders]="false"
+        [parentIdExpr]="'parentID'"
+        [expandedRowKeys]="childrenExpandedRowKeys"
+        (onRowDblClick)="onSmartTextChildSelected($event)">
+        <dxo-scrolling [useNative]="true"></dxo-scrolling>
+        <dxo-sorting [mode]="'single'"></dxo-sorting>
+        <dxo-selection [mode]="'single'"></dxo-selection>
+        <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+        <dxi-column [dataField]="'shortDescription'"></dxi-column>
+      </dx-tree-list>
+    </div>
+  </div>
+  <lib-template-details *ngIf="showTemplates"
+    [editMode]="editMode"
+    [definition]="definition"
+    [smartTextStyleProperties]="smartTextStyleProperties"
+    [referenceIdList]="referenceIdList"
+    [listAvailableHeaders]="smartTextHeaderNodeList"
+    [doctor]="doctor"
+    [userName]="userName"
+    [selectedTemplate]="selectedTemplate"
+    (deleteTemplateClicked)="deleteTemplate()"
+    (editTemplateClicked)="editTemplateClicked()"
+    (cancelEditTemplate)="cancelEditTemplate()"
+    (errorMessage)="handleErrorMessage($event)"
+    (undoChangesClicked)="undoTemplateChanges()"
+    (saveTemplateClicked)="saveTemplate()">
+  </lib-template-details>
+  <lib-smart-text-details *ngIf="!showTemplates"
+    [smartText]="selectedSmartTextListItem"
+    [editMode]="editMode"
+    [userName]="userName"
+    [smartTextStyleProperties]="smartTextStyleProperties"
+    [referenceIdList]="referenceIdList"
+    [smartTextNodeList]="smartTextNodeList"
+    (editSmartTextClicked)="editMode = true"
+    (cancelEditSmartText)="cancelEditSmartText()"
+    (deleteSmartTextClicked)="deleteSmartText()"
+    (errorMessage)="handleErrorMessage($event)"
+    (saveSmartTextClicked)="saveSmartText($event)">
+  </lib-smart-text-details>
+</div>
+<div class="hms-buttons-footer">
+  <div *ngIf="showTemplates" style="margin-right: 10px;">
+    <dx-button [text]="'New Template'" [type]="'default'" [icon]="'plus'"
+      (onClick)="addNewTemplate(false)" [width]="145">
+    </dx-button>
+  </div>
+  <div *ngIf="showTemplates" style="margin-right: 10px;">
+    <dx-button [text]="'Duplicate Template'" [type]="'default'" [icon]="'plus'"
+      [width]="145" [disabled]="!selectedTemplate" (onClick)="addNewTemplate(true)">
+    </dx-button>
+  </div>
+  <div *ngIf="!showTemplates" style="margin-right: 10px;">
+    <dx-button [text]="'New Group'" [type]="'default'" [icon]="'plus'"
+      (onClick)="addNewSmartText(nodeType.Group)" [width]="145">
+    </dx-button>
+  </div>
+  <div *ngIf="!showTemplates" style="margin-right: 10px;">
+    <dx-button [text]="'New Smart Text'" [type]="'default'" [icon]="'plus'"
+      (onClick)="addNewSmartText(nodeType.SmartText)" [width]="145">
+    </dx-button>
+  </div>
+  <div *ngIf="!showTemplates" style="margin-right: 10px;">
+    <dx-button [disabled]="!unsavedSmartTextChanges"
+      [text]="'Save All'" [type]="'success'" [icon]="'plus'"
+      (onClick)="saveAllSmartText()" [width]="145">
+    </dx-button>
+  </div>
+</div>
+<dx-load-panel
+  shadingColor="rgba(0,0,0,0.4)"
+  [(visible)]="showLoading"
+  [message]='"Saving"'
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>

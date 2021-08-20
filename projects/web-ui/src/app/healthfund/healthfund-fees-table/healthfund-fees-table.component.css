@@ -1,0 +1,12 @@
+::ng-deep .list-item-deleted {
+    text-decoration: line-through;
+  }
+  
+  ::ng-deep table tbody tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-selection.dx-row > td {
+    background-color: chartreuse;
+  }
+
+  .padding-bottom{
+    padding-bottom: 27px;
+  }
+  

@@ -1,0 +1,38 @@
+.move {
+    position:relative;
+    right:75px;
+}
+
+.mover {
+  position: relative;
+  left: -53px;
+}
+
+.move-left {
+  position: relative;
+  left: 114px;
+}
+
+.widget-list {
+  background-color: white;
+  float:right;
+  border: 1px dashed #ccc!important;
+  line-height: 0.733;
+}
+
+.dx-field-item-label-content {
+  width: 32px !important;
+}
+
+.margin-b {
+  margin-bottom: -6px;
+}
+
+.dx-list-item {
+  border: 1px dashed #ccc!important;
+}
+
+.move-item {
+  position: relative;
+  right: 46px;
+}

@@ -1,0 +1,37 @@
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    margin-right: 6px;
+    width: 83px!important;
+}
+:host ::ng-deep .findings .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 44px!important;
+}
+
+:host ::ng-deep .dx-radio-value-container {
+    padding-left: 0;
+    width: 2px;
+}
+/*
+:host ::ng-deep .details .dx-field-item-label-content{
+  /*  margin-left:132px;
+        position: relative;
+        right: 6px;
+}*/
+:host ::ng-deep .ml-15 .dx-field-item-label-content{
+    margin-left:15px;
+}
+:host ::ng-deep .radio-width .dx-widget {
+    width: 100%;
+}
+
+@media screen and (max-width: 2000px) {
+    :host ::ng-deep .list .dx-box-item-content {
+        flex-direction: column !important;
+}
+}
+
+:host ::ng-deep .dx-field-item-label-content{
+    width:186px !important;
+}
+:host ::ng-deep .dx-field-item-label-content {
+    white-space: pre-wrap !important;
+}

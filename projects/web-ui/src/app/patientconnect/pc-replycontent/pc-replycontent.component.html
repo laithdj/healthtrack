@@ -1,0 +1,86 @@
+<div class="container-fluid page-top-padding">
+  <div class="row">
+    <div class="col-sm-7 text-right">
+        <dx-form [formData]="filter" >
+              <dxi-item itemType="group">
+                <div *dxTemplate>
+                    <dx-button icon="refresh" text="Refresh" (onClick)="onRefreshClick()"></dx-button>
+                </div>
+            </dxi-item>
+          </dx-form>
+    </div>
+    <div class="col-sm-5">
+      <dx-form [formData]="filter" >
+        <dxi-item itemType="group" [colSpan]="1">
+          <dxi-item dataField="programId" [label]="{text:'Program Name'}" editorType="dxSelectBox" [editorOptions]="{items:enabledPrograms, displayExpr:'reason',valueExpr:'id',searchEnabled:'true'}"></dxi-item>
+          <dxi-item dataField="attendingMOId" [label]="{text:'Attending MO'}" editorType="dxSelectBox" [editorOptions]="{items:doctors, displayExpr:'displayname',valueExpr:'doctorId',searchEnabled:'true'}"></dxi-item>
+          <dxi-item dataField="locationId" [label]="{text:'Location'}" editorType="dxSelectBox" [editorOptions]="{items:locations, displayExpr:'name',valueExpr:'locationId',searchEnabled:'true'}"></dxi-item>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-sm-12" style="padding-top: 5px">
+      <dx-form>
+        <dxi-item>
+          <div *dxTemplate>
+            <dx-data-grid id="replyContentGrid" #replyGridRef
+              [dataSource]="replies"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              [showBorders]="true"
+              [rowAlternationEnabled]="true">
+              <dxo-editing
+                mode="cell"
+                [allowDragging]="true"
+                [allowUpdating]="editMode"></dxo-editing>
+            <dxi-column dataField="dateReceived" width="110" [allowEditing]="false" caption="Received" format="dd/MM/yyyy HH:mm" sortOrder="desc"></dxi-column>
+            <dxi-column dataField="patientName" [allowEditing]="false" caption="Patient" sortOrder="asc"></dxi-column>
+            <dxi-column dataField="mobile" width="100" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="replyStatus" width="80" caption="Status" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="definition.reason" [allowEditing]="false" caption="Program"></dxi-column>
+            <dxi-column dataField="contentField" [allowEditing]="false" caption="Content Type"></dxi-column>
+            <dxi-column dataField="content" [allowEditing]="false"  caption="Message"></dxi-column>
+            <dxi-column dataField="contentValue" width="50" caption="Value"></dxi-column>
+            <dxi-column dataField="lowRangeValue" width="50" caption="High" [allowEditing]="false" format="#0.0" ></dxi-column>
+            <dxi-column dataField="highRangeValue" width="50" caption="Low" [allowEditing]="false" format="#0.0" ></dxi-column>
+            <dxi-column cellTemplate="cellTemplate" [width]="66">
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <dx-button icon="edit" (click)="onEditReply(cell)" [disabled]="!editMode"></dx-button>
+                    <dx-button icon="remove" (click)="onDeleteReply(cell)" [disabled]="!editMode"  ></dx-button>
+                </div>
+            </dxi-column>
+          </dx-data-grid>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </div>
+<br>
+    <hms-button-set-save [includeDeleteButton]="false"
+    (saveClicked)="onSaveClicked()"
+    [EditText]="editMode ? 'Cancel' : 'Edit'"
+    (cancelClicked)="onEditClicked()">
+    </hms-button-set-save>
+
+
+    <!--
+    <dx-button class="pull-right" [type]="'success'" [text]="'Save'" (onClick)="onSaveClicked()"
+      [disabled]="!editMode" style="padding-right: 0px" ></dx-button>
+    <dx-button class="pull-right" text="{{editMode ? 'Cancel' : 'Edit'}}" [type]="'default'" (onClick)="onEditClicked()"></dx-button>
+    -->
+</div>
+<dx-popup
+  class="popup"
+  [width]="500"
+  [height]="400"
+  [showTitle]="true"
+  title="Review SMS Reply"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="reviewPopup">
+  <div *dxTemplate="let data of 'content'" >
+    <app-replycontent-dialog [reply]="selectedReply" [dateReceivedDisabled]="true" (onConfirmFunction)="onConfirmReviewClicked()" (onCancelFunction)="reviewPopup = false"></app-replycontent-dialog>
+    <hr/>
+  </div>
+</dx-popup>

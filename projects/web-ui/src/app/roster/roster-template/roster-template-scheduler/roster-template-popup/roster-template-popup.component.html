@@ -1,0 +1,117 @@
+<dx-popup
+  [visible]="(rosterPopup$ | async).showPopup"
+  [showTitle]="true"
+  [width]="400" [height]="'auto'"
+  [title]="popupTitle"
+  [closeOnOutsideClick]="false"
+  (onHiding)="onPopupHiding()">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <dx-form [formData]="editTemplate" [colCount]="2">
+      <dxi-item [colSpan]="2" [label]="{ text: 'Location/Room' }">
+        <div *dxTemplate>
+          <dx-select-box
+            [items]="(locationRooms$ | async)"
+            displayExpr="displayName"
+            [searchEnabled]="true"
+            [(value)]="selectedLR"
+            (onValueChanged)="onLocationRoomChanged()">
+          </dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item *ngIf="!editTemplate.isDoctor" [colSpan]="2" [label]="{ text: 'Staff' }">
+        <div *dxTemplate>
+          <dx-select-box
+            [items]="(staff$ | async)"
+            displayExpr="staffName"
+            valueExpr="staffId"
+            [searchEnabled]="true"
+            [(value)]="editTemplate.staffId"
+            (onValueChanged)="onStaffChanged()">
+          </dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item *ngIf="editTemplate.isDoctor" [colSpan]="2" [label]="{ text: 'Doctor' }">
+        <div *dxTemplate>
+          <dx-select-box
+            [items]="(doctors$ | async)"
+            displayExpr="doctorName"
+            valueExpr="doctorId"
+            [searchEnabled]="true"
+            [(value)]="editTemplate.doctorId"
+            (onValueChanged)="onDoctorChanged()">
+          </dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+      <dxi-item [colSpan]="2" [label]="{ visible: false }">
+        <div *dxTemplate style="margin-left: 64px">
+          <div *ngIf="(selectedSet$ | async)">
+            <div *ngFor="let week of (selectedSet$ | async)?.weeks" style="display: flex">
+              <div *ngIf="(selectedSet$ | async)?.weeks.length > 1" class="week-label">
+                W{{ week }}:
+              </div>
+              <div *ngFor="let day of daysInWeek" style="margin: 1px">
+                <dx-button
+                  [width]="34" type="default" [text]="getDayOfWeek(day)"
+                  (onClick)="selectedDayChanged(week, day)"
+                  [stylingMode]="(selectedDays[week - 1][day] === true) ? 'contained' : 'outlined'">
+                </dx-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+      <dxi-item *ngIf="editTemplate && editTemplate.sessionId >= 0" [colSpan]="2" [label]="{ text: 'Session' }">
+        <div *dxTemplate="let data of 'content'" style="padding-top: 3px" class="widget-container">
+          <dx-radio-group
+            [items]="(sessions$ | async)"
+            [(value)]="selectedSession"
+            (onValueChanged)="onSessionChanged()"
+            itemTemplate="sessionTemplate">
+            <div style="display: flex" *dxTemplate="let session of 'sessionTemplate'">
+              <div *ngIf="session.sessionId !== 0">
+                {{ session.sessionId }}: {{ session.displayName }}
+              </div>
+              <div *ngIf="session.sessionId === 0"
+                style="padding-top: 4px; padding-right: 4px">
+                {{ session.displayName }}
+              </div>
+              <div style="padding: 0px 2px" *ngIf="session.sessionId === 0">
+                <dx-date-box
+                  [width]="104" type="time"
+                  [readOnly]="selectedSession.sessionId !== 0"
+                  [(value)]="customStart"
+                  (onValueChanged)="customStartChanged()"
+                  [useMaskBehavior]="true">
+                </dx-date-box>
+              </div>
+              <div *ngIf="session.sessionId === 0"
+                style="padding-top: 4px; padding-left: 2px; padding-right: 2px">
+                -
+              </div>
+              <div style="padding: 0px 2px" *ngIf="session.sessionId === 0">
+                <dx-date-box type="time"
+                  [width]="104"
+                  [readOnly]="selectedSession.sessionId !== 0"
+                  [(value)]="customEnd"
+                  (onValueChanged)="customEndChanged()"
+                  [useMaskBehavior]="true">
+                </dx-date-box>
+              </div>
+            </div>
+          </dx-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="2">
+        <div *dxTemplate="let data of 'content'" style="padding-top: 10px;">
+          <hms-button-set-save
+            [includeDeleteButton]="false"
+            (cancelClicked)="onPopupHiding()"
+            (saveClicked)="onApplyChanges()">
+          </hms-button-set-save>
+        </div>
+      </dxi-item>
+    </dx-form>
+  </div>
+</dx-popup>

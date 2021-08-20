@@ -1,0 +1,30 @@
+<div *ngIf="(selectedFeature$ | async)?.hasLocationRooms">
+  <dx-form>
+    <dxi-item itemType="group" caption="Booking Types">
+      <dx-data-grid
+        [dataSource]="(editMode$ | async) ? bookingTypes : selectedBookingTypes"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [keyExpr]="'bookingType'"
+        [noDataText]="'No Booking Type Selected'"
+        [showBorders]="true"
+        [showColumnHeaders]="false"
+        [hoverStateEnabled]="false"
+        (onSelectionChanged)="onChanged($event)"
+        [selectedRowKeys]="selectedRowKeys"
+        [rowAlternationEnabled]="true"
+        [height]="400">
+        <dxo-selection [mode]="(editMode$ | async) ? 'multiple' : 'none'" showCheckBoxesMode="always"></dxo-selection>
+        <dxo-paging [enabled]="false" ></dxo-paging>
+        <dxo-load-panel [enabled]="true"></dxo-load-panel>
+        <dxo-editing mode="cell" [allowUpdating]="(editMode$ | async)"></dxo-editing>
+        <dxi-column dataField="longName" dataType="string" [allowEditing]="false"
+          [sortIndex]="0" sortOrder="asc"></dxi-column>
+      </dx-data-grid>
+    </dxi-item>
+  </dx-form>
+  <div class="row" style="padding-left: 16px">
+    <dx-button icon="check" (onClick)="onCheck(true)" [disabled]="!(editMode$ | async)"></dx-button>
+    <dx-button icon="clear" (onClick)="onCheck(false)" [disabled]="!(editMode$ | async)"></dx-button>
+  </div>
+</div>

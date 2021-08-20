@@ -1,0 +1,32 @@
+<dx-form id="form">
+	<dxi-item itemType="group" [colCount]="10">
+    <dxi-item [colSpan]="5">
+        <dx-radio-group
+        [items]="filters"
+        [value]="0"
+        [displayExpr]="'name'"
+        [valueExpr]="'value'"
+        layout="horizontal"
+        (onValueChanged)="switchFilter()"
+        #filterSelection
+        [disabled]="!allowSelection">
+        </dx-radio-group>
+    </dxi-item>
+    <dxi-item [colSpan]="4">
+        <dx-select-box
+        [disabled]="!usingSingleFund || !allowSelection"
+        [deferRendering]="true"
+        [value]=0
+        displayExpr="companyName"
+        valueExpr="company_ID"
+        [searchEnabled]="true"
+        (onSelectionChanged)="onCompanyChange($event)"
+        (onFocusIn)="onFocusIn($event)"
+        #companyIdInput>
+    </dx-select-box>
+    </dxi-item>
+    <dxi-item [colSpan]="1">
+        <dx-button text="Refresh" [type]="'default'" [disabled]="!allowSelection" (onClick)="onRefresh()" [width]="350"></dx-button>
+    </dxi-item>
+  </dxi-item>
+</dx-form>

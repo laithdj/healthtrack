@@ -1,0 +1,249 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="row justify-content-center" style="padding-right: 10px;">
+        <div class="col-auto" style="padding-top: 10px; padding-right: 5px;">
+          <dx-button [text]="'Load Bookings'"
+            [type]="'default'" [height]="40" [width]="110"
+            (onClick)="onLoadBookingsClicked()">
+          </dx-button>
+        </div>
+        <div class="col" style="padding: 0px; margin: 0px;"></div>
+        <div class="col-auto" *ngFor="let item of statuses$ | async"
+          style="padding-top: 10px; padding-right: 5px; padding-left: 5px;">
+          <div *ngIf="(selectedStatus$ | async)">
+            <dx-button 
+              [text]="item.shortDisplayName" [width]="110" [height]="40"
+              [type]="(selectedStatus$ | async) === item.status ? 'success' : 'normal'"
+              (onClick)="onStatusClicked(item.status)">
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-auto">
+      <dx-form *ngIf="filter" style="padding-top: 10px;"
+        [width]="300" [formData]="filter">
+        <dxi-item [label]="{ text: 'Status' }">
+          <div *dxTemplate="let data of 'content'">
+            <dx-select-box
+              [items]="statuses$ | async"
+              [value]="selectedStatus$ | async"
+              [valueExpr]="'status'"
+              [width]="'100%'"
+              [displayExpr]="'statusDisplayName'"
+              (onValueChanged)="onStatusChanged($event)">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text: 'Location' }">
+          <div *dxTemplate="let data of 'content'">
+            <dx-select-box
+              [items]="locations$ | async"
+              displayExpr="name"
+              [width]="'100%'"
+              valueExpr="locationId"
+              [noDataText]="'No Locations Available'"
+              [value]="selectedLocation$ | async"
+              (onValueChanged)="onLocationChanged($event)">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text: 'Doctor' }">
+          <div *dxTemplate="let data of 'content'">
+            <dx-select-box
+              [items]="(doctors$ | async)"
+              displayExpr="doctorName"
+              valueExpr="doctorId"
+              [width]="'100%'"
+              [noDataText]="'No Doctors at this location'"
+              [value]="selectedDoctor$ | async"
+              (onValueChanged)="onDoctorChanged($event)">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div class="col-auto">
+      <div class="row">
+        <div class="col-auto">
+          <dx-form style="padding-top: 10px;"
+            [width]="'auto'" *ngIf="filter"
+            [formData]="filter">
+            <dxi-item [label]="{ text: 'From' }">
+              <div *dxTemplate="let data of 'content'">
+                <dx-date-box
+                  [useMaskBehavior]="true" [width]="110"
+                  [value]="(fromDate$ | async)"
+                  (onValueChanged)="onFromDateChanged($event)">
+                </dx-date-box>
+              </div>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'To' }">
+              <div *dxTemplate="let data of 'content'">
+                <dx-date-box
+                  [useMaskBehavior]="true" [width]="110"
+                  [value]="(toDate$ | async)"
+                  (onValueChanged)="onToDateChanged($event)">
+                </dx-date-box>
+              </div>
+            </dxi-item>
+            <dxi-item [label]="{ text: '' }">
+              <div *dxTemplate="let data of 'content'">
+                <dx-button style="margin-left: 40px;"
+                  [icon]="'event'" (onClick)="showDateSelector = true"
+                  [width]="110" [text]="'Select'">
+                </dx-button>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto">
+      <div class="row">
+        <div class="col-auto">
+          <dx-form style="padding-top: 10px;" [width]="'auto'" *ngIf="filter" [formData]="filter">
+            <dxi-item [label]="{ text: 'Include Deleted' }">
+              <div *dxTemplate="let data of 'content'">
+                <dx-check-box [(value)]="includeDeleted"
+                  (onValueChanged)="onIncludeDeletedChanged($event)">
+                </dx-check-box>
+              </div>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Detail View' }">
+              <div *dxTemplate="let data of 'content'" style="margin-top: 30px;">
+                <dx-check-box [(value)]="detailView"></dx-check-box>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto" style="padding-top: 10px;">
+      <div class="row">
+        <div class="col-auto">
+          <dx-button [text]="'Reset Filters'"
+            [width]="90" [type]="'default'"
+            (onClick)="resetFilter()">
+          </dx-button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-auto" style="padding-top: 33px;">
+          <dx-button 
+            [text]="'Refresh'" [icon]="'refresh'"
+            [width]="90" [type]="'default'"
+            (onClick)="fetchFilteredBookings()">
+          </dx-button>
+        </div>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>
+  <div class="row" style="padding-top: 10px; padding-bottom: 22px;">
+    <div class="col">
+      <dx-data-grid *ngIf="detailView"
+        [dataSource]="(worksheetItems$ | async)"
+        [showBorders]="true" [showRowLines]="true"
+        (onRowDblClick)="onRowDblClick($event)"
+        [noDataText]="'No Worksheet Items Found'"
+        (onRowPrepared)="cellColour($event)"
+        [rowAlternationEnabled]="false"
+        (onContextMenuPreparing)="onContextMenuPreparing($event)">
+        <dxo-paging [pageSize]="15"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true"
+          [allowedPageSizes]="[ 10, 15, 20, 25, 30 ]" [showInfo]="true">
+        </dxo-pager>
+        <dxi-column dataField="statusDisplayName" [width]="'auto'" caption="Status"></dxi-column>
+        <dxi-column dataField="doctorDisplayName" caption="Doctor" [width]="'20%'" [minWidth]="150"></dxi-column>
+        <dxi-column dataField="dateTimeBookingDate" caption="Booking Date" [dataType]="'date'" [width]="'auto'">
+          <dxo-format type="shortDateShortTime"></dxo-format>
+        </dxi-column>
+        <dxi-column dataField="patientDisplayName" caption="Patient" [width]="'20%'" [minWidth]="150"></dxi-column>        
+        <dxi-column dataField="insurer" [width]="'auto'" [minWidth]="80"></dxi-column>
+        <dxi-column dataField="serviceCode" caption="Service" [width]="'auto'" [minWidth]="80"></dxi-column>
+        <dxi-column dataField="insurerCode" caption="HI-Code" [width]="'auto'" [minWidth]="80"></dxi-column>
+        <dxi-column dataField="insurerDefaultMethod" caption="Method" [width]="'auto'" [minWidth]="80"></dxi-column>
+        <dxi-column dataField="applicationNumber" caption="App. No." [width]="'auto'" [minWidth]="80"></dxi-column>
+        <dxi-column dataField="fullFee" [dataType]="'number'" [format]="'$#0.00'" [width]="'auto'" [minWidth]="80">
+        </dxi-column>
+        <dxi-column dataField="cover" caption="Cover %" [width]="'auto'" [minWidth]="80" [alignment]="'right'"
+          [dataType]="'number'" [format]="'#0.##%'">
+        </dxi-column>
+        <dxi-column dataField="coverFee" caption="Fee" [format]="'$#0.00'" [width]="'auto'" [minWidth]="80" [alignment]="'right'">
+        </dxi-column>
+        <dxi-column dataField="coPayment" caption="Co-Pay" [format]="'$#0.00'" [width]="'auto'" [minWidth]="80" [alignment]="'right'">
+        </dxi-column>
+        <dxi-column dataField="coPaymentOverride" caption="Override" [format]="'$#0.00'" [width]="'auto'" [minWidth]="80" [alignment]="'right'">
+        </dxi-column>
+        <dxi-column dataField="claimId" [cellTemplate]="'editTemplate'" [allowEditing]="false"
+          caption="" [width]="'auto'" [allowSorting]="false" [fixed]="true" [fixedPosition]="'right'">
+          <div *dxTemplate="let data of 'editTemplate'">
+            <dx-button [type]="'default'" [icon]="'edit'" (onClick)="onEditBooking(data)"></dx-button>
+          </div>
+        </dxi-column>
+      </dx-data-grid>
+      <dx-data-grid *ngIf="!detailView"
+        [dataSource]="uniqueWorksheetItems"
+        [showBorders]="true" [showRowLines]="true"
+        (onRowDblClick)="onRowDblClick($event)"
+        [noDataText]="'No Worksheet Items Found'"
+        (onRowPrepared)="simpleCellColour($event)"
+        [rowAlternationEnabled]="false"
+        (onContextMenuPreparing)="onContextMenuPreparing($event)">
+        <dxo-paging [pageSize]="15"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true"
+          [allowedPageSizes]="[ 10, 15, 20, 25, 30 ]" [showInfo]="true">
+        </dxo-pager>
+        <dxi-column dataField="statusDisplayName" [width]="'auto'" caption="Status"></dxi-column>
+        <dxi-column dataField="doctorDisplayName" [width]="'auto'" [minWidth]="170" caption="Doctor"></dxi-column>
+        <dxi-column dataField="dateTimeBookingDate" caption="Booking Date" [dataType]="'date'" [width]="'auto'">
+          <dxo-format type="shortDateShortTime"></dxo-format>
+        </dxi-column>
+        <dxi-column dataField="bookingType" [width]="'auto'"></dxi-column>
+        <dxi-column dataField="patientDisplayName" caption="Patient" [width]="'auto'" [minWidth]="170"></dxi-column>        
+        <dxi-column dataField="insurer" [width]="'auto'"></dxi-column>
+        <dxi-column dataField="services" caption="Services" [width]="'auto'" [minWidth]="120"></dxi-column>
+        <dxi-column dataField="insurerDefaultMethod" caption="Method" [width]="'auto'"></dxi-column>
+        <dxi-column dataField="applicationNumber" caption="App. No." [width]="'auto'"></dxi-column>
+        <dxi-column dataField="claimId" [cellTemplate]="'editTemplate'" [allowEditing]="false"
+          caption="" [width]="'auto'" [allowSorting]="false" [fixed]="true" [fixedPosition]="'right'">
+          <div *dxTemplate="let data of 'editTemplate'">
+            <dx-button [type]="'default'" [icon]="'edit'" (onClick)="onEditBooking(data)">
+            </dx-button>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="claimNotes" caption="Notes" [width]="'100%'"></dxi-column>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>
+<dx-popup [(visible)]="showEditPopup"
+  [showTitle]="true" [title]="'Edit Billing Details'"
+  [width]="1050" [height]="'auto'"
+  (onHiding)="showEditPopup = false"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content" style="padding: 0px; overflow-x: auto;">
+    <app-edit-claim-services 
+      (popupClosed)="showEditPopup = false">
+    </app-edit-claim-services>
+  </div>
+</dx-popup>
+<app-load-bookings
+  [showPopup]="showLoadBookings"
+  (popupClosed)="showLoadBookings = false">
+</app-load-bookings>
+<app-date-selector-popup
+  [showPopup]="showDateSelector"
+  [fromDate]="(fromDate$ | async)"
+  [toDate]="(toDate$ | async)"
+  (dateRangeSelected)="onDateRangeSelected($event)"
+  (popupClosed)="showDateSelector = false">
+</app-date-selector-popup>
+<app-audit-info-popup
+  [showPopup]="showAuditInfo"
+  (popupClosed)="showAuditInfo = false">
+</app-audit-info-popup>

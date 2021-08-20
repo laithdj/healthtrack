@@ -1,0 +1,40 @@
+<dx-popup
+  class="popup"
+  [width]="800"
+  [height]="popupHeight"
+  title="Patient Connect Program Actions Changed"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [(visible)]="actionChangedPopupVisible">
+  <div *ngIf="effectedConnects && effectedConnects.effectedConnectSteps" style="margin: 10px 5px 10px 10px;">
+    <div class="changes-message">Changes will affect the <b>{{actionChangedPopupVisible ? effectedConnects.patientCount : 0}} Patients </b> currently on the <b>{{selectedProgramDO.reason}}</b> program</div>
+      <div class="effected-header" [ngStyle]="{ 'margin-right': effectedConnects.effectedConnectSteps.length > 10 ? '20px' : 'unset' }">
+        <div>Patients</div>
+        <div>Currently On</div> 
+        <div>Affected</div>
+        <div>New Step</div>
+      </div>
+      <hr/>
+      <div [ngStyle]="{ 'overflow-y': effectedConnects.effectedConnectSteps.length > 10 ? 'scroll' : 'unset', 'max-height': '400px' }">
+        <div class="effected-steps-row" *ngFor="let effectedStep of effectedConnects.effectedConnectSteps">
+          <div>{{ effectedStep.effectedCount }}</div>
+          <div>Step {{ effectedStep.stepAction }}</div> 
+          <div>{{effectedStep.effectedImmediately ? 'Immediately' : 'Future'}}</div>
+          <div><b>Select step for these patients</b></div>
+          <div>
+            <dx-select-box
+              [(value)]="effectedStep.effectedNextStep"
+              [items]="newActions"
+              displayExpr="stepAction"
+              valueExpr="step"
+              [disabled]="effectedStep.effectedImmediately && effectedStep.effectedCount === 0">
+            </dx-select-box>
+          </div>
+        </div>
+      </div>
+    <div class="btns">
+      <dx-button text="OK" [type]="'success'" (click)="onSaveConfirmed(true)" [width]="90" style="margin-right: 10px;"></dx-button>
+      <dx-button text="Cancel" [type]="'default'" [icon]="'arrowleft'" (click)="onSaveConfirmed(false)" [width]="90"></dx-button>
+    </div>
+  </div>
+</dx-popup>

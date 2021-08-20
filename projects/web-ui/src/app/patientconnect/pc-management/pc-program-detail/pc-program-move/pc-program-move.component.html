@@ -1,0 +1,38 @@
+<dx-popup
+  class="popup"
+  [width]="620"
+  [height]="'auto'"
+  title="Move Patients on {{ programReason }} Program"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [(visible)]="moveProgramPopupVisible">
+  <label style="padding: 6px 10px 6px 10px;"><b>{{ patientCount }} patients</b> on <b>{{ selectedProgramDO.reason }}</b></label>
+  <div class="elements-row">
+    <label>Select from Available Programs</label>
+    <dx-select-box [width]="200"
+      [dataSource]="allEnabledProgramsExceptMovingFrom"
+      displayExpr="reason" valueExpr="id"
+      (onValueChanged)="onProgramSelected($event)">
+    </dx-select-box>
+  </div>
+  <div class="elements-row">
+    <label>Disable the {{ selectedProgramDO.reason }} program</label>
+    <dx-check-box [value]="movingFromDisabled" (onValueChanged)="onMovedFromDisabled($event)"></dx-check-box>
+  </div>
+  <div *ngIf="patientsToMoveCount > 0 && moveToProgramId >= 0" style="padding: 10px;">
+    <hr/>
+    <label><b>{{ patientsToMoveCount }}</b> patients from <b>{{ programReason }}</b> {{ patientsToMoveCount > 1 ? 'are' : 'is' }} already on <b>{{ movingToProgramName }}</b>.</label>
+    <label>{{ patientsToMoveCount > 1 ? 'These patients' : 'This patient' }} will be excluded from the move and will remain on <b>{{ programReason }}</b> to be handled separately.</label>
+    <hr/>
+  </div>
+  <div style="width: 100%; display: flex;">
+    <hms-button-cancel (cancelClicked)="resetMovePopup()"></hms-button-cancel>
+    <div style="width: 100%;"></div>
+    <div>
+      <dx-button text="Continue" [type]="'default'"
+        (onClick)="onMove()" [width]="90"
+        [disabled]="moveToProgramId <= 0 || patientCount <= 0">
+      </dx-button>
+    </div>
+  </div>
+</dx-popup>

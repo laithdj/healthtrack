@@ -1,0 +1,67 @@
+<dx-popup *ngIf="newPatientConnect" #newPopup
+  [height]="400"
+  [width]="660"
+  [title]="'Create A New Patient Connect'"
+  [(visible)]="newPatientConnect.showPopup"
+  (onShown)="loaded = true"
+  (onHiding)="popupClosed()">
+  <div style="padding: 5px;">
+    <div style="display: flex;">
+      <div style="white-space: nowrap; padding-right: 10px;">Patient Connect Type:</div>
+      <div>
+        <dx-radio-group
+          [items]="patientConnectTypesList"
+          [displayExpr]="'typeName'"
+          [valueExpr]="'id'"
+          [(value)]="selectedType"
+          (onValueChanged)="onTypeChanged()"
+          layout="horizontal">
+        </dx-radio-group>
+      </div>
+    </div>
+    <div *ngIf="filteredProgramsList && loaded" style="padding-top: 10px; padding-bottom: 10px;">
+      <dx-data-grid
+        [dataSource]="filteredProgramsList"
+        [showBorders]="true"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [rowAlternationEnabled]="true"
+        [keyExpr]="'id'"
+        (onRowDblClick)="onConfirmProgram()"
+        (onSelectionChanged)="onSelectionChanged()"
+        [(selectedRowKeys)]="selectedRowKeys"
+        [height]="270">
+        <dxo-selection mode="single"></dxo-selection>
+        <dxi-column
+          [width]="100"
+          dataField="type"
+          alignment="center">
+          <dxo-lookup
+            [dataSource]="patientConnectTypesList"
+            displayExpr="typeName"
+            valueExpr="id">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column
+          [caption]="'Name'"
+          [dataField]="'reason'"
+          [sortIndex]="0">
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+    <div *ngIf="!loaded" style="height: 290px;"></div>
+    <div style="display: flex; width: 100%;">
+      <hms-button-cancel
+        (cancelClicked)="popupClosed()">
+      </hms-button-cancel>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button [type]="'success'"
+          [disabled]="!selectedProgram"
+          [text]="'Select'" [width]="90"
+          (onClick)="onConfirmProgram()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

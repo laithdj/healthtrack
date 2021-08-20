@@ -1,0 +1,36 @@
+<div style="text-align: left; margin: 10px;">
+  <dx-validation-group id="replyContent">
+    <div class="reply-content-field">
+      <div style="line-height: 20px;">Patient Id: </div>
+      <dx-number-box [value]="reply.patientId" [disabled]="true"></dx-number-box>
+    </div>
+    <div class="reply-content-field">
+      <div style="line-height: 20px;">Patient: </div>
+      <dx-text-box [value]="reply.patientName" [disabled]="true"></dx-text-box>
+    </div>
+    <div class="reply-content-field">
+      <div style="line-height: 20px;">Mobile: </div>
+      <dx-number-box [value]="reply.mobile" [disabled]="true"></dx-number-box>
+    </div>
+    <div class="reply-content-field">
+      <div style="line-height: 20px;">Date: </div>
+      <dx-date-box [value]="reply.dateReceived" [disabled]="dateReceivedDisabled"></dx-date-box>
+    </div>
+
+    <div class="reply-content-field validation-field">
+      <div style="line-height: 20px;" name="reply-content-value-validation">Value: </div>
+      <!-- <dx-number-box [(value)]="reply.contentValue">
+        <dx-validator [validationRules]="[{ type: 'required'}]" name="Value"></dx-validator>
+      </dx-number-box> -->
+      <!-- <div></div>
+      <dx-validation-summary></dx-validation-summary> -->
+
+      <dx-number-box [(value)]="reply.contentValue">
+      </dx-number-box>
+    </div>
+    <hr class="rc-hr">
+    <hms-button-set-save [includeDeleteButton]="false" (saveClicked)="save()"
+    (cancelClicked)="onCancel()">
+    </hms-button-set-save>
+  </dx-validation-group>
+</div>

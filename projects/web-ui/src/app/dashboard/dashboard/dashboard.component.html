@@ -1,0 +1,24 @@
+<div class="dashboard-container">
+  <div class="dashboard" *ngIf="dashboard">
+    <div class="row">
+      <div class="col-auto" style="padding-right: 10px;">
+        <div style="margin-left: 5px;">
+          <dx-select-box #dashboardSelectBox [width]="'auto'" [items]="dashboards" [(value)]="selectedDashboardId"
+            (onValueChanged)="goToDashboard()" displayExpr="dashboardName" [valueExpr]="'id'">
+          </dx-select-box> 
+        </div>
+      </div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="New Dashboard" type="default" (onClick)="openDashboard(dashboard.id)"></dx-button> 
+      </div>
+      <div class="col"></div>
+    </div>
+    <div style="display: flex" *ngFor="let row of dashboard.dashboardContents; let i = index">
+      <div style="padding: 5px" *ngFor="let widget of dashboard.dashboardContents[i]; let j = index">
+        <app-dashboard-widget [widget]="widget" [rowNumber]="i" [columnNumber]="j" [editMode]="false" [inactive]="false"
+          [selectedLocationId]="getWidgetLocation(i, j)" [noRelocateButtons]="true" [doctorId]="doctorId$ | async">
+        </app-dashboard-widget>
+      </div>
+    </div>
+  </div>
+</div>

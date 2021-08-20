@@ -1,0 +1,8 @@
+<div [ngStyle]="{ 'margin-right': isLast ? '0px' : '10px' }">
+  <dx-button [width]="90"
+    [text]="editMode ? 'Save' : 'New'"
+    [icon]="editMode ? 'save' : 'add'"
+    [type]="editMode ? 'success' : 'default'"
+    (onClick)="onButtonClicked()">
+  </dx-button>
+</div>

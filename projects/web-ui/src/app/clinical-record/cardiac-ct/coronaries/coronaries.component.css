@@ -1,0 +1,91 @@
+:host ::ng-deep .radio-space .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 51px !important;
+}
+
+:host ::ng-deep .radio-space .dx-widget {
+    width: 110px;
+}
+
+:host ::ng-deep .radio-space .dx-radiogroup-horizontal .dx-radiobutton .dx-radio-value-container {
+    width: 2px !important;
+}
+
+.caption {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+ .option {
+    margin-top: 3px;
+}
+
+:host ::ng-deep .checkboxes .dx-widget{
+    width: 270px;
+    margin-left: 177px;
+}
+
+.comments-mts{
+    margin-top: 13px;
+}
+
+.w-52{
+    width: 50%
+}
+
+.al-right{
+    float: right !important;
+}
+
+.radio-align{
+    position: relative;
+    bottom: 14px;
+}
+
+.custom-label{
+    overflow: unset !important;
+}
+
+.mr-16{
+    margin-right: 18px;
+}
+
+:host ::ng-deep .details .dx-field-item-label-content{
+    width: auto !important;
+}
+
+:host ::ng-deep .radio-space .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 56px !important;
+}
+
+:host ::ng-deep .radio-space .dx-radiogroup-horizontal .dx-radiobutton .dx-radio-value-container {
+    width: 2px !important;
+}
+
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    white-space: pre;
+}
+
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 50px;
+}
+
+:host ::ng-deep .dx-radio-value-container {
+    width: 1px;
+}
+
+.p1{
+    position: relative;
+    bottom: 1px;
+}
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 82px;
+}
+::ng-deep .segment .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 96px;
+}
+::ng-deep .calibre-radio .dx-radiogroup-horizontal .dx-radiobutton {
+    margin-right: 46px;
+}
+::ng-deep .segment .dx-radio-value-container {
+    width: 2px;
+}

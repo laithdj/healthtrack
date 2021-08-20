@@ -1,0 +1,18 @@
+hr {
+    margin-top: 6px;
+}
+
+.freq-btns .dx-button {
+    margin-right: 2px;
+}
+
+.popup-buttons-footer {
+  width: 100%;
+  padding: 5px 15px 15px 15px;
+  display: flex;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}

@@ -1,0 +1,17 @@
+<dx-form id="deviceDetails" [formData]="editingDevice"
+  [readOnly]="!(editMode$ | async)"
+  (onFieldDataChanged)="onDeviceChanged($event)">
+  <dxi-item itemType="group" [colCount]="2" caption="Details">
+    <dxi-item dataField="id" [disabled]="true" [label]="{ text: 'ID' }" ></dxi-item>
+    <dxi-item dataField="enabled" editorType="dxCheckBox" ></dxi-item>
+    <dxi-item dataField="name" [label]="{ text: 'AE Title' }" [editorType]="'dxTextBox'" [editorOptions]="{ maxLength: 16 }">
+      <dxi-validation-rule type="required" message="AE Title is required"></dxi-validation-rule>
+      <dxi-validation-rule type="stringLength" [max]="16" message="AE Title must be 16 characters or less"></dxi-validation-rule>
+    </dxi-item>
+    <dxi-item dataField="ipAddress" [label]="{text: 'IP Address'}" ></dxi-item>
+    <dxi-item dataField="port"></dxi-item>
+    <dxi-item dataField="make"></dxi-item>
+    <dxi-item dataField="model"></dxi-item>
+    <dxi-item dataField="serialNumber" [label]="{text: 'Serial #'}" ></dxi-item>
+  </dxi-item>
+</dx-form>

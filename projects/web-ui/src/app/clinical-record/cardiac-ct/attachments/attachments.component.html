@@ -1,0 +1,73 @@
+<div style="display: flex;" [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+    <div class="w-100" style="display: flex;">
+        <div class="attachments-list">
+          <dx-tree-list 
+            [keyExpr]="'id'"
+            [width]="'100%'" [height]="'calc(100vh - 500px)'"
+            [dataSource]="array_of_pdf"
+            [autoExpandAll]="true"
+            [selectedRowKeys]="[0]"
+            [customizeColumns]
+            [showColumnHeaders]="false"
+            (onRowUpdated)="updateNode = false"
+            (onRowClick)="selectPdf($event)"
+            (onRowDblClick)="renameNode($event)"
+            [parentIdExpr]="'parentId'">
+            <dxi-column dataField="name" cellTemplate="cellTemplate">
+                <div *dxTemplate="let cell of 'cellTemplate'">
+                    <div><i *ngIf="cell.data.parentId === 0" class="dx-icon-inactivefolder"></i> {{ cell.text }}</div>
+                </div>
+            </dxi-column>
+            <dxo-selection [mode]="'single'"></dxo-selection>
+            <dxo-editing
+            mode="cell"
+            [allowUpdating]="updateNode">
+            </dxo-editing>
+            <dxo-row-dragging
+            [onDragChange]="onDragChange"
+            [onReorder]="onReorder"
+            [allowDropInsideItem]="true"
+            [allowReordering]="true"
+            [showDragIcons]="false"
+        ></dxo-row-dragging>
+        </dx-tree-list>
+          <div class="mt-3">
+            <dx-form>
+                <dxi-item>
+                    <div>
+                        <b>{{pdfTitle}}</b>
+                    </div>
+                </dxi-item>
+                <dxi-item [label]="{ text: 'Pages' }">
+                    <dx-number-box [(value)]="pages" [width]="100"></dx-number-box>
+                </dxi-item>
+                <dxi-item [label]="{ text: 'Custom Report Style' }">
+                    <div class="d-flex">
+                        <dx-select-box [width]="120" [disabled]="true"></dx-select-box>
+                        <dx-check-box class="ml-1" [disabled]="true"></dx-check-box>
+                    </div>
+                </dxi-item>
+                <dxi-item>
+                    <div class="d-flex justify-content-between mt-5">
+                        <dx-button [width]="100" [type]="'default'" [text]="'Remove'" (onClick)="removeNode()"  class="mr-1"></dx-button>
+                        <dx-button [width]="100" [type]="'default'"[text]="'Open'" class="mr-1"></dx-button>
+                        <dx-button [width]="100" [type]="'default'" [text]="'Print'"></dx-button>
+                    </div>
+                </dxi-item>
+                <dxi-item>
+                    <hr/>
+                    <div class="d-flex">
+                    <dx-button [width]="120" [type]="'default'" [text]="'Import New'" [disabled]="true" class="mt-2"></dx-button>
+                    <dx-button [width]="120" [type]="'default'" [text]="'Attach Existing'" class=" ml-1 mt-2"></dx-button>
+                    <dx-button [icon]="'paste'" [type]="'default'" class="ml-auto mt-2" [disabled]="true"></dx-button>
+                    </div>
+                </dxi-item>
+            </dx-form>
+          </div>
+        </div>
+        <div class="col-sm-custom viewer-size" style="padding-left: 10px; float:right; ">
+            <iframe [src]="trustedUrl" class="viewer" frameborder="0"></iframe>
+        </div>
+    </div>
+  </div>
+  

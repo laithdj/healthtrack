@@ -1,0 +1,186 @@
+.dx-state-disabled .dx-widget, .dx-state-disabled.dx-widget {
+  opacity: 1;
+}
+
+.patient-panel {
+  background-color: #f7f7f7;
+  padding: 10px 0px;
+}
+
+div label input label {
+  font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
+}
+
+::ng-deep .page-top-padding {
+  padding-top: 6px;
+}
+
+::ng-deep .dx-field-item-label {
+  text-align: right;
+}
+
+/* added to prevent wrapping of labels - overwrite with normal and set maxwidth to wrap*/
+::ng-deep .dx-field-item-label-content {
+  white-space: pre;
+}
+
+/* START: added to override the default devextreme disable opacity */
+/* /deep/ .dx-state-disabled.dx-widget, .dx-state-disabled .dx-widget{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-widget{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled .dx-widget{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-checkbox .dx-checkbox-icon, .dx-state-disabled .dx-checkbox .dx-checkbox-icon {
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-checkbox .dx-checkbox-icon{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled .dx-checkbox .dx-checkbox-icon {
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-list-item, .dx-state-disabled .dx-list-item{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-list{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-list-item, .dx-state-disabled .dx-list-item{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled.dx-list-item{
+  opacity: 0.9;
+}
+
+/deep/ .dx-state-disabled .dx-list-item{
+  opacity: 0.9;
+} */
+
+/* END: added to override the default devextreme disable opacity */
+
+::ng-deep .form-panel {
+  background-color: #DEEAF5;
+  padding: 10px;
+}
+
+::ng-deep .dx-popup-content {
+  background-color: #DEEAF5;
+}
+
+::ng-deep .flexable-pairing {
+  display: flow-root;
+}
+
+::ng-deep .highlightedField .dx-texteditor-input {
+  font-weight: bolder;
+}
+
+::ng-deep .highlightedField .dx-field-item-label-text {
+  font-weight: bolder;
+}
+
+/* provides header style to dx-grid */
+::ng-deep .dx-header-row {
+  color: black;
+  font-weight: bold;
+  background-color: lightgray;
+}
+
+::ng-deep .dx-datagrid-rowsview .dx-row > td {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row > td {
+  vertical-align:middle;
+}
+
+::ng-deep .dx-form-group-with-caption .dx-form-group-content {
+  padding-top: 3px;
+  padding-bottom: 0px;
+  margin-top: 3px;
+}
+
+::ng-deep .dx-form-group-caption {
+  font-size: 10pt;
+  font-weight: bold;
+  font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
+}
+
+::ng-deep .sub-group  .dx-form-group-content {
+  padding-bottom: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+}
+
+::ng-deep .dx-layout-manager .dx-field-item:not(.dx-first-row) {
+  padding-top: 2px;
+}
+
+::ng-deep
+.dx-layout-manager .dx-field-item:not(.dx-last-col) {
+  padding-right: 5px;
+}
+
+::ng-deep
+.dx-layout-manager .dx-field-item:not(.dx-first-col) {
+  padding-left: 5px;
+}
+
+::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+  margin-right: 6px;
+}
+
+::ng-deep
+.dx-radiogroup-vertical .dx-radiobutton {
+  margin-top: 5px;
+}
+
+::ng-deep .dx-radio-value-container {
+  padding-right: 5px;
+}
+
+::ng-deep .errorStatus {
+  background-color: red;
+}
+
+::ng-deep .pausedStatus {
+  background-color: #ffbf00;
+}
+
+::ng-deep .completedStatus {
+  background-color: green;
+}
+
+/* Fix for buttons loosing padding when clicked */
+::ng-deep .dx-datagrid-content .dx-datagrid-table .dx-row .dx-editor-cell {
+  padding-left: 5px;
+}
+
+/* Fix to place spacing between buttons*/
+/* ::ng-deep div .dx-button {
+  margin-right: 6px;
+} */
+
+::ng-deep .warningMessage {
+  color: red
+}
+
+::ng-deep .dx-layout-manager.dx-layout-manager-one-col .dx-box-item:not(:first-child) .dx-single-column-item-content > .dx-field-item {
+  padding-top: 2px;
+}
+

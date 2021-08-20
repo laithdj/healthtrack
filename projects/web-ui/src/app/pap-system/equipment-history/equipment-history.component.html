@@ -1,0 +1,117 @@
+<div class="row">
+  <div class="col">
+    <div class="device-panel">
+      <div class="row">
+        <div class="col">
+          <dx-form id="form" class="second-groups">
+            <dxi-item itemType="group" [colSpan]="3" caption="Asset">
+              <div class="row">
+                <div class="col">
+                  <div class="dx-fieldset">
+                    <div class="dx-field">
+                      <div class="dx-field-label" >Manufacturer:</div>
+                      <div class="dx-field-value">
+                        <dx-text-box readOnly="true" [value]="equipment.manufacturer.companyName"
+                          style="border-style:dashed;">
+                        </dx-text-box>
+                      </div>
+                    </div>
+                    <div class="dx-field">
+                      <div class="dx-field-label">Asset No.:</div>
+                      <div class="dx-field-value">
+                        <dx-text-box readOnly="true" [value]="equipment.equipmentNumber" style="border-style:dashed;">
+                        </dx-text-box>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="dx-fieldset">
+                    <div class="dx-field">
+                      <div class="dx-field-label" >Model:</div>
+                      <div class="dx-field-value">
+                        <dx-text-box readOnly="true" [value]="equipment.model" style="border-style:dashed;">
+                        </dx-text-box>
+                      </div>
+                    </div>
+                    <div class="dx-field">
+                      <div class="dx-field-label">Serial No.:</div>
+                      <div class="dx-field-value">
+                        <dx-text-box readOnly="true" [value]="equipment.serialNumber" style="border-style:dashed;">
+                        </dx-text-box>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col" style="margin-left:50px">
+                  <div class="row">
+                    <div class="dx-fieldset" style="margin-bottom:5px">
+                    <dxi-item dataField="surname" [label]="{text: 'Surname'}">
+                    </dxi-item>
+                    <div class="dx-field">
+                      <div class="dx-field-label">Type:</div>
+                      <div class="dx-field-value">
+                        <dx-text-box  readOnly="true" [value]="combineEquipmentTypes(equipment.equipmentType)"  [width]="200" style="border-style:dashed;">
+                        </dx-text-box>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<dx-form id="form" class="form-panel">
+  <dxi-item itemType="group" [colCount]="4"  caption="Equipment History Filters">
+    <dxi-item itemType="group" [colSpan]="3">
+      <dxi-item [label]="{text:'Issued From'}">
+        <dx-date-box [(value)]="searchCriteria.inputDate" [useMaskBehavior]="true" type="date" showClearButton="true"
+          width="150px"></dx-date-box>
+      </dxi-item>
+      <dxi-item [label]="{text:'Issued To'}">
+        <dx-date-box [(value)]="searchCriteria.inputDate2" [useMaskBehavior]="true" type="date" showClearButton="true"
+          width="150px"></dx-date-box>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="1">
+      <div *dxTemplate>
+        <dx-button text='Search' class="" [type]="'default'" [width]="80" icon="search" (onClick)="search()">
+        </dx-button>&nbsp;<br>
+        <dx-button text='Reset' class="mt-1" [type]="'default'" [width]="80" icon="refresh" (onClick)="reset()">
+        </dx-button>
+      </div>
+    </dxi-item>
+  </dxi-item>
+</dx-form>
+<br>
+<dx-data-grid style="padding-left: 10px; padding-right:10px; padding-bottom:20px;" id="gridContainer"
+  [dataSource]="transactions" [showBorders]="true"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  (onRowClick)="doubleClickRow($event)"
+  [rowAlternationEnabled]="true"
+  [showRowLines]="true">
+  <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
+  <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+  <dxi-column #issue_date_col dataField="issuingDate" showClearButton="true" [width]="150" caption="Issuing Date" [allowFiltering]="false">
+  </dxi-column>
+  <dxi-column #return_date_col dataField="returnDate" alignment="left" caption="Return Date" [width]="150" [allowFiltering]="false">
+  </dxi-column>
+  <dxi-column dataField="patientName" alignment="left" caption="Patient Name"></dxi-column>
+  <dxi-column dataField="patientID" alignment="left" caption="Patient ID"></dxi-column>
+  <dxi-column dataField="mrn" alignment="left" caption="MRN"></dxi-column>
+  <dxi-column alignment="left" caption="Action" [width]="78" cellTemplate="actionsCellTemplate">
+    <div *dxTemplate="let cell of 'actionsCellTemplate'">
+      <div>
+        <dx-button type="default" icon="edit" text="Edit" [width]="75" (onClick)="view(cell.data.transactionID,cell.data.patientID)">
+        </dx-button>
+      </div>
+    </div>
+  </dxi-column>
+</dx-data-grid>

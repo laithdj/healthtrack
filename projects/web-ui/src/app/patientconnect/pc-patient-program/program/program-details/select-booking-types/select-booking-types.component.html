@@ -1,0 +1,49 @@
+<dx-popup
+  class="popup"
+  [height]="numberOfColumns > 1 ? (columnsLength + 1) * 26 + 130 : (sortedBookingTypes.length + 1) * 26  + 130"
+  [width]="columnsWidth > 280 ? columnsWidth : 280"
+  title="Select Booking Type/s"
+  [showTitle]="true"
+  [(visible)]="showPopup"
+  (onHiding)="onHidePopup()">
+  <div [className]="numberOfColumns > 4 ? 'booking-types-content booking-types-content-scrollable' : 'booking-types-content'"
+    *dxTemplate="let data of 'content'">
+    <div *ngFor="let item of sortedBookingTypesColumns" [className]="'booking-types-columns'">
+      <dx-list
+        [dataSource]="item.columnData"
+        [height]="numberOfColumns > 1 ? (columnsLength) * 26 + 10 : (sortedBookingTypes.length) * 26 + 10"
+        [showSelectionControls]="true"
+        keyExpr="bookingType"
+        selectionMode="multiple"
+        (onSelectionChanged)="onBookingTypeChecked($event)"
+        [selectedItemKeys]="selectedBookingTypes">
+        <div *dxTemplate="let bookingType of 'item'">
+          <span>{{bookingType.longName}}</span>
+        </div>
+      </dx-list>
+    </div>
+    <div style="height: 24px; padding-left: 2px;">
+      <span *ngIf="selectedBookingTypes.length === 0" class="warningMessage" >At least one Booking Type must be selected</span>
+    </div>
+    <div style="display: block;">
+      <div style="position: absolute; bottom: 0; left: 0; margin: 0 0 40px 16px;">
+        <dx-button style="margin-right: 15px;" [type]="'default'" [text]="'All'" [width]="90"
+          (onClick)="onSelectAllBookingTypes()">
+        </dx-button>
+        <dx-button [type]="'default'" [text]="'Clear'" [width]="90"
+          (onClick)="onClearAllBookingTypes()">
+        </dx-button>
+      </div>
+      <div style="position: absolute; bottom: 0; right: 0; margin: 0 16px 40px 0;">
+        <dx-button style="margin-right: 15px;"
+          text="Cancel" type="default" [width]="90"
+          (onClick)="onSelectBookingTypesCancel()">
+        </dx-button>
+        <dx-button [type]="'success'" [text]="'OK'"
+          (onClick)="onSelectBookingTypesOK()" [width]="90"
+          [disabled]="selectedBookingTypes.length === 0">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

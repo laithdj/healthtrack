@@ -1,0 +1,46 @@
+<dx-form id="form" class="split-form" [formData]="roster" [readOnly]="true">
+  <dxi-item itemType="group" [colCount]="7" caption="Current Roster" cssClass="move">
+    <dxi-item itemType="group" [colSpan]="3" cssClass="mover">
+      <div *dxTemplate style="display:inline-block">
+      <label style="float:left;margin-right:5px;margin-top:4px">Staff:</label>
+      <dx-list class="widget-list" [dataSource]="roster.staff"  [width]="200" [height]="117" [disabled]="false"
+         selectionMode="single" showScrollbar="onHover"
+        [selectedItemKeys]="[]">
+        <dxo-label location="top"
+        alignment="left"></dxo-label>
+        <div *dxTemplate="let data of 'item'" class="has-border" style="display: flex;border-bottom: 1px solid #ccc;">
+          <div style="font-size: 0.7rem;padding:2px; color:black ;">
+           {{data}}
+          </div>
+          <div style="margin-left: auto; margin-right: 0">
+          </div>
+        </div>
+      </dx-list>
+    </div>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="3" cssClass="ml-4 move-left">
+      <dxi-item [label]="{ text: 'Location/Room' }" [editorOptions]="{ width: 115 }">
+        <dx-text-box [text]="comibineLocation(roster.location , roster.room)" [(value)]="combine" [readOnly]="true">
+          </dx-text-box>
+      </dxi-item>
+      <dxi-item dataField="startTime" editorType="dxDateBox" [label]="{ text: 'Start Date' }" [editorOptions]="{ width: 90 }">
+      </dxi-item>
+        <dxi-item [label]="{ text: 'Start Time' }" >
+            <dx-date-box
+            [value]="roster.startTime"
+            type="time"
+            [width]="90"
+            [readOnly]="true">
+        </dx-date-box>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'Finish Time' }" >
+        <dx-date-box
+        [value]="roster.endTime"
+        type="time"
+        [width]="90"
+        [readOnly]="true">
+    </dx-date-box>
+  </dxi-item>
+    </dxi-item>
+  </dxi-item>
+</dx-form>

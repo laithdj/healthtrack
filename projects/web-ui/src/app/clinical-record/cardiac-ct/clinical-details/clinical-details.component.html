@@ -1,0 +1,220 @@
+<dx-form [width]="'100%'" [colCount]="2"
+    [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" cssClass="mt-3">
+    <dxi-item itemType="group" [colSpan]="(showReportBeside$ | async) ? 6 : 4">
+        <dxi-item itemType="group" [cssClass]="(showReportBeside$ | async) ? 'align-fields' : ''" [colCount]="15">
+            <dxi-item [label]="{ text: 'Procedure/Test Date' }" [colSpan]="10">
+                <dx-date-box [useMaskBehavior]="true" [value]="selectTestDate$ | async" type="datetime" [class]="(showReportBeside$ | async) ? 'date-report' :'date-width'"
+                    (onValueChanged)="onTestDateChanged($event)">
+                </dx-date-box>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Duration' }" [colSpan]="5" [cssClass]="(showReportBeside$ | async) ? 'duration-align' : ''">
+                <dx-number-box [showSpinButtons]="true" format="# mins"
+                    [value]="duration" [class]="(showReportBeside$ | async) ? 'duration-report' :'duration-width'"
+                    (onValueChanged)="onDurationChanged($event)" [min]="0">
+                </dx-number-box>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item [label]="{ text: 'Procedure' }">
+            <dx-select-box [items]="procedures" [(value)]="procedures[0]" [class]="(showReportBeside$ | async) ? 'procedure-report' :'procedure-width'"
+                [displayExpr]="'name'" [readOnly]="true">
+            </dx-select-box>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="4" >
+        <dxi-item [label]="{ text: 'Hospital Site' }"  [cssClass]="(showReportBeside$ | async) ? '' :'ml-15'">
+            <dx-select-box [items]="hospitalLocations$ | async" [displayExpr]="'name'"
+                [valueExpr]="'locationId'" [width]="(showReportBeside$ | async) ? '' : 300"
+                [value]="selectedLocation$ | async" (onValueChanged)="onHospitalSiteChanged($event)">
+            </dx-select-box>
+        </dxi-item>
+    </dxi-item>    
+    </dxi-item>
+    <br>
+    <dxi-item itemType="group" [colSpan]="2" caption="Patient Baseline" cssClass="mt-3">
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="(showReportBeside$ | async) ? 2 : 4">
+            <dxi-item [label]="{ text: 'Heart Rate' }"  [colSpan]="1">
+                <div *dxTemplate>
+                    <div class="d-flex flex-row">
+                        <dx-number-box [width]="80" [value]="heartRate$ | async" (onValueChanged)="heartRateChanged($event)"></dx-number-box>
+                        <span class="m-1">bpm</span>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item  [label]="{ text: 'Blood Pressure' }" [colSpan]="1" cssClass="ml-3">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [width]="40" [value]="bloodPressureSystolic$ | async" (onValueChanged)="bloodPressureChanged($event, 'systolic')"></dx-number-box><span
+                        class="dash-style">/</span>
+                    <dx-number-box [width]="40" [value]="bloodPressureDiastolic$ | async" (onValueChanged)="bloodPressureChanged($event ,'diastolic')"></dx-number-box>
+                </div>
+            </dxi-item> 
+            <dxi-item itemType="group" [colSpan]="2">
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="(showReportBeside$ | async) ? 2 : 4" cssClass="expand-span">
+            <dxi-item [label]="{ text: 'Height' }"  [colSpan]="1">
+              <div *dxTemplate class="d-flex flex-row">
+                <dx-number-box [width]="80" [(value)]="height"
+                  (onValueChanged)="heightChanged()" format="0#.0" [min]="0">
+                </dx-number-box>
+                <span class="m-1" style="margin-right:14px!important;width:16px;">
+                  {{heightUnit}}
+                </span>
+                <div *ngIf="feetEnabled" class="d-flex flex-row">
+                  <dx-number-box [width]="80" [(value)]="inches" [min]="0"
+                    (onValueChanged)="heightChanged()" format="0#.0">
+                  </dx-number-box>
+                  <span class="m-1" style="width:10px;">inches</span>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item  [colSpan]="1" cssClass="ml-3">
+                <div *dxTemplate class="d-flex flex-row">
+                    <div style="width:91px"></div>
+                    <dx-button [text]="heightBtn" class="float-right" (onClick)="enableFeet(height, inches)" [width]="92">
+                    </dx-button>
+                </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="(showReportBeside$ | async) ? 2 : 4" cssClass="expand-span">
+            <dxi-item [label]="{ text: 'Weight' }" [colSpan]="1">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [width]="80" [(value)]="weight"
+                      (onValueChanged)="weightChanged()" format={{formatWeight}} [min]="0">
+                    </dx-number-box>
+                    <span class="m-1" style="margin-right:14px!important;width:17px;">{{weightUnit}}</span>
+                    <div *ngIf="stoneEnabled" class="d-flex flex-row">
+                        <dx-number-box [width]="80" [(value)]="pounds" (onValueChanged)="weightChanged()"
+                            format="0#.0" [min]="0">
+                        </dx-number-box>
+                        <span class="m-1" style="width:10px;">pounds</span>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item  [colSpan]="1" cssClass="ml-3">
+                <div *dxTemplate class="d-flex flex-row">
+                    <div style="width:91px"></div>
+                    <dx-button [text]="weightBtn" class="float-right" (onClick)="enableStone(weight, pounds)" [width]="92">
+                    </dx-button>
+                </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="(showReportBeside$ | async) ? 2 : 4" cssClass="expand-span">
+            <dxi-item  [label]="{ text: 'BMI' }" [colSpan]="1">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [value]="bmi$ | async" [width]="80" style="margin-right:33px;" [readOnly]="true" format="0#.0">
+                    </dx-number-box>
+                    <dx-text-box [width]="100" [value]="bmiDesc$ | async" [readOnly]="true">
+                    </dx-text-box>
+                </div>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'BSA' }" [colSpan]="1" cssClass="ml-3">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [value]="bsa$ | async" [width]="92" style="margin-right:33px;" [readOnly]="true" format="0#.00">
+                    </dx-number-box>
+                    <dx-select-box [width]="100" [items]="mosteller" [(value)]="mosteller[0]" [readOnly]="true">
+                    </dx-select-box>
+                </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="1">
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="(showReportBeside$ | async) ? 2 : 10" caption="Staff" cssClass=" mt-3">
+        <dxi-item itemType="group" [colSpan]="4" cssClass="expand-span">
+            <dxi-item [label]="{ text: 'Cardiologist' }" [editorType]="'dxSelectBox'">
+                <dx-select-box [displayExpr]="'staffName'" [valueExpr]="'staffId'"
+                    [items]="cardiologistsList$ | async" [width]="212"
+                    [value]="cardiologist$ | async"
+                    (onValueChanged)="StaffChanged($event, 'CT Doctor')">
+                </dx-select-box>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Radiologist' }" [editorType]="'dxSelectBox'">
+                <dx-select-box [items]="radiographersList$ | async" [displayExpr]="'staffName'" [valueExpr]="'staffId'" [width]="212"
+                    [value]="radiographer$ | async" (onValueChanged)="StaffChanged($event, 'CT Radiographer')">
+                </dx-select-box>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Fellow' }" [editorType]="'dxSelectBox'">
+                <dx-select-box [displayExpr]="'staffName'" [valueExpr]="'staffId'" [items]="fellowList$ | async" [width]="212"
+                    [value]="fellow$ | async" (onValueChanged)="StaffChanged($event, 'CT Fellow')">
+                </dx-select-box>
+            </dxi-item>
+            <!--
+            <dxi-item [label]="{ text: 'Nurse' }" [editorType]="'dxSelectBox'">
+                <dx-select-box [displayExpr]="'staffName'" [valueExpr]="'staffId'" [items]="nurseList$ | async"
+                [value]="nurse$ | async" (onValueChanged)="StaffChanged($event)">
+                </dx-select-box>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Technician/Scientist' }" [editorType]="'dxSelectBox'">
+                <dx-select-box [displayExpr]="'staffName'" [valueExpr]="'staffId'" [items]="techniciansList$ | async"
+                [value]="technician$ | async" (onValueChanged)="StaffChanged($event)">
+                </dx-select-box>
+            </dxi-item>-->
+            </dxi-item>
+        </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Indications" cssClass=" mt-3">
+        <dxi-item  [colSpan]="(showReportBeside$ | async) ? 6 : 5">
+            <dx-button [text]="'Edit'" [ngClass]="(showReportBeside$ | async) ? 'float-custom-side' : 'float-custom'" [type]="'default'" (onClick)="listIndicationsGrid()">
+            </dx-button>
+            <div class="list-container mr-3">
+                <dx-list [height]="100" [width]="'90%'" [dataSource]="indicationsListGrid$ | async" [displayExpr]="'itemValue'" [noDataText]="'Not Specified'"
+                    [grouped]="false" [collapsibleGroups]="false">
+                </dx-list>
+            </div>
+        </dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Details' }" [editorType]="'dxTextArea'">
+            <dx-text-area [height]="100" [value]="indicationsDetails$ | async" (onValueChanged)="indicationsDetailsChange($event)">
+            </dx-text-area>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Risk Factors" cssClass=" mt-3">
+        <dxi-item [colSpan]="(showReportBeside$ | async) ? 6 : 5">
+            <dx-button [text]="'Edit'" [ngClass]="(showReportBeside$ | async) ? 'float-custom-side' : 'float-custom'" [type]="'default'" (onClick)="listRiskFactorsGrid()">
+            </dx-button>
+            <div class="list-container mr-3">
+                <dx-list [height]="100" [width]="'90%'" [dataSource]="riskFactorsListGrid$ | async" [displayExpr]="'itemValue'" [noDataText]="'Not Specified'">
+                </dx-list>
+            </div>
+        </dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Details' }" [editorType]="'dxTextArea'">
+            <dx-text-area [height]="100" [value]="riskFactorsDetails$ | async" (onValueChanged)="riskFactorsDetailsChange($event)">
+            </dx-text-area>
+        </dxi-item>
+    </dxi-item>
+</dx-form>
+<dx-popup class="popup" [height]="390" [width]="300" title="Indications" [showTitle]="true" [showCloseButton]="false"
+    [visible]="indicationsList">
+    <div class="list widget-container">
+        <dx-list [items]="indicationsList$  | async" [displayExpr]="'itemValue'" [height]="300"  [width]="'100%'"
+        (onSelectionChanged)="selectionChanged($event,selectedItems,'indications')"
+            [showSelectionControls]="true" selectionMode="multiple" [(selectedItems)]="selectedItems">
+        </dx-list>
+    </div>
+    <div class="mt-2">
+        <div style="width: 100%">
+            <dx-button [width]="90" text="Done" type="success" class="float-right" (onClick)="closeIndication()"
+                style="margin-right: 0px">
+            </dx-button>
+        </div>
+    </div>
+</dx-popup>
+<dx-popup class="popup" [height]="390" [width]="300" title="Risk Factors" [showTitle]="true" [showCloseButton]="false"
+    [visible]="riskFactorsList">
+    <div class="list widget-container">
+        <dx-list [items]="riskFactorsList$ | async" [displayExpr]="'itemValue'" [height]="300"  [width]="'100%'"
+         (onSelectionChanged)="selectionChanged($event,selectedRiskItems,'riskFactors')"
+            [showSelectionControls]="true" selectionMode="multiple" [(selectedItems)]="selectedRiskItems">
+        </dx-list>
+    </div>
+    <div class="mt-2">
+        <div style="width: 100%">
+            <dx-button [width]="90" text="Done" type="success" class="float-right" (onClick)="closeRiskFactors()"
+                style="margin-right: 0px">
+            </dx-button>
+        </div>
+    </div>
+</dx-popup>

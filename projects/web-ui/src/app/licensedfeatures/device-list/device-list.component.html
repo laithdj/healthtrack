@@ -1,0 +1,23 @@
+<dx-form>
+  <dxi-item itemType="group" caption="Devices">
+    <dx-data-grid
+      [dataSource]="(worklistDevices$ | async)"
+      [showColumnLines]="true"
+      [showRowLines]="true"
+      [keyExpr]="'id'"
+      [showBorders]="true"
+      [height]="'100%'"
+      [width]="'100%'"
+      [selectedRowKeys]="selectedRowKeys"
+      (onSelectionChanged)="onDeviceSelected($event)"
+      (onContentReady)="onContentReady()"
+      [hoverStateEnabled]="true"
+      [rowAlternationEnabled]="true"
+      [disabled]="(editMode$ | async)">
+      <dxo-selection mode="single"></dxo-selection>
+      <dxi-column dataField="id" [width]="'auto'" caption="ID"></dxi-column>
+      <dxi-column dataField="name" caption="AE Title"></dxi-column>
+      <dxi-column dataField="enabled" [width]="'auto'"></dxi-column>
+    </dx-data-grid>
+  </dxi-item>
+</dx-form>

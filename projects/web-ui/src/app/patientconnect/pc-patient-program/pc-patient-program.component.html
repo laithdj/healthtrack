@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="row">
+        <div class="col patient-panel side-padding">
+          <lib-PatientHeader [patient]="patient"></lib-PatientHeader>
+        </div>
+        <div class="col-auto patient-refresh-panel" style="padding-left: 0px;">
+          <div style="margin-top: 30px">
+            <dx-button 
+              text="Refresh"
+              [disabled]="(editMode$ | async)"
+              icon="refresh" type="default"
+              (onClick)="onRefreshClicked()">
+            </dx-button>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <app-program [patient]="patient"></app-program>
+    </div>
+  </div>
+</div>

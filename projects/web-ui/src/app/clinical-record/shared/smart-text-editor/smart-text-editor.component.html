@@ -1,0 +1,15 @@
+<lib-smart-text-configuration
+  [doctor]="{ doctorId: doctorId$ | async, displayName: doctorDisplayName$ | async }"
+  [definition]="definition"
+  [smartTextStyleProperties]="smartTextStyleProperties$ | async"
+  [referenceIdList]="referenceIdList$ | async"
+  [smartTextNodeList]="smartTextNodeList$ | async"
+  [smartTextTemplateList]="smartTextTemplateList$ | async"
+  [selectedTemplate]="selectedTemplate"
+  (errorMessage)="handleError($event)"
+  (reloadClicked)="reloadSmartTextClicked($event)"
+  (saveTemplateList)="saveTemplateList($event)"
+  (deleteTemplateClicked)="deleteTemplate($event)"
+  (saveTemplateClicked)="saveSelectedTemplate($event)"
+  (saveSmartTextPackageClicked)="saveSmartTextPackage($event)">
+</lib-smart-text-configuration>

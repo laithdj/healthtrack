@@ -1,0 +1,27 @@
+hr {
+    margin-top: 4px;
+}
+
+.changes-message {
+    margin: 10px 0 20px 0;
+}
+
+.effected-header {
+    display: grid;
+    grid-template-columns: 10% 60% 30%;
+    font-weight: bold;
+}
+
+.effected-steps-row {
+    height: 40px;
+    display: grid;
+    grid-template-columns: 10% 35% 25% 30%;
+    margin-right: 5px;
+}
+
+.btns {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+}

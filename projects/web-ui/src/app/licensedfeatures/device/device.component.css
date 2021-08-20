@@ -1,0 +1,11 @@
+
+/deep/ .dx-editor-cell.dx-editor-inline-block .dx-highlight-outline::before {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/deep/ .dx-form-group-with-caption .dx-form-group-content {
+    padding-bottom: 10px;
+}
+
+

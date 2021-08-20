@@ -1,0 +1,241 @@
+<div class="row width-size" style="border:ridge;width: 100%;">
+  <div class="row triage-width" style="float:left;border-right:ridge;">
+    <div  style="width:860px">
+      <div class="row">
+        <div class="patient-panel" style="margin-left: 17px;">
+          <div class="col" style="width:835px;">
+            <app-patient-summary [patient]="patient"></app-patient-summary>
+          </div>
+        </div>
+      </div>
+      <div style="padding-left: 15px; margin: 5px 0px 0px 15px;">
+        <dx-form itemType="group" [colCount]="8" id="form" cssClass="form-height">
+          <dxi-item itemType="group" cssClass="w-600" caption="Details" [colSpan]="6">
+            <dxi-item [label]="{text:'Workflow'}" cssClass="h-35">
+              <div *dxTemplate>
+                <dx-select-box [items]="workflowSteps" [width]="210" [(value)]="booking.workflowStep"></dx-select-box>
+                <dx-button text='Add Booking' (onClick)="addBookingButton()" class="mb-30 float-right mt-1" icon="add"
+                [type]="'default'" [width]="120">
+              </dx-button>
+              </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="10">
+              <div style="display: flex;">
+                <div>
+                  <dx-data-grid #booking_grid [paging]="false" [dataSource]="booking.appointments" id="stepsGrid" [height]="150" [rowAlternationEnabled]="true"
+                    [showRowLines]="true" [showBorders]="true">
+                    <dxo-sorting mode="none"></dxo-sorting>
+                   <!-- <dxo-scrolling [showScrollbar]="'always'"></dxo-scrolling>-->
+                    <dxo-selection mode="single"></dxo-selection>
+                    <dxi-column caption="Booking Type" cellTemplate="bookingTypeCellTemplate" dataField="bookingType" alignment="left" dataType="string"
+                      [allowResizing]="false" [width]="120">
+                      <div *dxTemplate="let cell of 'bookingTypeCellTemplate'">
+                        {{getPurposesName(cell.data.bookingType)}}
+                      </div>
+                    </dxi-column>
+                    <dxi-column cellTemplate="locationCellTemplate" caption="Location" [width]="166" alignment="left">
+                      <div *dxTemplate="let cell of 'locationCellTemplate'">
+                        {{getLocationName(cell.data.locationId)}}
+                      </div>
+                    </dxi-column>
+                    <dxi-column dataField="startDate" cellTemplate="dateTemplate" caption="Date/Time" dataType="date" [width]="125"
+                      [allowResizing]="false">
+                      <div *dxTemplate="let cell of 'dateTemplate'">
+                        {{formatDate(cell.data.startDate)}}
+                      </div>
+                    </dxi-column>
+                    <dxi-column dataField="referringDoctor.doctorName" caption="Doctor" [width]="100" dataType="date">
+                    </dxi-column>
+                    <dxi-column cellTemplate="actionsCellTemplate" caption="" [width]="80">
+                      <div *dxTemplate="let cell of 'actionsCellTemplate'">
+                        <hms-button-edit (editClicked)="editBookingButton(cell.data.appointmentId , cell.data.startDate)"></hms-button-edit>
+                      </div>
+                    </dxi-column>
+                  </dx-data-grid>
+                </div>
+              </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="10">
+              <label>Notes:</label>
+              <dx-text-area [height]="65" [width]="593">
+              </dx-text-area>
+            </dxi-item>
+          </dxi-item>
+          <div syle="padding-top:20px"></div>
+          <dxi-item itemType="group" caption="" [colSpan]="1">
+            <dxi-item>
+              <div *dxTemplate>
+                <p></p>
+              </div>
+            </dxi-item>
+            <dxi-item cssClass="bottom w-220" itemType="group" caption="Triage Options">
+              <dxo-label location="top" alignment="left">
+              </dxo-label>
+              <div *dxTemplate style="border:2px;border-color:red" class="mt-2">
+                <dx-list [height]="281" width="200" [dataSource]="triageOptions" displayExpr="name"
+                  [selectionMode]="selectionModeValue" [selectAllMode]="selectAllModeValue"
+                  [showSelectionControls]="true" [pageLoadMode]="'scrollBottom'" [showScrollbar]="'always'"></dx-list>
+              </div>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+        <dx-form itemType="group" [colCount]="8">
+          <dxi-item itemType="group" caption="Referral Details" [colSpan]="6">
+            <div style="display: flex; margin-top: 2px">
+              <div>
+                <dx-data-grid [dataSource]="referrals" [paging]="false" id="stepsGrid"  [rowAlternationEnabled]="true" [height]="106"
+                  [showRowLines]="true" [showBorders]="true" [width]="599">
+                  <dxo-sorting mode="none"></dxo-sorting>
+                   <!-- <dxo-scrolling [showScrollbar]="'always'"></dxo-scrolling>-->
+                  <dxi-column caption="Referring MO" dataField="referringDoctor.doctorName" alignment="left"
+                    dataType="string" [allowResizing]="false" [width]="150">
+                  </dxi-column>
+                  <dxi-column dataField="type" dataType="string" caption="Type" [width]="120">
+                  </dxi-column>
+                  <dxi-column dataField="purpose" caption="Purpose" dataType="date" [width]="190"
+                    [allowResizing]="false">
+                  </dxi-column>
+                  <dxi-column dataField="toDate" caption="Valid To" [width]="130" dataType="date">
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+          </dxi-item>
+          <dxi-item itemType="group" class="mt-4" [colSpan]="2">
+            <div *dxTemplate class="mt-4" style="width:218px">
+              <dx-radio-group [items]="referralOptions"></dx-radio-group>
+              &nbsp;
+              <dx-button text='Modify' class="mt-2" [width]="80" (onClick)="getReferrals()">
+              </dx-button>&nbsp;
+              <dx-button text='Deselect' style="float:left" [width]="80" class="mt-2">
+              </dx-button><br>
+              <dx-button text='New In' style="margin-top:6px" [width]="80">
+              </dx-button>
+            </div>
+          </dxi-item>
+        </dx-form>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-custom viewer-size" style="padding-left: 10px;min-width:50px; float:right; ">
+    <app-triage-viewer></app-triage-viewer>
+  </div>
+</div>
+<div style="display: flex;padding-left: 10px; padding-right: 10px" class="mt-3 margin-bottom">
+  <hms-button-cancel>
+  </hms-button-cancel> &nbsp;
+  <hms-button-delete>
+  </hms-button-delete>
+  <div style="width: 80%"></div>
+  <dx-button text='Schedule to Diary' class="w-80" [type]="'default'">
+  </dx-button>&nbsp;
+  <dx-button text='Patient Connect' class="w-80" [type]="'default'">
+  </dx-button>
+  <div style="width: 100%"></div>
+  <hms-button-save>
+  </hms-button-save>
+</div>
+<dx-popup [height]="'auto'" [width]="440" title="Add New Booking" [showTitle]="true" [showCloseButton]="false"
+  id="detailForm" [visible]="addBooking">
+  <div id="form-container">
+    <dx-form id="form" [formData]="triagebookings">
+      <dxi-item itemType="group">
+        <dxi-item [label]="{text:'Location'}">
+          <div *dxTemplate>
+            <dx-select-box [width]="'250px'" [items]="locationsWithDoctors" displayExpr="locationName" valueExpr="locationId"
+              [(value)]="triagebookings.locationId" (onValueChanged)="getAssociates()"></dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Purpose'}">
+          <div *dxTemplate>
+            <dx-select-box [items]="purposes" displayExpr="display" [width]="'250px'" style="float:left;position: relative;top:6px;
+            " valueExpr="bookingCode" [(value)]="triagebookings.bookingType"></dx-select-box>
+            <div style="float:right; margin-right:27px;position: relative;
+            right: 5px;
+            top: 6px;">
+              <dx-check-box class="ml-1 mt-1"></dx-check-box><span style="margin-top:8px">&nbsp;Show all</span>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Date'}">
+          <dx-date-box [useMaskBehavior]="true" [width]="'130px'" [(value)]="triagebookings.startDate" [showClearButton]="true" type="date"
+           >
+          </dx-date-box>
+        </dxi-item>
+        <dxi-item [label]="{text:'Start Time'}">
+          <dx-date-box [useMaskBehavior]="true" [width]="'130px'" type="time" [showClearButton]="true"
+            [(value)]="triagebookings.startDate">
+          </dx-date-box>
+        </dxi-item>
+        <dxi-item [label]="{text:'Doctor'}">
+          <div *dxTemplate>
+            <dx-select-box [width]="'250px'" displayExpr="doctorName"
+              valueExpr="doctorId" [(value)]="triagebookings.doctorId"></dx-select-box>
+              <!--            <dx-select-box [width]="'250px'" [items]="selectedLocation.locationDoctors" displayExpr="doctorName"
+              [(value)]="booking.bookedDoctorId" valueExpr="doctorId"></dx-select-box>-->
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item [colSpan]="2">
+        <div>
+          <hms-button-set-save [includeDeleteButton]="false"  
+          (cancelClicked)="cancelAddBooking()" (saveClicked)="saveTriageBooking(triagebookings,'leith')">
+          </hms-button-set-save>
+        </div>
+      </dxi-item>
+    </dx-form>
+  </div>
+</dx-popup>
+<dx-popup [height]="'auto'" [width]="440" title="Edit Booking" [showTitle]="true" [showCloseButton]="false"
+  id="detailForm" [visible]="editBooking">
+  <div id="form-container">
+    <dx-form id="form" [formData]="triagebookings">
+      <dxi-item itemType="group">
+        <dxi-item [label]="{text:'Location'}">
+          <div *dxTemplate>
+            <dx-select-box [width]="'250px'" [items]="locationsWithDoctors" displayExpr="locationName" valueExpr="locationId"
+              [(value)]="triagebookings.locationId" (onValueChanged)="getAssociates()"></dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Purpose'}">
+          <div *dxTemplate>
+            <dx-select-box [items]="purposes" displayExpr="display" [width]="'250px'" style="float:left;position: relative;top:6px;
+            " valueExpr="bookingCode" [(value)]="triagebookings.bookingType"></dx-select-box>
+            <div style="float:right; margin-right:27px;position: relative;
+            right: 5px;
+            top: 6px;">
+              <dx-check-box class="ml-1 mt-1"></dx-check-box><span style="margin-top:8px">&nbsp;Show all</span>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Date'}">
+          <dx-date-box [useMaskBehavior]="true" [width]="'130px'" [(value)]="triagebookings.startDate" [showClearButton]="true" type="date"
+           >
+          </dx-date-box>
+        </dxi-item>
+        <dxi-item [label]="{text:'Start Time'}">
+          <dx-date-box [useMaskBehavior]="true" [width]="'130px'" type="time" [showClearButton]="true"
+            [(value)]="triagebookings.startDate">
+          </dx-date-box>
+        </dxi-item>
+        <dxi-item [label]="{text:'Doctor'}">
+          <div *dxTemplate>
+            <dx-select-box [width]="'250px'" displayExpr="doctorName"
+              valueExpr="doctorId" [(value)]="triagebookings.doctorId"></dx-select-box>
+              <!--            <dx-select-box [width]="'250px'" [items]="selectedLocation.locationDoctors" displayExpr="doctorName"
+              [(value)]="booking.bookedDoctorId" valueExpr="doctorId"></dx-select-box>-->
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item [colSpan]="2">
+        <div>
+          <hms-button-set-save [includeDeleteButton]="true"  
+          (cancelClicked)="cancelEditBooking()" (saveClicked)="updateTriageBooking(triagebookings,'leith')" 
+          (deleteClicked)="deleteTriageAppointment(triagebookings.appointmentId)"
+          >
+          </hms-button-set-save>
+        </div>
+      </dxi-item>
+    </dx-form>
+  </div>
+</dx-popup>

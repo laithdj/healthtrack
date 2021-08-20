@@ -1,0 +1,92 @@
+.patient-panel {
+    background-color: #f7f7f7;
+    padding: 15px;
+    margin: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(221, 221, 221, 0.6);
+    max-width:540px;
+    border-right: 1px solid #ccc!important;
+    width:100px;
+  }
+
+  .split-form {
+    padding: 15px;
+    width:792px;
+    border-right: 1px solid #ccc!important;
+    min-width:780px;
+  }
+
+  .move-duration{
+    position: relative;
+    left: 133px;
+  }
+  
+  .move-item-1 {
+    position: relative;
+    right: 15px;
+  }
+
+  .move-item-2 {
+    position: relative;
+    right: 14px;
+  }
+
+  .button-style {
+    width:560px;
+  }
+
+  .left{
+    right:38px;
+  }
+
+  .left-8 {
+    position: relative;
+    left: 65px;
+  }
+
+  .margin {
+    margin-right: -6px;
+    margin-left: -4px;
+  }
+
+  .outcome-panel {
+    background-color: #f7f7f7;
+    padding: 10px;
+    margin: 0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(221, 221, 221, 0.6);
+    width:792px;
+    border-right: 1px solid #ccc!important;
+    min-width:780px;
+
+  }
+
+  .mover{
+    position: relative;
+    left: -53px;
+  }
+
+  .bottom-line{
+    border-bottom: 1px solid #ccc!important;
+
+  }
+  .margin-b{
+    margin-bottom: -6px;
+  }
+
+  .hide-data{
+    color:white;
+  }
+
+  .move-item{
+    position: relative;
+    right: 46px;
+  }
+
+  .move-item-3{
+    position: relative;
+    right: -25px;
+  }
+  

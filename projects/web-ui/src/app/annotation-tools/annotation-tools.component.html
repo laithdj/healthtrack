@@ -1,0 +1,50 @@
+<div class="container-fluid" style="padding-top: 10px; padding-bottom: 60px;" id="annotationToolsContainer">
+  <dx-data-grid [(dataSource)]="annotationTools"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [rowAlternationEnabled]="true"
+    [noDataText]="'No Annotation Tools Found'"
+    [showBorders]="true">
+    <dxo-paging [pageSize]="20"></dxo-paging>
+    <dxo-pager
+      [showPageSizeSelector]="true"
+      [allowedPageSizes]="[10, 20, 50]"
+      [showInfo]="true">
+    </dxo-pager>
+    <dxo-editing
+      mode="popup"
+      [allowUpdating]="true"
+      [allowDeleting]="true">
+      <dxo-popup
+        title="Annotation Measurement Tool"
+        [showTitle]="true"
+        [width]="700" [height]="170">
+      </dxo-popup>
+    </dxo-editing>
+    <dxi-column dataField="toolDescription"
+      caption="Tool Name">
+      <dxi-validation-rule
+        type="required"
+        message="Tool Name is required">
+      </dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="dataType"
+      caption="Input Type">
+      <dxo-lookup [dataSource]="dataTypes"
+        displayExpr="text" valueExpr="value">
+      </dxo-lookup>
+      <dxi-validation-rule type="required" message="Data Type is required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="units" caption="Units"></dxi-column>
+  </dx-data-grid>
+<div>
+<div class="hms-buttons-footer">
+  <div style="margin-right: 10px;">
+    <dx-button [icon]="'add'" text="New Annotation Tool" [type]="'default'" (onClick)="onAddNewTool()"></dx-button>
+  </div>
+  <div>
+    <dx-button [text]="'Undo Changes'" [icon]="'undo'" [type]="'default'" (onClick)="onCancelChanges()"></dx-button>
+  </div>
+  <div style="width: 100%;"></div> 
+  <hms-button-save (saveClicked)="onSaveChanges()"></hms-button-save>
+</div>

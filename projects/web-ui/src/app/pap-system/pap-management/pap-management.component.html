@@ -1,0 +1,514 @@
+<dx-form id="formz">
+  <dxi-item itemType="group" cssClass="form-panel" [colCount]="13">
+    <dxi-item itemType="group" [colSpan]="3">
+      <dxi-item [label]="{ text:'Type' }">
+        <hms-dropdown [searchEnabled]="true" [class]="'filterDropDown'" [items]="papTypes"
+          [value]="searchCriteria.equipmentType" [displayExp]="'categoryName'"
+          (onValueChanged)="updateEquipmentType($event)">
+        </hms-dropdown>
+      </dxi-item>
+      <dxi-item [label]="{text:'Status'}">
+        <dx-select-box *ngIf="!issuedFilter" [dataSource]="status" displayExpr='displayStatus' valueExpr='value'
+          class="filterDropDown" [(value)]="searchCriteria.status" [searchEnabled]="true">
+        </dx-select-box>
+        <dx-select-box *ngIf="issuedFilter" [dataSource]="statusIssued" displayExpr='displayStatus' valueExpr='value'
+          class="filterDropDown" [(value)]="statusIssued[0].value" [searchEnabled]="true">
+        </dx-select-box>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="3" class="mt-2">
+      <dxi-item [label]="{text:'Manufacturer'}">
+        <hms-dropdown [searchEnabled]="true" [class]="'filterDropDown'" [items]="manufacturers"
+          [value]="searchCriteria.manufacturer" [displayExp]="'companyName'"
+          (onValueChanged)="updateManufacturer($event)">
+        </hms-dropdown>
+      </dxi-item>
+      <dxi-item [label]="{text:'Model'}">
+        <dx-select-box *ngIf="searchCriteria.manufacturer || searchCriteria.equipmentType" [items]="displayModels" displayExpr="model" valueExpr="model"
+          searchEnabled='true' [(value)]="searchCriteria.model" class="filterDropDown">
+        </dx-select-box>
+        <dx-text-box *ngIf="!searchCriteria.manufacturer && !searchCriteria.equipmentType" class="filterDropDown" [(value)]="searchCriteria.model">
+        </dx-text-box>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item [colSpan]="6">
+      <div class="d-flex float-right">
+        <div><span>Filter by Next Service Date: <dx-check-box [value]="movingFromDisabled"
+              (onValueChanged)="onMovedFromDisabled($event)"></dx-check-box></span></div>
+        <div class="next-service-container float-right">
+          <div style="width: auto; margin-bottom:-17px;">
+            <div class="float-right">
+              <div style="display: flex ;padding-top: 0px; position:relative; bottom:9px;">
+                <dx-button #date_button1 [width]="'98px'" text='Overdue' (onClick)="quickDate(1)" [disabled]="true"
+                  [type]="'default'">
+                </dx-button>&nbsp;
+                <dx-button #date_button2 [width]="'98px'" text='Next 7 Days' (onClick)="quickDate(7)" [disabled]="true"
+                  [type]="'default'">
+                </dx-button>&nbsp;
+                <dx-button #date_button3 [width]="'98px'" text='Next 35 Days' (onClick)="quickDate(35)"
+                  [disabled]="true" [type]="'default'">
+                </dx-button>&nbsp;
+              </div>
+              <div style='padding-top: 2px;position:relative; bottom:9px;'>
+                <div class="float-left ml-1" style="padding-top: 2px">Due Before:</div>
+                <div style="max-width: 100%;margin-left:34%">
+                  <dx-date-box #service_date [width]="'201px'" showClearButton="true" [disabled]="true"
+                    [useMaskBehavior]="true" [calendarOptions]="{ showTodayButton: true }"
+                    [(value)]="searchCriteria.inputDate">
+                  </dx-date-box>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div style="display: flex; float:right" class="float-right">
+        <div style="width: 100%"></div>
+        <div style="width: auto">
+          <div style="margin-bottom: 10px">
+            <dx-button [width]="80" text='Search' [type]="'default'" icon="search" (onClick)="search()">
+            </dx-button>
+          </div>
+          <div>
+            <dx-button [width]="80" text='Reset' icon="refresh" [type]="'default'" (onClick)="reset()">
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </dxi-item>
+  </dxi-item>
+</dx-form>
+<div style="padding-bottom: 40px">
+  <div style="display: flex; padding: 10px 4px 0px 10px">
+    <div style="width: 100%">
+      <dx-button text='Manage Products' icon="edit" [type]="'default'" (onClick)="manageProducts()" class="float:right">
+      </dx-button>
+    </div>
+    <div style="width: auto">
+      <dx-button text='New Asset' icon="add" [type]="'default'" (onClick)="addAssetClicked()">
+      </dx-button>
+    </div>
+  </div>
+  <div style="padding: 10px">
+    <dx-data-grid [columnAutoWidth]="false" [columnHidingEnabled]="false" [showColumnLines]="true" [showRowLines]="true"
+      [showBorders]="true" [hoverStateEnabled]="false" [rowAlternationEnabled]="false" #grid id="gridContainer"
+      [dataSource]="assets" [selectedRowKeys]="[]" (onRowClick)="doubleClickRow($event)" keyExpr="equipment_ID"
+      [showBorders]="true" style="max-height:calc(100vh - 90px); max-width:calc(100vw - 20px)"
+      (onRowPrepared)="rowColourControl($event)" [cellHintEnabled]='true'>
+      <dxo-paging [pageSize]="10"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+      <dxo-sorting mode="single"></dxo-sorting>
+      <dxi-column cellTemplate="equipmentTypeCellTemplate" caption="Equipment Type" dataField="equipmentType">
+        <div *dxTemplate="let cell of 'equipmentTypeCellTemplate'">
+          {{combineEquipmentTypes(cell.data.equipmentType)}}
+        </div>
+      </dxi-column>
+      <dxi-column caption="Manufacturer" dataField="manufacturer.companyName"></dxi-column>
+      <dxi-column caption="Model" dataField="model"></dxi-column>
+      <dxi-column caption="Serial Number" dataField="serialNumber"></dxi-column>
+      <dxi-column caption="Asset No." dataField="equipmentNumber" alignment="left"></dxi-column>
+      <dxi-column caption="Commission Date" dataField="commissionDate" alignment="left" [width]="130"></dxi-column>
+      <dxi-column cellTemplate="statusCellTemplate" caption="Status" dataField="status" [width]="100" alignment="left">
+        <div *dxTemplate="let cell of 'statusCellTemplate'">
+          {{equipmentStatuses.GetDisplayStatus(cell.data.status)}}
+        </div>
+      </dxi-column>
+      <dxi-column caption="Current Patient" dataField="lastLoan.displayDetails"></dxi-column>
+      <dxi-column caption="Last Service" dataField="lastServiceDate" dataType="date" [width]="100"></dxi-column>
+      <dxi-column caption="Next Service" dataField="nextServiceDate" dataType="date" [width]="100" sortOrder=asc>
+      </dxi-column>
+      <dxi-column cellTemplate="actionsCellTemplate" caption="Actions" [width]="80">
+        <div *dxTemplate="let cell of 'actionsCellTemplate'">
+          <hms-button-edit (editClicked)="edit(cell.data.equipment_ID , cell.data.status)"></hms-button-edit>
+        </div>
+      </dxi-column>
+    </dx-data-grid>
+  </div>
+</div>
+<dx-popup [height]="'auto'" [width]="650" title="Add New Asset"
+  [showTitle]="true" (onHiding)="onAddPopupHiding()"
+  [showCloseButton]="true" id="detailForm" [visible]="addAssetBool">
+  <div id="form-container">
+    <dx-form id="form" [formData]="asset" [colCount]="2">
+      <dxi-item itemType="group" caption="Asset Information">
+        <dxi-item [label]="{ text:'Asset No.' }">
+          <div *dxTemplate>
+            <dx-text-box [(value)]="asset.equipmentNumber" [maxLength]="50" [width]="195">
+            </dx-text-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Manufacturer'}">
+          <div *dxTemplate>
+            <dx-select-box [items]="manufacturers" searchEnabled='true' [(value)]="asset.manufacturer"
+              (onSelectionChanged)="assetRevaluateModels()" displayExpr="companyName" [width]="195">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Model'}">
+          <div *dxTemplate>
+            <dx-select-box [items]="assetDisplayModels" displayExpr="model" valueExpr="model" searchEnabled='true'
+              [(value)]="asset.model" (onSelectionChanged)="selectModel($event)" [width]="195">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Equipment Type'}">
+          <div *dxTemplate>
+            <div *ngIf="asset.equipmentType">
+              <dx-text-box [text]="combineEquipmentTypes(asset.equipmentType)" [disabled]="true" [width]="195">
+              </dx-text-box>
+            </div>
+            <div *ngIf="!asset.equipmentType">
+              <dx-text-box [disabled]="true" [width]="195">
+              </dx-text-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Serial No.' }">
+          <div *dxTemplate>
+            <dx-text-box [(value)]="asset.serialNumber" [maxLength]="50" [width]="195">
+            </dx-text-box>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group">
+        <dxi-item itemType="group" caption="Service Information" style="padding-left:'13px'; margin-left:'13px'  "
+          cssClass="shift-right">
+          <dxi-item [label]="{ text:'Commission Date'}">
+            <div *dxTemplate>
+              <dx-date-box [width]="100" [(value)]="asset.commissionDate" (onValueChanged)="calculateNextServiceDate()"
+                [useMaskBehavior]="true">
+              </dx-date-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text:'Service Interval' }" class="service-info">
+            <div *dxTemplate>
+              <dx-number-box [showSpinButtons]="true" format="# months" [min]="1" [width]="100"
+                (onValueChanged)="calculateNextServiceDate()" [(value)]="asset.serviceInterval">
+              </dx-number-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text:'Calibration Required'}" style="padding-left:'13px'; margin-left:'13px'  ">
+            <div *dxTemplate class="row">
+              <dx-check-box #req [value]="required" (onValueChanged)="requiredCalibration($event)"
+                style="margin-right:5px; margin-left:14px"></dx-check-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text:'Calibration Interval'}" style="padding-left:'13px'; margin-left:'13px'  ">
+            <div *dxTemplate class="row">
+              <dx-number-box #calibration_add [showSpinButtons]="true" (onValueChanged)="calculateNextCalibrationDate()"
+                format="# months" [min]="1" [width]="100" [(value)]="calibrationInterval"
+                style="margin-right:5px; margin-left:14px">
+              </dx-number-box>
+            </div>
+          </dxi-item>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" caption="Maintenance and Calibration" [colSpan]="2" [colCount]="2">
+        <dxi-item [label]="{ text:'Last Service Date' }">
+          <div *dxTemplate>
+            <dx-date-box [(value)]="asset.lastServiceDate" (onValueChanged)="calculateNextServiceDate()"
+              [useMaskBehavior]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Last Calibration Date' }" cssClass="shift-dates">
+          <div *dxTemplate>
+            <dx-date-box #add_last_calibration [(value)]="lastCalibrationDate"
+              (onValueChanged)="calculateNextServiceDate()" [useMaskBehavior]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Next Service Date' }">
+          <div *dxTemplate>
+            <dx-date-box [(value)]="asset.nextServiceDate" [disabled]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Next Calibration Date' }" cssClass="shift-dates">
+          <div *dxTemplate>
+            <dx-date-box [(value)]="nextCalibrationDate" [disabled]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" caption="Equipment Status" [colSpan]="2" [colCount]="2">
+        <dxi-item [label]="{ text:'Status' }">
+          <div *ngIf="asset?.status != 2">
+            <dx-select-box [items]="status" displayExpr="displayStatus" valueExpr="value" [(value)]="asset.status"
+              [width]="195">
+            </dx-select-box>
+          </div>
+          <div *ngIf="asset?.status == 2">
+            <dx-text-box [value]="'Issued'" [disabled]="true" [width]="195"></dx-text-box>
+          </div>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'">
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+      <dxi-item [label]="{ text: 'Notes' }" [colSpan]="2"
+        dataField="notes" editorType="dxTextArea"
+        [editorOptions]="{ height: 90 , width: '100%', maxLength: 8000 }">
+      </dxi-item>
+      <dxi-item [colSpan]="2">
+        <div>
+          <hms-button-set-save [includeDeleteButton]="false"
+            (saveClicked)="addNewAsset(asset)" (cancelClicked)="cancel()">
+          </hms-button-set-save>
+        </div>
+      </dxi-item>
+    </dx-form>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [height]="'auto'" [width]="650" title="Edit Asset"
+  [showTitle]="true" [showCloseButton]="false"
+  [visible]="editAssetBool">
+  <div id="form-container">
+    <dx-form id="form" [formData]="asset" [colCount]="2">
+      <dxi-item itemType="group" caption="Asset Information">
+        <dxi-item [label]="{ text:'Asset No.' }">
+          <div *dxTemplate>
+            <dx-text-box [(value)]="asset.equipmentNumber" [maxLength]="50" [width]="195">
+            </dx-text-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Manufacturer'}">
+          <div *dxTemplate>
+            <dx-select-box [items]="manufacturers"
+              searchEnabled='true'
+              [(value)]="asset.manufacturer.company_ID"
+              (onSelectionChanged)="assetRevaluateModels()"
+              displayExpr="companyName"
+              valueExpr="company_ID" [width]="195">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Model'}">
+          <div *dxTemplate>
+            <dx-select-box [items]="assetDisplayModels" displayExpr="model" valueExpr="model" searchEnabled='true'
+              [(value)]="asset.model" (onSelectionChanged)="selectModel($event)" [width]="195">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{text:'Equipment Type'}">
+          <div *dxTemplate>
+            <div *ngIf="asset.equipmentType">
+              <dx-text-box [text]="combineEquipmentTypes(asset.equipmentType)" [disabled]="true" [width]="195">
+              </dx-text-box>
+            </div>
+            <div *ngIf="!asset.equipmentType">
+              <dx-text-box [disabled]="true" [width]="195">
+              </dx-text-box>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Serial No.' }">
+          <div *dxTemplate>
+            <dx-text-box [(value)]="asset.serialNumber" [maxLength]="50" [width]="195">
+            </dx-text-box>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group">
+        <dxi-item itemType="group" caption="Service Information" style="padding-left:'100px'; margin-left:'13px'  "
+          cssClass="shift-right">
+          <dxi-item [label]="{ text:'Commission Date' }">
+            <div *dxTemplate>
+              <dx-date-box [width]="100" [(value)]="asset.commissionDate" (onValueChanged)="calculateNextServiceDate()"
+                [useMaskBehavior]="true">
+              </dx-date-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text:'Service Interval' }" class="service-info">
+            <div *dxTemplate>
+              <dx-number-box [showSpinButtons]="true" format="# months" [min]="1" [width]="100"
+                (onValueChanged)="calculateNextServiceDate()" [(value)]="asset.serviceInterval">
+              </dx-number-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text:'Calibration Required'}" style="padding-left:'13px'; margin-left:'13px'  ">
+            <div *dxTemplate class="row">
+              <dx-check-box #req [value]="required" (onValueChanged)="requiredCalibration($event)"
+                style="margin-right:5px; margin-left:14px"></dx-check-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text:'Calibration Interval'}" style="padding-left:'13px'; margin-left:'13px'  ">
+            <div *dxTemplate class="row">
+              <dx-number-box #calibration [showSpinButtons]="true" format="# months" [min]="1" [width]="100"
+                [(value)]="calibrationInterval" (onValueChanged)="calculateNextCalibrationDate()"
+                style="margin-right:5px; margin-left:14px">
+              </dx-number-box>
+            </div>
+          </dxi-item>
+          <dxi-item *ngIf="companyDetails" [label]="{ text:'Suppliers' }">
+            <div *dxTemplate>
+              <dx-button class="button-info" text="Details" (onClick)="showSuppliers()">
+              </dx-button>
+            </div>
+          </dxi-item>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" caption="Maintenance and Calibration" [colSpan]="2" [colCount]="2">
+        <dxi-item [label]="{ text:'Last Service Date' }">
+          <div *dxTemplate>
+            <dx-date-box [(value)]="asset.lastServiceDate" (onValueChanged)="calculateNextServiceDate()"
+              [useMaskBehavior]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Last Calibration Date' }" cssClass="shift-dates">
+          <div *dxTemplate>
+            <dx-date-box #last_calibration [(value)]="lastCalibrationDate"
+              (onValueChanged)="calculateNextCalibrationDate()" [useMaskBehavior]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Next Service Date' }">
+          <div *dxTemplate>
+            <dx-date-box [(value)]="asset.nextServiceDate" [disabled]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Next Calibration Date' }" cssClass="shift-dates">
+          <div *dxTemplate>
+            <dx-date-box [(value)]="nextCalibrationDate" [disabled]="true" [width]="100">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" caption="Equipment Status" [colSpan]="2" [colCount]="16">
+        <dxi-item [label]="{ text:'Status' }" [colSpan]="6">
+          <div *dxTemplate>
+            <dx-select-box #status_con [items]="status" [width]="115" displayExpr="displayStatus" valueExpr="value"
+              [(value)]="asset.status">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [colSpan]="4">
+          <div *dxTemplate>
+            <dx-button class="button-info" text="Transaction History"
+              (onClick)="transactionHistory(asset.equipment_ID)">
+            </dx-button>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Purpose' }" [colSpan]="4" cssClass="shift-type">
+          <div *dxTemplate class="d-flex">
+            <dx-select-box [items]="purpose" [width]="100" [(value)]="asset.purpose" displayExpr="displayType" valueExpr="value"
+              [disabled]="asset?.status === statusValues.Issued" (onSelectionChanged)="formatLocation($event, asset?.equipment_ID)">
+            </dx-select-box>
+            <i class='dx-icon-info ml-2 mt-2' id="loanable" (mouseenter)="toggleTip()" (mouseleave)="toggleTip()"></i>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+        <dxi-item [label]="{ text: 'Notes' }" [colSpan]="2" dataField="notes" editorType="dxTextArea"
+          [editorOptions]="{ height: 90 , width: '90%', maxLength: 8000 }">
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+        <dxi-item>
+          <div *dxTemplate>
+            <div class="dx-field shifter" 
+            *ngIf="asset?.purpose === purposeValues.Fixed || asset.purpose === purposeValues.Mobile">
+              <div class="dx-field-label left-label">Location:</div>
+              <div class="dx-field-value">
+                <dx-text-box [(value)]="asset.location" 
+                [width]="193"></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+        <div *dxTemplate>
+          <div *ngIf="issuedFlag" style="width:100%; border-bottom: 1px solid #ddd;">
+            <span class="dx-form-group-caption">Current Loan Information</span>
+          </div>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+        <dxi-item>
+          <div *dxTemplate>
+            <div class="dx-field shifter" *ngIf="issuedFlag">
+              <div class="dx-field-label left-label">Patient Name:</div>
+              <div class="dx-field-value">
+                <dx-text-box [(value)]="lastLoanedPatient.fullName" [disabled]="true" [width]="193"></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item cssClass="left-26">
+          <div *dxTemplate>
+            <div class="dx-field right-shifter" *ngIf="issuedFlag">
+              <div class="dx-field-label right-label">DOB:</div>
+              <div class="dx-field-value">
+                <dx-date-box [(value)]="lastLoanedPatient.dob" [disabled]="true" [width]="100"> </dx-date-box>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item>
+          <div *dxTemplate>
+            <div class="dx-field shifter" *ngIf="issuedFlag">
+              <div class="dx-field-label left-83">MRN:</div>
+              <div class="dx-field-value">
+                <dx-text-box [(value)]="lastLoanedPatient.patient_MRN" [disabled]="true" [width]="193"></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+        <dxi-item cssClass="left-26">
+          <div *dxTemplate>
+            <div class="dx-field right-shifter" *ngIf="issuedFlag">
+              <div class="dx-field-label left-61">Patient ID:</div>
+              <div class="dx-field-value">
+                <dx-text-box [(value)]="lastLoanedPatient.patient_ID" [disabled]="true" [width]="100"></dx-text-box>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+    </dx-form>
+  </div>
+  <div>
+    <hms-button-set-save [includeDeleteButton]="true"
+      (saveClicked)="updateAsset(asset)" (cancelClicked)="cancelEdit()"
+      (deleteClicked)="deleteAsset(asset.equipment_ID , asset.equipmentNumber )">
+    </hms-button-set-save>
+  </div>
+</dx-popup>
+<dx-popup class="popup" [width]="350" [height]="'auto'" [showTitle]="true" title="Suppliers" [dragEnabled]="false"
+  [closeOnOutsideClick]="true" [(visible)]="supplierVisible">
+  <div *dxTemplate="let data of 'content'">
+    <span *ngIf="companyDetails[0]">
+      <h6>Primary Supplier</h6>
+      <p style="line-height:90%">
+        Supplier Name: <span>{{companyDetails[0].companyName}}</span>
+        <span></span>
+        <span></span>
+      </p>
+      <p style="line-height:90%">
+        Phone Number: {{companyDetails[0].companyPhone}}
+        <span></span>
+      </p>
+      <p style="line-height:90%">
+        Email: {{companyDetails[0].companyEmail}}
+        <span></span>
+      </p>
+      <p style="line-height:90%">
+        Address: {{companyDetails[0].companyAddress}}
+        <span></span>
+      </p>
+    </span>
+  </div>
+</dx-popup>
+<dx-tooltip target="#loanable" [(visible)]="message" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data = data of 'content'" class="text-left">
+    <span>Loanable: The asset is designated to be loaned out to patients for home use.</span><br>
+      <span>Fixed: The asset is in a consistent location.</span><br>
+      <span>Mobile: The asset is portable and can be transported between locations, however will not be loaned to patients.</span>
+  </div>
+</dx-tooltip>

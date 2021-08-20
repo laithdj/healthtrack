@@ -1,0 +1,63 @@
+<div class="panel mt-2 ml-2 mr-2">
+  <dx-form id="form">
+    <dxi-item itemType="group" [colCount]="10">
+      <dxi-item itemType="group" [label]="{ text:'Search' }" [colSpan]="2">
+        <div *dxTemplate>
+          <dx-text-box [(value)]="searchTerm.searchTerm" (onEnterKey)="filterProducts(searchTerm)" showClearButton=true>
+          </dx-text-box>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="group" [label]="{ text:'Category' }" [colSpan]="2">
+        <div *dxTemplate>
+          <dx-select-box [searchTimeout]="50" [dataSource]="categories" valueExpr="categoryId" displayExpr="categoryName"
+            [(value)]="searchTerm.searchCategory_ID" searchEnabled=true showClearButton=true (onEnterKey)="filterProducts(searchTerm)"></dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="4">
+        <div *dxTemplate>
+          <dx-button text='Search' [type]="'default'" style="width:80px;" icon="search"
+            (onClick)="filterProducts(searchTerm)">
+          </dx-button>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="2" style="float:right">
+        <div *dxTemplate>
+          <dx-button text='Add New Product' style="float:right" [useSubmitBehavior]="false" class="" icon="add"
+            [type]="'default'" (onClick)="addProduct()">
+          </dx-button>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+</div>
+<dx-data-grid #product_grid [columnAutoWidth]="false" [columnHidingEnabled]="false" [showColumnLines]="true"
+  [showRowLines]="true" [showBorders]="true" [hoverStateEnabled]="true" [rowAlternationEnabled]="true" #grid
+  id="gridContainer" [dataSource]="products" [selectedRowKeys]="[]" (onRowClick)="doubleClickRow($event)"
+  [showBorders]="true"
+  style="padding-left: 10px; padding-right:10px;padding-bottom:20px; max-height:calc(100vh - 90px);" class="mt-2">
+  <dxo-pager></dxo-pager>
+  <dxo-state-storing [enabled]="true" type="localStorage" storageKey="storage"></dxo-state-storing>
+  <dxo-scrolling mode="standard"></dxo-scrolling>
+  <dxi-column caption="SPC/Model" dataField="model" style="height:calc(0.2 * (100vh - 136px))" sortOrder=asc>
+  </dxi-column>
+  <dxi-column caption="Description" dataField="description" style="height:calc(0.2*(100vh - 136px))"></dxi-column>
+  <dxi-column caption="Additional Description" dataField="additionalDescription"
+    style="height:calc(0.2*(100vh - 136px))"></dxi-column>
+  <dxi-column caption="Manufacturer" dataField="manufacturerCompany.companyName"
+    style="height:calc(0.2*(100vh - 136px))"></dxi-column>
+  <dxi-column caption="Supplier" dataField="primarySupplier.companyName" style="height:calc(0.2*(100vh - 136px))">
+  </dxi-column>
+  <dxi-column cellTemplate="typeCellTemplate" caption="Categories" style="height:calc(0.2*(100vh - 136px))">
+    <div *dxTemplate="let cell of 'typeCellTemplate'">
+      {{comibineEquipmentTypes(cell.data.categories)}}
+    </div>
+  </dxi-column>
+  <dxi-column cellTemplate="actionsCellTemplate" caption="" [width]="80">
+    <div *dxTemplate="let cell of 'actionsCellTemplate'">
+      <!-- <dx-button type="default" icon="edit" text="Edit" (onClick)="editProduct(cell.data.productId)">
+      </dx-button>-->
+      <hms-button-edit (editClicked)="editProduct(cell.data.productId)"></hms-button-edit>
+
+    </div>
+  </dxi-column>
+</dx-data-grid>

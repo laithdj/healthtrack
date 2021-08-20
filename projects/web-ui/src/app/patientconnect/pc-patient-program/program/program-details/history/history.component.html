@@ -1,0 +1,66 @@
+<dx-form [formData]="selectedProgram" [readOnly]="true">
+  <dxi-item itemType="group" [colCount]="2">
+    <dxi-item dataField="userCreated" [label]="{ text: 'Created By' }"></dxi-item>
+    <dxi-item dataField="dateCreated" editorType="dxDateBox"
+      [label]="{ text:'Created' }">
+    </dxi-item>
+  </dxi-item>
+  <dxi-item [label]="{ text:'Show All' }">
+    <div *dxTemplate>
+      <dx-check-box [(value)]="showAll"></dx-check-box>
+    </div>
+  </dxi-item>
+</dx-form>
+<dx-data-grid style="padding-left: 10px" id="historyGrid"
+  [dataSource]="selectedProgram.history"
+  [columnAutoWidth]="true"
+  [allowColumnResizing]="true"
+  columnResizingMode="widget"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [rowAlternationEnabled]="true"
+  [allowColumnReordering]="false"
+  (onSelectionChanged)="onSelectionChanged($event)">
+  <dxo-selection mode="single"></dxo-selection>
+  <dxi-column dataField="id" [sortIndex]="1"
+    sortOrder="desc" [visible]="false" dataType="number">
+  </dxi-column>
+  <dxi-column dataField="actionName" caption="Action"
+    [width]="100" [minWidth]="60"
+    [allowResizing]="true" dataType="string">
+  </dxi-column>
+  <dxi-column dataField="description" [minWidth]=125
+    dataType="string">
+  </dxi-column>
+  <dxi-column dataField="actionTaken" caption="Sent"
+    dataType="boolean" [width]="55"
+    [filterValue]="!showAll ? true : undefined">
+  </dxi-column>
+  <dxi-column dataField="dateCreated" [sortIndex]="0"
+    sortOrder="desc" caption="Date" [width]=120
+    [minWidth]=60 [allowResizing]="true"
+    dataType="datetime" format="yyyy/MM/dd HH:mm:ss">
+  </dxi-column>
+  <dxi-column dataField="createdBy" caption="By"
+    dataType="string" [minWidth]=40 [allowResizing]="true">
+  </dxi-column>
+  <dxi-column dataField="cycleCount" caption="Count"
+    [width]=50 [allowResizing]="false" dataType="number">
+  </dxi-column>
+  <dxi-column dataField="step" [width]=50
+    [allowResizing]="false" dataType="number">
+  </dxi-column>
+  <dxi-column dataField="statusName" caption="Status"
+    [width]=70  dataType="string">
+  </dxi-column>
+  <dxi-column dataField="actionDate" [width]=80
+    dataType="date" [visible]="showAll"
+    [allowResizing]="false">
+  </dxi-column>
+</dx-data-grid>
+<dx-form [formData]="selectedLog" [readOnly]="true" style="padding-top: 10px">
+  <dxi-item dataField="notes" editorType="dxTextArea"
+    [label]="{ text: 'Notes' }" [editorOptions]="{ height: 100 }">
+  </dxi-item>
+</dx-form>

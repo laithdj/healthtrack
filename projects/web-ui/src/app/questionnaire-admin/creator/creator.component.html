@@ -1,0 +1,73 @@
+<div  style="padding-left:15px;padding-right:15px;">
+    <h2>Template:
+        <span *ngIf="template.templateDescription"> {{template.templateDescription}} </span>
+        <span *ngIf="template.class">- {{template.class}}</span>
+    </h2>
+    <dx-form id="form">
+        <dxi-item itemType="group" cssClass="form-panel" [colCount]="20">
+            <dxi-item itemType="group" cssClass="form-panel" [colSpan]="20" [colCount]="7">
+                <dxi-item itemType="group" [colSpan]="1">
+                    <dxi-item [label]="{ text:'Prefill data' }">
+                        <dx-check-box
+                        [(value)]="template.prefill"
+                        >
+                      </dx-check-box>                
+                    </dxi-item>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="1">
+                    <dxi-item [label]="{ text:'Use Pin Security' }">
+                        <dx-check-box
+                        [(value)]="template.usePin"
+                        >
+                      </dx-check-box>                
+                    </dxi-item>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="1">
+                    <dxi-item [label]="{ text:'Requires Review' }">
+                        <dx-check-box
+                        [(value)]="template.requiresReview"
+                        >
+                      </dx-check-box>                
+                    </dxi-item>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="2">
+                    <dxi-item [label]="{ text: 'Max days on the Web' }">
+                        <dx-number-box [showSpinButtons]="true" format="# Days" class="expire-width" [showClearButton]="true" [width]='100'
+                        [(value)]="template.expiry" [min]="1">
+                        </dx-number-box>
+                    </dxi-item>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="2">
+                    <dxi-item [label]="{ text: 'Save To' }">
+                        <dx-select-box [dataSource]="recordSubCategory$ | async" displayExpr='title' valueExpr='recordSubCategory'
+                        class="filterDropDown" [(value)]="template.recordSubCategory" [searchEnabled]="true" [width]='150'>
+                      </dx-select-box>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colSpan]="10">
+            </dxi-item>
+        </dxi-item>
+    </dx-form>
+<div id="surveyCreatorContainer"></div>
+</div>
+<div class="hms-buttons-footer">
+    <hms-button-save
+    (saveClicked)="saveTemplate()"></hms-button-save>
+    <div class="ml-1"></div>
+    <hms-button-cancel
+    (cancelClicked)="cancel()"></hms-button-cancel>
+    <div class="ml-1"></div>
+    <hms-button-delete *ngIf="template.templateId"
+    (deleteClicked)="deleteQuiz()"></hms-button-delete>
+    <div class="w-100"></div>
+    <div [ngStyle]="{ 'margin-right':'10px' }">
+        <dx-button [width]="150"
+          [text]="'Save and Close'"
+          [icon]="'save'"
+          [type]="'success'"
+          [useSubmitBehavior]="true"
+          (onClick)="saveTemplateClose()">
+        </dx-button>
+      </div>
+</div>

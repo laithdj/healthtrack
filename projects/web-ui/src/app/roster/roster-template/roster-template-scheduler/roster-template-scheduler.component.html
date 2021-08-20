@@ -1,0 +1,130 @@
+<div *ngIf="(schedulerView$ | async) === 'Day'" class="roster-header">
+  <div *ngIf="(selectedLocationRoom$ | async).roomId >= 0">
+    <span class="week-header">{{ selectedDayString }}, Week {{ selectedWeek }}</span>
+    <span *ngIf="(selectedView$ | async) === 'Location/Room'">{{ (selectedLocationRoom$ | async).displayName }}</span>
+  </div>
+</div>
+<div *ngIf="(schedulerView$ | async) === 'Week'" class="roster-header">
+  <span class="week-header">Week {{ selectedWeek }}</span>
+  <span *ngIf="(selectedView$ | async) === 'Location/Room'">{{ (selectedLocationRoom$ | async).displayName }}</span>
+</div>
+<div *ngIf="(schedulerView$ | async) === 'Cycle'" class="roster-header">
+  <span class="week-header">Full Cycle</span>
+  <span *ngIf="(selectedView$ | async) === 'Location/Room'">{{ (selectedLocationRoom$ | async).displayName }}</span>
+</div>
+<dx-scheduler *ngIf="(selectedView$ | async) === 'Location/Room'"
+  #rosterScheduler id="rosterScheduler"
+  style="max-height: calc(100vh - 12px)"
+  [width]="'100%'" [height]="'calc(100vh - 12px)'"
+  [currentDate]="(currentDate$ | async)"
+  [currentView]="(schedulerView$ | async)"
+  [groups]="['roomId']" [groupByDate]="true"
+  [firstDayOfWeek]="1"
+  [crossScrollingEnabled]="true"
+  [cellDuration]="(cellDuration$ | async)"
+  [showCurrentTimeIndicator]="false"
+  [startDateExpr]="'trueStartDate'"
+  [endDateExpr]="'trueEndDate'"
+  dateCellTemplate="date-cell-template"
+  [showAllDayPanel]="false"
+  [maxAppointmentsPerCell]="'unlimited'"
+  [(dataSource)]="templates"
+  appointmentTemplate="appointment-template"
+  appointmentTooltipTemplate="tooltip-template"
+  (onContentReady)="scrollToTime()"
+  (onCellClick)="onCellClick($event)"
+  (onCellContextMenu)="onCellContextMenu($event)"
+  (onAppointmentClick)="onAppointmentClick($event)"
+  (onAppointmentDblClick)="onAppointmentDblClick($event)"
+  (onAppointmentUpdating)="onAppointmentUpdating($event)"
+  (onAppointmentUpdated)="onTemplateUpdated($event)"
+  (onAppointmentContextMenu)="onAppointmentContextMenu($event)">
+  <dxi-view name="Day" type="day" [intervalCount]="1"></dxi-view>
+  <dxi-view name="Week" type="week" [intervalCount]="1"></dxi-view>
+  <dxi-view name="Cycle" type="week"
+    [intervalCount]="(selectedSet$ | async)?.weeks.length">
+  </dxi-view>
+  <dxi-resource [dataSource]="roomResource"
+    fieldExpr="roomId" valueExpr="roomId"
+    displayExpr="roomName" label="Room"
+    [allowMultiple]="true">
+  </dxi-resource>
+  <dxi-resource fieldExpr="edited"
+    valueExpr="id"
+    [allowMultiple]="true"
+    [dataSource]="editedResource"
+    [useColorAsDefault]="true">
+  </dxi-resource>
+  <dxo-editing [allowAdding]="false">
+  </dxo-editing>
+  <div *dxTemplate="let template of 'appointment-template'">
+    <div>
+      <div>{{ template.appointmentData.staffName }}</div>
+      <div *ngIf="template.sessionId > 0">Session: {{ template.appointmentData.sessionId }}</div>
+      <div *ngIf="template.sessionId === 0">Custom</div>
+      <div>
+        {{(template.appointmentData.trueStartDate | date:'shortTime') + ' - ' + (template.appointmentData.trueEndDate | date:'shortTime')}}
+      </div>
+    </div>
+  </div>
+  <div *dxTemplate="let template of 'tooltip-template'" (click)="stopPropagation($event)">
+    <div style="display: flex; width: 100%">
+      <div style="width: 100%">
+        <div>{{ template.appointmentData.roleName }}: <span style="font-weight: bold">{{ template.appointmentData.staffName }}</span></div>
+        <div>{{ template.appointmentData.locationRoomName }}</div>
+        <div *ngIf="template.appointmentData.sessionId > 0">
+          <span *ngIf="(schedulerView$ | async) !== 'Day'">
+            {{ (template.appointmentData.trueStartDate | date:'EEE') + ', ' }} W{{ selectedWeek }},
+          </span>
+          Session {{ template.appointmentData.sessionId }} ({{ (template.appointmentData.trueStartDate | date:'shortTime') + ' - ' + (template.appointmentData.trueEndDate | date:'shortTime') }})
+        </div>
+        <div *ngIf="template.appointmentData.sessionId === 0">
+          <span *ngIf="(schedulerView$ | async) !== 'Day'">
+            {{ (template.appointmentData.trueStartDate | date:'EEE') + ', ' }} W{{ selectedWeek }},
+          </span>
+          Custom ({{ (template.appointmentData.trueStartDate | date:'shortTime') + ' - ' + (template.appointmentData.trueEndDate | date:'shortTime')}})
+        </div>
+      </div>
+      <div style="width: auto">
+        <div style="margin-top: 3px">
+          <dx-button *ngIf="!template.appointmentData.deleted" [width]="57"
+            [text]="'Delete'" [type]="'danger'"
+            (onClick)="deleteTemplateClicked($event, template.appointmentData)">
+          </dx-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *dxTemplate="let item of 'date-cell-template'">
+    {{ item.date | date: 'EEEE' }}, W{{ getWeek(item.date) }}
+  </div>
+</dx-scheduler>
+<app-doctor-scheduler *ngIf="(selectedView$ | async) === 'Doctor/Staff'"
+  [selectedDay]="selectedDay" [selectedWeek]="selectedWeek">
+</app-doctor-scheduler>
+<dx-context-menu *ngIf="(selectedView$ | async) === 'Location/Room'" #appointmentMenu [width]="150"
+  [dataSource]="appointmentContextMenuItems"
+  target=".dx-scheduler-appointment"
+  (onItemClick)="onContextMenuItemClick($event)">
+  <div *dxTemplate="let e of 'item'" style="padding-top: 2px">
+    <div style="display: flex" *ngIf="e.text === 'Edit'">
+      <i style="margin-top: 1px" class="dx-icon-edit"></i><span style="padding-left: 5px">{{ e.text }}</span>
+    </div>
+    <div style="display: flex" *ngIf="e.text === 'Delete'">
+      <i style="margin-top: 1px" class="dx-icon-remove"></i><span style="padding-left: 5px">{{ e.text }}</span>
+    </div>
+    <div style="display: flex" *ngIf="e.text !== 'Edit' && e.text !== 'Delete'">
+      <i style="margin-top: 1px" class="dx-icon-add"></i><span style="padding-left: 5px">{{ e.text }}</span>
+    </div>
+  </div>
+</dx-context-menu>
+<dx-context-menu *ngIf="(selectedView$ | async) === 'Location/Room'" #cellMenu [width]="'auto'"
+  [dataSource]="cellContextMenuItems"
+  target=".dx-scheduler-date-table-cell"
+  (onItemClick)="onContextMenuItemClick($event)">
+  <div *dxTemplate="let m of 'item'" style="display: flex; padding: 3px 5px 5px 5px">
+    <i style="margin-top: 2px" class="dx-icon-add"></i>
+    <span style="padding-left: 5px">{{ m.text }}</span>
+  </div>
+</dx-context-menu>
+<app-roster-template-popup></app-roster-template-popup>

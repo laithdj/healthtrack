@@ -1,0 +1,44 @@
+<dx-popup
+  class="popup"
+  [width]="800"
+  [height]="'auto'"
+  title="Select Next Step for Moving Patients"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [(visible)]="movingStepSelectPopupVisible">
+  <div *ngIf="movingConnects" style="margin: 10px 5px 10px 10px;">
+    <div class="changes-message">
+      Moving will affect <b>{{movingConnects.patientCount ? movingConnects.patientCount : 0}}</b> patient connects. 
+      Select the next step of the program to run after the move.
+    </div>
+    <div class="effected-header" [ngStyle]="{ 'margin-right': movingConnects.movingConnectSteps.length > 10 ? '20px' : 'unset' }">
+      <div>Patients</div>
+      <div>Currently On</div> 
+      <div>New Step</div>
+    </div>
+    <hr/>
+    <div [ngStyle]="{ 'overflow-y': movingConnects.movingConnectSteps.length > 10 ? 'scroll' : 'unset', 'max-height': '400px' }">
+      <div class="effected-steps-row" *ngFor="let movingConnectStep of movingConnects.movingConnectSteps">
+        <div>{{ movingConnectStep.beforeMovePatientsOnStepCount }}</div>
+        <div>Step {{ movingConnectStep.beforeMoveNextStep }} - {{ movingConnectStep.beforeMoveStepName }}</div> 
+        <div><b>Select step for these patients</b></div>
+        <div>
+          <dx-select-box
+            [(value)]="movingConnectStep.afterMoveNextStep"
+            [items]="movingConnects.moveToActions"
+            displayExpr="actionSelectionName"
+            valueExpr="definitionStep"
+            (onValueChanged)="nextStepValueChanged()">
+          </dx-select-box>
+        </div>
+      </div>
+    </div>
+    <div style="width: 100%; display: flex;">
+      <hms-button-cancel (cancelClicked)="onMoveCancelled()"></hms-button-cancel>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button text="Move" [type]="'success'" (click)="onMoveConfirmed()" [width]="90" [disabled]="!allNextStepsSelected"></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

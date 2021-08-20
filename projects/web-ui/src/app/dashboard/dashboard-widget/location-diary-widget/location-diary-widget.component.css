@@ -1,0 +1,64 @@
+::ng-deep .large-button .dx-button-content .dx-icon {
+    font-size: 40px;
+  }
+  
+  ::ng-deep .icon-button .dx-button-content .dx-icon{
+    font-size: 40px;
+    background-size: 35px !important;
+    background-attachment: fixed;
+    background-position: center;
+    width:100% !important;
+    height:100% !important;
+  
+  }
+  
+  ::ng-deep .small-button .dx-button-content .dx-icon {
+    background-size: 35px;
+    background-attachment: fixed;
+    background-position: center;
+    width:16px !important;
+    height:16px !important;
+    /* background-image: url('Messenger.png');  */
+    /* background-image: url('refresh.png'); */
+  }
+  
+  
+  .location-diary-header {
+    font-size: 20px;
+    background-color: rgb(191, 120, 233);
+    padding: 0px 10px 5px 10px;
+  }
+  
+  .location-diary-content {
+    background-color: #f7f7f7;
+    font-size: 14px;
+    padding: 4px 10px;
+    height: 103px;
+  }
+  
+  .location-diary-explanation {
+    background-color: #f7f7f7;
+    font-size: 12px;
+    padding: 1px 13px;
+    height: 10px;
+  }
+  
+  .left-content {
+    margin-top: 5px;
+  }
+  
+  .right-content {
+    margin-top: 5px;
+  }
+
+  .bottom-content {
+    position:absolute;
+    margin-top: 55px;
+    margin-left: 65px;
+  }
+  
+  .outer {
+    display:flex;
+    justify-content: center;
+  }
+  

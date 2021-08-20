@@ -1,0 +1,36 @@
+<dx-button
+  [disabled]="!(editMode$ | async)"
+  text="Set Defaults" [width]="120"
+  (onClick)="setDefaultsPopup = true"
+  [type]="'default'">
+</dx-button>
+<dx-popup
+  class="popup"
+  [width]="360"
+  [height]="'auto'"
+  title="Set Default Worklist Device Settings"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [(visible)]="setDefaultsPopup">
+  <div *dxTemplate="let data of 'content'">
+    <div style="padding-left: 10px;">
+      <dx-radio-group #selectDefaultSetting
+        [dataSource]="setDefaultItems"
+        [value]="defaultSettings[0]"
+        displayExpr="label"
+        valueExpr="settings">
+      </dx-radio-group>
+    </div>
+    <div style="padding-top: 16px; display: flex;">
+      <hms-button-cancel (cancelClicked)="closeDefaultSettingPopup()" [isLast]="false"></hms-button-cancel>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button
+          text="OK" [width]="90"
+          (onClick)="onSetDefaults(selectDefaultSetting.value)"
+          [type]="'success'">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

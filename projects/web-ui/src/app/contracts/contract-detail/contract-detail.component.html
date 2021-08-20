@@ -1,0 +1,229 @@
+
+<dx-button text="New Contract"  [disabled]="!contract || editingMode" [type]="'default'" (onClick)="onNewContract()"></dx-button>
+<br/><br/>
+    <dx-form id="form" [formData]="contract" [disabled]="!editingMode">
+      <dxi-item itemType="group" cssClass="form-panel" caption="Contract Details" [colCount]="3">
+        <dxi-item itemType="group" [colSpan]="1"> 
+            <dxi-item [label]="{text:'Fund / Company'}">
+                <dx-select-box 
+                 [value]="contract.companyId"
+                 [items]="companies"
+                 [displayExpr]="'companyName'"
+                 [valueExpr]="'company_ID'"
+                 [searchEnabled]="true"
+                 (onFocusIn)="onFocusIn($event)"
+                 (onValueChanged)="updateCompany($event)"
+                 ></dx-select-box>
+              </dxi-item>
+          <dxi-item [label]="{text:'Contract Name'}">
+            <dx-text-box [value]="contract.contractName"
+             [maxLength]="100"
+             (onValueChanged)="updateContractName($event)"
+             ></dx-text-box>
+          </dxi-item>
+            <dxi-item [label]="{text:'Validity Start'}">
+              <dx-date-box [value]="contract.validityStart"
+               [width]="100"
+               (onValueChanged)="updateValidityStart($event)"
+               ></dx-date-box>
+            </dxi-item>
+            <dxi-item  [label]="{text:'Validity End'}">
+              <dx-date-box [width]="100" [value]="contract.validityEnd"
+              (onValueChanged)="updateValidityEnd($event)"
+              ></dx-date-box>
+            </dxi-item>
+            
+          <dxi-item  [label]="{text:'Effective From'}">
+            <dx-select-box [items]="effectiveFromOptions"
+            [value]="contract.contractEffectiveFrom"
+             [displayExpr]="'Name'"
+             [valueExpr]="'ID'"
+             (onValueChanged)="updateContractEffectiveFrom($event)"
+             >
+            </dx-select-box>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="Procedure Percentages" [colCount]="1">
+          <dxi-item [label]="{text:'1st'}" >
+            <dx-number-box [min]="0" [max]="100" [format]="'#0.00%'" [value]="contract.proc1" (onValueChanged)="updateProc1($event)"></dx-number-box>
+          </dxi-item>
+          <dxi-item  [label]="{text:'2nd'}"  >
+            <dx-number-box [min]="0" [max]="100" [format]="'#0.00%'" [value]="contract.proc2" (onValueChanged)="updateProc2($event)"></dx-number-box>
+          </dxi-item>
+          <dxi-item [label]="{text:'3rd'}"  >
+            <dx-number-box [min]="0" [max]="100" [format]="'#0.00%'" [value]="contract.proc3" (onValueChanged)="updateProc3($event)"></dx-number-box>
+          </dxi-item>
+          <dxi-item [label]="{text:'4th'}">
+            <dx-number-box [min]="0" [max]="100" [format]="'#0.00%'" [value]="contract.proc4plus" (onValueChanged)="updateProc4($event)"></dx-number-box>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group">
+          <dxi-item dataField="dRGVersion" [label]="{text:'DRG Version'}">
+            <dx-text-box [value]="contract.drgVersion"
+            [maxLength]="100"
+            (onValueChanged)="updatedRGVersion($event)"
+            ></dx-text-box>
+          </dxi-item>
+          <dxi-item [label]="{text:'Theatre Banding Includes Medical Services'}" >
+            <dx-check-box [value]="contract.includeMedicalServicesTB"
+            (onValueChanged)="updatedMedicalService($event)"
+            ></dx-check-box>
+          </dxi-item>
+        </dxi-item>
+      </dxi-item>
+      </dx-form>
+      <dx-form style="padding-bottom:10px">
+          <dxi-item itemType="group" cssClass="form-panel">
+              <dxi-item itemType="group" caption="Fees">
+                <dxi-item itemType="tabbed" [tabPanelOptions]="{ deferRendering: false }">
+                    <dxi-tab title="Procedure / Case">
+                      <dxi-item>
+                          <dx-data-grid id="procedureGridContainer"
+                          [dataSource]="contract.contractFees"
+                          [showColumnLines]="true"
+                          [showRowLines]="true"
+                          [showBorders]="true"
+                          [rowAlternationEnabled]="true"
+                          (onRowInserted)="onSavingProcedure($event)"
+                          (onInitNewRow)="onNewProcedure($event)">
+                          <dxo-editing
+                            mode="batch"
+                            [allowUpdating]="editingMode"
+                            [allowDeleting]="editingMode"
+                            [allowAdding]="editingMode">
+                        </dxo-editing>
+                          <dxi-column [visible]="false" dataField="category" value="P"  dataType="string"></dxi-column>
+                          <dxi-column
+                              caption="Category"
+                              dataField="categoryDesc"
+                              dataType="string"
+                              [allowEditing]="false"
+                              filterValue="ProcCase">
+                          </dxi-column>
+                          <dxi-column dataField="stayType"  dataType="string">
+                            <dxo-lookup
+                                  [dataSource]="stayTypes"
+                                  displayExpr="Name"
+                                  valueExpr="ID">
+                              </dxo-lookup>
+                          </dxi-column>
+                          <dxi-column dataField="itemNumber" caption="Item #"  dataType="string">
+                            <dxo-lookup
+                                  [dataSource]="procItemNums"
+                                  displayExpr="itemNumberDisplay"
+                                  valueExpr="itemNumber">
+                              </dxo-lookup>
+                          </dxi-column>
+                          <dxi-column dataField="fundCode"  dataType="string"></dxi-column>
+                          <dxi-column dataField="caseFee" dataType="number" format="$ #,##0.##"></dxi-column>
+                          <dxi-column dataField="procFee" dataType="number" format="$ #,##0.##"></dxi-column>
+                          <dxi-column dataField="accomIncluded" caption="Accom" dataType="boolean" ></dxi-column>
+                          <dxi-column dataField="theatreIncluded" caption="Theatre" dataType="boolean"></dxi-column>
+                          <dxi-column dataField="billingGroup" caption="Group"  dataType="string">
+                              <dxo-lookup
+                              [dataSource]="billingGroups"
+                              displayExpr="groupName"
+                              valueExpr="groupName">
+                          </dxo-lookup>
+                          </dxi-column>
+                        </dx-data-grid>
+                      </dxi-item>
+                    </dxi-tab>
+                    <dxi-tab title="Theatre">
+                        <dx-data-grid
+                        [dataSource]="contract.contractFees"
+                        (onInitNewRow)="onNewTheatre($event)"
+                        [showColumnLines]="true"
+                        [showRowLines]="true"
+                        [showBorders]="true"
+                        [rowAlternationEnabled]="true">
+                        <dxo-editing
+                          mode="batch"
+                          [allowUpdating]="editingMode"
+                          [allowDeleting]="editingMode"
+                          [allowAdding]="editingMode">
+                        </dxo-editing>
+                        <dxi-column dataField="category" [visible]="false" value="T"  dataType="string"></dxi-column>
+                        <dxi-column
+                          caption="Category"
+                          dataField="categoryDesc"
+                          dataType="string"
+                          [allowEditing]="false"
+                          filterValue="Theatre">
+                        </dxi-column>
+                        <dxi-column dataField="stayType"  dataType="string">
+                          <dxo-lookup
+                                [dataSource]="stayTypes"
+                                displayExpr="Name"
+                                valueExpr="ID">
+                            </dxo-lookup>
+                        </dxi-column>
+                        <dxi-column dataField="itemNumber" caption="Item #"  dataType="string">
+                          <dxo-lookup
+                                [dataSource]="theatreItemNums"
+                                displayExpr="itemNumberDisplay"
+                                valueExpr="itemNumber">
+                            </dxo-lookup>
+                        </dxi-column>
+                        <dxi-column dataField="fundCode"  dataType="string"></dxi-column>
+                        <dxi-column dataField="procFee" caption="Theatre Fee"  format="$ #,##0.##"></dxi-column>
+                      </dx-data-grid>
+                    </dxi-tab>
+                    <dxi-tab title="Accommodation">
+                      <dx-data-grid
+                      [dataSource]="contract.contractFees"
+                      [showColumnLines]="true"
+                      [showRowLines]="true"
+                      [showBorders]="true"
+                      [rowAlternationEnabled]="true"
+                      (onInitNewRow)="onNewAccom($event)">
+                      <dxo-editing
+                        mode="batch"
+                        [allowUpdating]="editingMode"
+                        [allowDeleting]="editingMode"
+                        [allowAdding]="editingMode">
+                    </dxo-editing>
+                      <dxi-column [visible]="false" dataField="category" value="A"  dataType="string"></dxi-column>
+                      <dxi-column
+                          caption="Category"
+                          dataField="categoryDesc"
+                          dataType="string"
+                          [allowEditing]="false"
+                          filterValue="Accom">
+                      </dxi-column>
+                      <dxi-column dataField="stayType"  dataType="string">
+                        <dxo-lookup
+                              [dataSource]="stayTypes"
+                              displayExpr="Name"
+                              valueExpr="ID">
+                          </dxo-lookup>
+                      </dxi-column>
+                      <dxi-column dataField="itemNumber" caption="Item #" dataType="string">
+                        <dxo-lookup
+                                [dataSource]="accommItemNums"
+                              displayExpr="itemNumberDisplay"
+                              valueExpr="itemNumber">
+                          </dxo-lookup>
+                      </dxi-column>
+                      <dxi-column dataField="fundCode"  dataType="string"></dxi-column>
+                        <dxi-column dataField="procFee" caption="Bed Fee" format="$ #,##0.##"></dxi-column>
+                    </dx-data-grid>
+                  </dxi-tab>
+                </dxi-item>
+              </dxi-item>
+            </dxi-item>
+      </dx-form>
+<!--
+<dx-button text="Save Contract" class="ml-1" [type]="'success'" [disabled]="!editingMode && !isNewContract" (onClick)="onSaveContract()"></dx-button>
+<dx-button text="{{editingMode ? 'Cancel' : 'Edit Contract'}}" class="ml-1" [type]="'default'" [disabled]="!contract.contractId && !editingMode" (onClick)="onCancelClicked()"></dx-button>
+<dx-button text="Delete Contract" [type]="'danger'" class="ml-1" [disabled]="!editingMode || isNewContract" (onClick)="onDeleteContract()"></dx-button>
+-->
+  <dx-button text="Add/Modify Bill Items" class="mr-1" [type]="'default'" class="pull-right" (onClick)="onOpenFees()"></dx-button><br><br>
+  <hms-button-set-save [includeDeleteButton]="true"
+  (saveClicked)="onSaveContract()"
+  [EditText]="editingMode ? 'Cancel' : 'Edit'"
+  (cancelClicked)="onCancelClicked()"
+  [disabled]="!contract.contractId && !editingMode"
+  (deleteClicked)="onDeleteContract()">
+  </hms-button-set-save>
+  <br>

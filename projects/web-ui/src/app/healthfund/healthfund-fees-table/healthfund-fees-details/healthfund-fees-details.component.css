@@ -1,0 +1,85 @@
+.pc-header {
+    background-color: #DEEAF5;
+    padding: 10px 15px;
+    margin-top: 10px;
+    font-size: 20px;
+    border-style: solid;
+    border-width: 1px 1px 0px 1px;
+    border-color: rgba(221, 221, 221, 0.6);
+    display: flex;
+    white-space:nowrap;
+  }
+  
+  .pc-body {
+    background-color: #DEEAF5;
+    margin: 0px 0px 10px 0px;
+    padding: 25px;
+  }
+  .mb-30{
+    margin-bottom: 35px;
+  }
+  .service-item-num {
+    font-weight: bold;
+    width: 80px;
+    padding-right: 4px;
+    /* border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: rgba(193, 193, 193); */
+  }
+  
+  .service-health-fund-code {
+    font-weight: bold;
+    width: 20px;
+    padding-left: 4px;
+    /* border-style: solid;
+    border-width: 0px 1px;
+    border-color: rgba(193, 193, 193); */
+  }
+  .service-description {
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    width: 100%;
+    padding-left: 4px;
+    /* border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: rgba(193, 193, 193); */
+  
+  }
+  .form-controller {
+    display: block;
+    width: 89%;
+    /* height: calc(1.5em + .75rem + 2px); */
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.33334;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    margin: 0;
+    padding: 4px 5px;
+    color: #333;
+    font-size: 1em;
+    border-radius: 4px;
+    min-height: 24px;
+}
+.error-message{
+  font-size: 80%;
+  color: #dc3545;
+}
+.valid-message{
+  font-size: 80%;
+  color: #28a745;
+}
+
+.icon-custom{
+  position: relative;
+  top: 5px;
+  color: #28a745;
+}
+.icon-custom-error{
+  position: relative;
+  top: 5px;
+  color: #dc3545;
+}

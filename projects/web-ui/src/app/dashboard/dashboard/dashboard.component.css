@@ -1,0 +1,12 @@
+.dashboard-container {
+  padding: 0px;
+  margin: 0px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.dashboard {
+  margin: 0px;
+  padding: 5px;
+  display: inline-block;
+}

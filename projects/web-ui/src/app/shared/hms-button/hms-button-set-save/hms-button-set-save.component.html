@@ -1,0 +1,17 @@
+<div style="display: flex; width: 100%">
+  <hms-button-cancel
+    [disabled]="disabled"
+    [text]="EditText"
+    [isLast]="false"
+    (cancelClicked)="onCancelClicked()">
+  </hms-button-cancel>
+  <hms-button-delete *ngIf="includeDeleteButton" 
+    [disabled]="disabled"
+    (deleteClicked)="onDeleteClicked()">
+  </hms-button-delete>
+  <div style="width: 100%"></div>
+  <hms-button-save
+    [disabled]="disabled"
+    (saveClicked)="onSaveClicked()">
+  </hms-button-save>
+</div>

@@ -1,0 +1,82 @@
+.custom-label{
+    width:20% !important;
+    position: relative;
+    bottom:3px;
+}
+.custom-label-2{
+    width:100% !important;
+    position: relative;
+    bottom:3px;
+}
+.custom-value{
+    float:left !important;
+}
+.dx-field-label{
+    text-align: right;
+}
+.label-custom{
+    z-index: 50000; width: 116px;overflow:unset !important;
+}
+.dash-style{
+    margin: 3px;
+    margin-top: 4px;
+}
+/*
+:host ::ng-deep .scanner-radio .dx-widget {
+    width:500px;
+}
+*/
+:host ::ng-deep .scanner-radio .dx-widget {
+    width:360px;
+}
+:host ::ng-deep .radio-width .dx-widget {
+    width:260px;
+}
+.ml-12{
+    margin-left:11.6%;
+}
+.ml-s{
+    margin-left:33.7%
+}
+.mr-2p{
+    margin-right:5px;
+}
+.ml-1p{
+
+}
+.ml-3p{
+    margin-left:3px;
+}
+@media screen and (min-width: 2000px) {
+    .ml-3p{
+        margin-left:11.6%;
+    }
+    .ml-2p{
+        margin-left:33.7%
+    }
+}
+@media screen and (max-width: 1700px) {
+    .label-pos{
+        position:fixed;
+        left:-4.7%;
+    }
+}
+@media screen and (min-width: 1700px) and (max-width: 1885px) {
+    .label-pos{
+        position:fixed;
+        left:-9.7%;
+    }
+}
+:host ::ng-deep .radio-width .dx-radiogroup-horizontal .dx-radiobutton {
+margin-right:36px;
+}
+
+:host ::ng-deep .custom-span .dx-item{
+    flex: 2 1 30px !important;
+}
+
+@media screen and (max-width: 2000px) {
+    :host ::ng-deep .list .dx-box-item-content {
+        flex-direction: column !important;
+}
+}

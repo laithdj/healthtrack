@@ -1,0 +1,125 @@
+.dx-field-label {
+    float: right!important ;
+}
+.ber
+{
+    border-color: red;  
+    border-width: 4px;  
+}
+.dx-autocomplete-popup-wrapper .dx-overlay-content  
+{  
+    border-color: red!important;  
+    border-width: 4px!important;  
+}
+
+.dx-field-item-label-alignment-left{
+    color:red!important;
+    margin-left:50px;
+}
+.dx-list {
+    border: ridge!important;
+    background-color:#fff;
+}
+.patient-panel {
+    background-color: #f7f7f7;
+    padding: 15px;
+    margin: 0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(221, 221, 221, 0.6);
+  }
+
+  .col-sm-custom {
+    flex: 0 0 41.666667%;
+    max-width: 30.566667%;
+}
+
+.mb-30{
+    position: relative;
+    bottom:30px;
+    right:2px;
+}
+.width-size{
+    margin-left: -1px !important;
+
+}
+.triage-width{
+    width:886px
+}
+.viewer-size{
+    width:475px;
+}
+
+.bottom {
+  position: relative;
+  bottom: 18px;
+}
+
+.form-height {
+  height:325px;
+}
+
+@media screen and (min-width: 1300px) {
+    .viewer-size{
+        width:130%;
+        flex: 43 0 13.666667% !important;
+        max-width: 100%!important;
+    }
+    .viewer-size{
+        margin-left:10px;
+    }
+  }
+
+
+
+  @media screen and (min-width: 1300px) {
+    .viewer-size{
+        width:100%;
+    }
+    .viewer-size{
+        margin-left:10px;
+    }
+  }
+
+  
+  @media screen and (max-width: 1270px) {
+    .viewer-size{
+        width:20px;
+    }
+    .width-size{
+        width:20px;
+    }
+
+  }
+ 
+  @media screen and (max-height: 675px) {
+    .width-size{
+        height:658px;
+        
+    }
+    .viewer-size{
+        margin-left:10px;
+        flex: 43 0 13.666667% !important;
+        max-width: 100%!important;
+    }
+    .margin-bottom{
+        padding-bottom:20px;
+    }
+  }
+  @media screen and (min-height: 675px) {
+    .width-size{
+        height: calc(100vh - 65px)
+    }
+  }
+ 
+  @media screen and (max-width: 1306px) {
+    .width-size{
+        width:1500px;
+    }
+    .viewer-size{
+        margin-left:10px;
+        flex: 43 0 13.666667% !important;
+        max-width: 100%!important;
+    }
+    
+  }

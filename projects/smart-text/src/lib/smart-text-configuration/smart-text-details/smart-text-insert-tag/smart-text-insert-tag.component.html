@@ -1,0 +1,140 @@
+<div style="display: flex;">
+  <div class="insert-tag-label" style="z-index: 5;">
+    Insert Tag:
+  </div>
+  <div class="insert-tag-content" style="z-index: 5;">
+    <div style="padding-right: 3px; z-index: 5;">
+      <dx-button [disabled]="!editMode" [text]="'Input Request'"
+        [width]="125" (onClick)="onInputRequestClicked()">
+      </dx-button>
+    </div>
+    <div style="padding-right: 3px; z-index: 5;">
+      <dx-button [disabled]="!editMode" [text]="'Selection Options'"
+        [width]="125" (onClick)="onSelectionOptionsClicked()">
+      </dx-button>
+    </div>
+    <div style="padding-right: 3px; z-index: 5;">
+      <dx-button [disabled]="!editMode" [text]="'Measurement Data'"
+        [width]="125" (onClick)="onMeasurementDataClicked()">
+      </dx-button>
+    </div>
+    <div style="z-index: 5;">
+      <dx-button [disabled]="!editMode" [text]="'[[ENTER]]'"
+        [width]="125" (onClick)="onEnterClicked()">
+      </dx-button>
+    </div>
+  </div>
+</div>
+<dx-popup [(visible)]="showInputRequestPopup" [showTitle]="true"
+  [title]="(showMeasurementData) ? 'Measurement Data Input Request' : 'Input Request'"
+  (onShown)="inputRequestShown()" [width]="500" [height]="'auto'"
+  (onHiding)="showInputRequestPopup = false" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <div *ngIf="!showMeasurementData" style="padding-bottom: 10px;">
+      Please type your request for input:
+    </div>
+    <div *ngIf="showMeasurementData" style="padding-bottom: 10px;">
+      <div>
+        Please enter the Reference ID that corresponds to the data field for your tag:
+      </div>
+      <div style="padding-left: 95px; padding-bottom: 5px;">
+        <dx-radio-group [items]="referenceIdOptions" [(value)]="referenceIdOption"></dx-radio-group>
+      </div>
+      <dx-form>
+        <dxi-item [label]="{ text: 'By Name' }">
+          <div *dxTemplate>
+            <dx-select-box [noDataText]="'No Measurements for this report type could be found'"
+              [dataSource]="{ store: referenceIdList, paginate: true }" [(value)]="referenceId"
+              [displayExpr]="'description'" [valueExpr]="'referenceId'" searchMode="startswith">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text: 'By Reference ID' }">
+          <div *dxTemplate>
+            <dx-number-box *ngIf="showMeasurementData" #measurementDataNumberBox id="measurementDataNumberBox"
+              [(value)]="referenceId" [valueChangeEvent]="'keyup change focusout'" (onEnterKey)="addInputRequestClicked()">
+            </dx-number-box>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </div>
+    <div *ngIf="!showMeasurementData" style="padding-bottom: 10px;">
+      <dx-text-box #inputRequestTextArea id="inputRequestTextArea"
+        [(value)]="inputRequest" [valueChangeEvent]="'keyup change focusout'" (onEnterKey)="addInputRequestClicked()">
+      </dx-text-box>
+    </div>
+    <div style="display: flex;">
+      <div [ngStyle]="{ 'margin-right': '10px' }">
+        <dx-button [width]="90" [text]="'Close'" [type]="'default'"
+          (onClick)="showInputRequestPopup = false">
+        </dx-button>
+      </div>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button [text]="'Insert'" [width]="90" [type]="'success'"
+          (onClick)="addInputRequestClicked()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<dx-popup [(visible)]="showSelectionOptionsPopup" [showTitle]="true"
+  [title]="'Insert Selection Options'" [width]="500" [height]="'auto'"
+  (onHiding)="showSelectionOptionsPopup = false" [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <div style="padding-bottom: 10px;">
+      Type in a list of options:
+    </div>
+    <dx-data-grid #selectionOptionsGrid id="selectionOptionsGrid" [(dataSource)]="selectionOptions"
+      [height]="300" [showRowLines]="true" [showColumnHeaders]="false">
+      <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="true"
+        [allowDeleting]="true" [selectTextOnEditStart]="true">
+      </dxo-editing>
+      <dxi-column [caption]="'Value'" [dataField]="'selectionOption'"></dxi-column>
+    </dx-data-grid>
+    <div style="display: flex; padding-top: 10px;">
+      <div class="multi-selection-options">
+        <dx-form [width]="340">
+          <dxi-item [label]="{ text: 'Multiselect' }">
+            <div *dxTemplate style="display: flex;">
+              <div>
+                <dx-check-box [(value)]="selectionOptionsMultiselect"></dx-check-box>
+              </div>
+              <div style="padding-left: 10px; padding-top: 5px;">
+                <dx-radio-group [disabled]="!selectionOptionsMultiselect" [layout]="'horizontal'"
+                  [items]="[ 'And', 'Or' ]" [(value)]="multiselectOption">
+                </dx-radio-group>
+              </div>
+              <div *ngIf="multiselectOption === 'And'" style="padding-top: 5px; padding-left: 20px;"
+                [ngStyle]="selectionOptionsMultiselect ? { opacity: 1 } : { opacity: 0.5 }">
+                e.g. "Red, Green and Blue"
+              </div>
+              <div *ngIf="multiselectOption === 'Or'" style="padding-top: 5px; padding-left: 20px;"
+                [ngStyle]="selectionOptionsMultiselect ? { opacity: 1 } : { opacity: 0.5 }">
+                e.g. "Red, Green or Blue"
+              </div>            
+            </div>
+          </dxi-item>
+        </dx-form>
+      </div>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button [text]="'Add'" [width]="90" [icon]="'add'"
+          (onClick)="addSelectionOption()"></dx-button>
+      </div>
+    </div>
+    <div style="display: flex; padding-top: 10px;">
+      <div [ngStyle]="{ 'margin-right': '10px' }">
+        <dx-button [width]="90" [text]="'Close'" [type]="'default'"
+          (onClick)="showSelectionOptionsPopup = false">
+        </dx-button>
+      </div>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button [text]="'Insert'" [width]="90" [type]="'success'"
+          (onClick)="addSelectionOptionsClicked()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

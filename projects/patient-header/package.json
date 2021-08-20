@@ -1,0 +1,10 @@
+{
+  "name": "patient-header",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^10.2.4",
+    "@angular/core": "^10.2.4",
+    "date-fns": "^2.16.1",
+    "devextreme-angular": "^20.1.8"
+  }
+}

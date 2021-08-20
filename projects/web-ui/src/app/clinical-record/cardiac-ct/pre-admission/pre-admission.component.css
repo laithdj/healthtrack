@@ -1,0 +1,125 @@
+.w-52{
+    width:50%
+}
+
+.al-right{
+    float:right !important;
+}
+
+.radio-align{
+    position: relative;
+    bottom: 14px;
+}
+
+.custom-label{
+    overflow:unset !important;
+}
+
+:host ::ng-deep .details .dx-field-item-label-content{
+    width:auto !important;
+}
+
+:host ::ng-deep .radio-space .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 56px!important;
+}
+:host ::ng-deep .radio-space .dx-radiogroup-horizontal .dx-radiobutton .dx-radio-value-container {
+    width: 2px!important;
+}
+/*
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 71px;
+}
+
+:host ::ng-deep .dx-radio-value-container {
+
+    width: 2px;
+}
+
+:host ::ng-deep .dx-item-content{
+    width: max-content;
+}
+
+
+:host ::ng-deep .smoking .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 71px;
+}
+
+:host ::ng-deep .smoking .dx-radio-value-container {
+
+    width: 2px;
+}
+
+:host ::ng-deep .smoking .dx-item-content{
+    width: max-content;
+}
+*/
+:host ::ng-deep .metformin .dx-radiogroup-horizontal .dx-radiobutton {
+     width: 5.2rem!important; 
+}
+
+
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    white-space: pre;
+}
+:host ::ng-deep .smoking .dx-radiogroup-horizontal .dx-radiobutton{
+    width: 82px;
+}
+:host ::ng-deep .dx-radiogroup-horizontal .dx-radiobutton {
+    width: 82px;
+}
+
+
+:host ::ng-deep .dx-radio-value-container {
+    width: 1px;
+}
+@media screen and (min-width: 2000px) {
+    :host ::ng-deep .radio-details .dx-widget {
+        flex-direction: row !important;
+    }
+}
+@media screen and (min-width: 1900px) {
+    :host ::ng-deep .radio-details-child .dx-collection {
+        flex-direction: column !important;
+    }
+}
+@media screen and (min-width: 1900px) {
+    :host ::ng-deep .cardiac-details .dx-collection {
+        flex-direction: row !important;
+    }
+}
+@media screen and (min-width: 1900px) {
+    :host ::ng-deep .cardiac-details-child .dx-collection {
+        flex-direction: column !important;
+    }
+}
+
+
+:host ::ng-deep .radio-width .dx-widget {
+    width:100%;
+}
+:host ::ng-deep .radio-allergy .dx-widget {
+    width:373px;
+}
+
+:host ::ng-deep .detail-radio .dx-box-item-content {
+    display:block
+}
+
+:host ::ng-deep .allergies .dx-item {
+    flex: none !important;
+}
+
+.cardiac-width{
+    margin-left:200px
+}
+
+
+@media screen and (max-width: 2000px) {
+    .cardiac-width{
+        margin-left:262px;
+    }
+    .cardiac-details{
+        padding-left:263px;
+    }
+}
+

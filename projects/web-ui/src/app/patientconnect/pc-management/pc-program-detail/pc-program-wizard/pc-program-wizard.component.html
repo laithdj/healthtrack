@@ -1,0 +1,85 @@
+<dx-popup
+  class="popup"
+  [width]="600"
+  [height]="420"
+  title="Create a New Patient Connect"
+  [showCloseButton]="false"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [visible]="showWizard">
+  <div *ngIf="selectedProgramDO && programTypes">
+    <dx-form [formData]="selectedProgramDO" [colCount]="1">
+      <dxi-item [label]="{ text: 'Name'}" [itemType]="'dxTextBox'" [dataField]="'reason'" [editorOptions]="{maxLength:50}"></dxi-item>
+      <dxi-item [itemType]="'empty'"></dxi-item>
+      <dxi-item [itemType]="'group'" [caption]="'Select a Patient Connect Type'">
+        <dxi-item>
+          <div *dxTemplate style="margin-left: 30px;">
+            <dx-radio-group
+              [items]="orderedProgramTypes"
+              [displayExpr]="'typeName'"
+              [valueExpr]="'id'"
+              [(value)]="selectedProgramDO.type"
+              (onValueChanged)="updateProgramType($event)">
+            </dx-radio-group>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item [itemType]="'empty'"></dxi-item>
+      <dxi-item [itemType]="'group'" [caption]="'Configure Cycles'">
+        <dxi-item [label]="{ text: 'Number of Cycles' }">
+          <div *dxTemplate>
+            <dx-number-box
+              [showSpinButtons]="true"
+              [min]="1"
+              [format]="'#0'"
+              [readOnly]="programType === 'Booking' || programType === 'Referral'"
+              [(value)]="selectedProgramDO.recurringCount"
+              [width]="'80px'">
+              <dx-validator [validationRules]="[{ type: 'required'}]" name="Value"></dx-validator>
+            </dx-number-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text: 'Frequency' }">
+          <div *dxTemplate>
+            <div style="display: flex;">
+              <div>
+                <dx-number-box
+                  [showSpinButtons]="true"
+                  [min]="1"
+                  [format]="'#0'"
+                  [(value)]="selectedProgramDO.frequencyValue"
+                  [width]="'80px'">
+                  <dx-validator [validationRules]="[{ type: 'required'}]" name="Value"></dx-validator>
+                </dx-number-box>
+              </div>
+              <div style="padding: 4px 10px 0px 10px;">
+                <dx-radio-group
+                  [layout]="'horizontal'"
+                  [items]="frequencyRadioGroupItems"
+                  [displayExpr]="'name'"
+                  [valueExpr]="'id'"
+                  [(value)]="selectedProgramDO.frequencyUnit">
+                </dx-radio-group>
+              </div>
+              <div style="display: inline-flex;">
+                <div *ngFor="let i of [1,2,3,4,5,6];" class="freq-btns">
+                  <dx-button text={{i}} (click)="onSetFrequency(i)"></dx-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+    <div class="popup-buttons-footer"> 
+      <hms-button-cancel (cancelClicked)="onCancel($event)"></hms-button-cancel>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button [type]="'default'"
+          [width]="90" [text]="'Continue'"
+          (onClick)="onContinue($event)">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

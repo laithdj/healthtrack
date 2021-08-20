@@ -1,0 +1,8 @@
+<div class="d-flex flex-row">
+    <dx-number-box [width]="width"
+      [readOnly]="readOnly"
+      [value]="(normalizedResult$ | async)?.result"
+      (onValueChanged)="changeValue($event)">
+    </dx-number-box>
+    <span *ngIf="includeUnit" class="m-1">{{unit}}<sup>{{sup}}</sup></span>
+</div>

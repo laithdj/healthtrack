@@ -1,0 +1,8 @@
+<dx-radio-group [items]="items"
+  [displayExpr]="displayEx"
+  [valueExpr]="valueEx"
+  [layout]="layout"
+  [width]="width"
+  [value]="(normalizedResult$ | async) ? (normalizedResult$ | async).result : default ? 1 : null"
+  (onValueChanged)="changeValue($event)">
+</dx-radio-group>

@@ -1,0 +1,16 @@
+  <dx-data-grid id="bookingStatus"
+    [dataSource]="editingDevice?.selectedBookingStatus"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [showColumnHeaders]="false"
+    [hoverStateEnabled]="true"
+    [rowAlternationEnabled]="true"
+    (onCellClick)="onDeviceChanged()"
+    [height]="'100%'"
+    [width]="'100%'">
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-editing mode="cell" [allowUpdating]="(editMode$ | async)"></dxo-editing>
+    <dxi-column dataField="selected" [width]="30" [allowEditing]="(editMode$ | async)"></dxi-column>
+    <dxi-column dataField="bookingStatus" [allowEditing]="false"></dxi-column>
+  </dx-data-grid>

@@ -1,0 +1,16 @@
+::ng-deep #boxImageUpload {
+  padding-top: 10px;
+}
+
+::ng-deep #addImageItem {
+  padding-right: 10px;
+}
+
+::ng-deep #uploadErrorDiv {
+  padding: 10px;
+}
+
+::ng-deep .dx-datagrid-header-panel {
+  visibility: hidden;
+  height: 0px;
+}

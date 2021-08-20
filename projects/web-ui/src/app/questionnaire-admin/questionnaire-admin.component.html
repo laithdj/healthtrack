@@ -1,0 +1,75 @@
+
+<div class="main-container">
+  <dx-button [text]="'New Template'" [icon]="'add'" [type]="'default'" class="mt-2 float-right" (onClick)="newTemplateModal = true"></dx-button>
+  <dx-data-grid
+  [columnAutoWidth]="false"
+  [noDataText]="'No Templates'"
+  [columnHidingEnabled]="false"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [hoverStateEnabled]="true"
+  [rowAlternationEnabled]="true"
+  (onRowClick)="doubleClickRow($event)"
+  [cellHintEnabled]='true'
+   [dataSource]="(templates$ | async)" [showBorders]="true" 
+   style="padding-bottom:20px;" class="mt-5">
+   <dxo-paging [pageSize]="20"></dxo-paging>
+   <dxo-pager 
+       [showPageSizeSelector]="false"
+       [showInfo]="true">
+   </dxo-pager>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-state-storing [enabled]="true" type="localStorage" storageKey="questionnaire_storage"></dxo-state-storing>
+    <dxi-column dataField="class" caption="Class" [width]="150"></dxi-column>
+    <dxi-column dataField="templateDescription" caption="Template Name"></dxi-column>
+    <dxi-column cellTemplate="actionsCellTemplate" [width]="75" caption="Actions">
+      <div *dxTemplate="let cell of 'actionsCellTemplate'">
+        <div>
+          <hms-button-edit
+          (editClicked)="editCreator(cell.data.templateId)"></hms-button-edit>
+        </div>
+      </div>
+    </dxi-column>
+  </dx-data-grid>
+</div>
+
+<dx-popup class="popup" [height]="230" [width]="580" title="Create a New Questionnaire Template"
+  [showTitle]="true" [showCloseButton]="false"
+  [visible]="newTemplateModal">
+  <div id="form-container">
+    <dx-form id="form" [colCount]="2">
+      <dxi-item itemType="group">
+        <dxi-item [label]="{ text:'Name' }">
+          <div *dxTemplate>
+            <dx-text-box  [maxLength]="50" [width]="'100%'" [(value)]='templateDescription'>
+            </dx-text-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'Select Class' }">
+          <div *dxTemplate>
+            <dx-radio-group  [layout]="'vertical'" [width]="480" [(value)]='templateClass'
+            [items]="classOptions">
+          </dx-radio-group>
+          </div>
+        </dxi-item>
+        </dxi-item>
+    </dx-form>
+  </div>
+  <div>
+    <div class="buttons-footer">
+      <hms-button-cancel
+      (cancelClicked)="newTemplateModal = false"></hms-button-cancel>
+      <div class="ml-1"></div>
+      <div class="w-100"></div>
+      <div [ngStyle]="{ 'margin-right':'10px' }">
+          <dx-button [width]="90"
+            [text]="'Continue'"
+            [type]="'default'"
+            [useSubmitBehavior]="true"
+            (onClick)="newTemplate()">
+          </dx-button>
+        </div>
+  </div>
+  </div>
+</dx-popup>

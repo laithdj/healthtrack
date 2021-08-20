@@ -1,0 +1,162 @@
+<div class="row">
+  <div class="col-auto" style="padding-right: 0px;">
+    <div style="margin-bottom: 5px;">
+      <dx-button text='Next 7 Days' [type]="'default'"
+        (onClick)="onDateTo(7)" [width]="95">
+      </dx-button>
+    </div>
+    <div style="margin-bottom: 5px;">
+      <dx-button text='Next 14 Days' [type]="'default'"
+        (onClick)="onDateTo(14)" [width]="95">
+      </dx-button>
+    </div>
+    <div>
+      <dx-button text='Next 28 Days' [type]="'default'"
+        (onClick)="onDateTo(28)" [width]="95">
+      </dx-button>
+    </div>
+  </div>
+  <div class="col-auto" style="padding-right: 0px;">
+    <dx-form id="form" [width]="180" [formData]="filter" (onFieldDataChanged)="onFilterChanged($event)">
+      <dxi-item itemType="group">
+        <dxi-item dataField="dueFrom" editorType="dxDateBox" [width]="'100%'"></dxi-item>
+        <dxi-item dataField="dueTo" editorType="dxDateBox" [width]="'100%'"></dxi-item>
+        <dxi-item itemType="group">
+          <div *dxTemplate style="display: flex;">
+            <div style="width: 50%;"></div>
+            <div>
+              <dx-button text='Select Processed Batch'
+                (onClick)="onSelectBatch()" [type]="'default'">
+              </dx-button>
+            </div>
+            <div style="width: 50%;"></div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+  </div>
+  <div class="col-auto" style="margin-top: -6px;">
+    <dx-form id="form" [formData]="filter" (onFieldDataChanged)="onFilterChanged($event)">
+      <dxi-item style="margin-top: -40px;" dataField="action" [cssClass]="'practicewide-radio-fix'"
+        editorType="dxRadioGroup" [label]="{ visible: false }"
+        [editorOptions]="{ items:radioGroupItems, displayExpr: 'text', valueExpr: 'action' }">
+      </dxi-item>
+    </dx-form>
+  </div>
+  <div class="col" style="max-width: 550px; min-width: 400px;">
+    <dx-form id="form" [width]="'100%'" [formData]="filter" (onFieldDataChanged)="onFilterChanged($event)">
+      <dxi-item itemType="group">
+        <dxi-item dataField="programId" [label]="{ text:'Program Name' }" editorType="dxSelectBox"
+          [editorOptions]="{ items:enabledPrograms, displayExpr:'reason', valueExpr:'id', searchEnabled:'true' }">
+        </dxi-item>
+        <dxi-item dataField="attendingMOId" [label]="{ text:'Attending MO' }" editorType="dxSelectBox"
+          [editorOptions]="{ items:doctors, displayExpr:'displayname', valueExpr:'doctorId', searchEnabled:'true' }">
+        </dxi-item>
+        <dxi-item dataField="locationId" [label]="{text:'Location'}" editorType="dxSelectBox"
+          [editorOptions]="{ items:locations, displayExpr:'name', valueExpr:'locationId', searchEnabled:'true' }">
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+  </div>
+  <div class="col-auto" style="padding-left: 0px;">
+    <div style="margin-top: 60px;">
+      <dx-button text='Refresh' [icon]="'refresh'" [width]="90"
+        [type]="'default'" (onClick)="onRefresh()">
+      </dx-button>
+    </div>
+  </div>
+</div>
+<dx-popup
+  class="popup"
+  [width]="700"
+  [height]="'auto'"
+  [showTitle]="true"
+  title="Patient Connect Batches"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="false"
+  [(visible)]="selectBatch">
+  <div *dxTemplate="let data of 'content'">
+    <dx-form [formData]="batchFilter" [colCount]="5">
+      <dxi-item itemType="group" [colSpan]="3" [colCount]="2">
+        <dxi-item [label]="{ text:'From Date' }">
+          <div *dxTemplate>
+            <dx-date-box [width]="'100%'" [useMaskBehavior]="true" 
+              [(value)]="batchFilter.fromDate">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'To Date' }">
+          <div *dxTemplate>
+            <dx-date-box [width]="'100%'" [useMaskBehavior]="true" 
+              [(value)]="batchFilter.toDate">
+            </dx-date-box>
+          </div>
+        </dxi-item>
+        <dxi-item [label]="{ text:'User' }" [colSpan]="2">
+          <div *dxTemplate>
+            <dx-select-box [width]="'100%'"
+              [(value)]="batchFilter.user" [items]="users">
+            </dx-select-box>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item [colSpan]="2">
+        <div *dxTemplate style="text-align: right; margin-top: 17px; margin-right: 160px;">
+          <dx-button text="Refresh" [type]="'default'" [icon]="'refresh'"
+            [width]="90" (onClick)="onBatchRefresh()">
+          </dx-button>
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="3">
+        <div *dxTemplate>
+          <dx-data-grid
+            id="gridContainer"
+            [dataSource]="filteredBatches"
+            [height]="400"
+            [keyExpr]="'id'"
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [selectedRowKeys]="selectedBatchId"
+            [showBorders]="true"
+            [hoverStateEnabled]="true"
+            [rowAlternationEnabled]="true"
+            (onSelectionChanged)="onBatchSelectionChanged($event)" >
+            <dxo-selection mode="single"></dxo-selection>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <dxo-editing [allowUpdating]="false"></dxo-editing>
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxi-column dataField="id" caption="ID" [width]="60" [fixed]="true"></dxi-column>
+            <dxi-column dataField="created" caption="Date" [width]="150"></dxi-column>
+            <dxi-column dataField="dateCreated" [visible]="false" [sortIndex]="0" sortOrder="desc"></dxi-column>
+            <dxi-column dataField="userCreated" caption="User Name"></dxi-column>
+          </dx-data-grid>
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="2" itemType="group" [caption]="'Patient Connect Batch Tracker'">
+        <dxi-item *ngIf="batchFilter.selectedBatch" dataField="selectedBatch.program" [label]="{text:'Program'}" [disabled]="true"></dxi-item>
+        <dxi-item *ngIf="batchFilter.selectedBatch" dataField="selectedBatch.attendingMO" [label]="{text:'Attending MO'}" [disabled]="true"></dxi-item>
+        <dxi-item *ngIf="batchFilter.selectedBatch" dataField="selectedBatch.location" [label]="{text:'Location'}" [disabled]="true"></dxi-item>
+        <dxi-item *ngIf="batchFilter.selectedBatch" dataField="selectedBatch.processed" [label]="{text:'Processed'}" [disabled]="true"></dxi-item>
+        <dxi-item *ngIf="batchFilter.selectedBatch" dataField="selectedBatch.created" [label]="{text:'Created'}" [disabled]="true"></dxi-item>
+        <dxi-item *ngIf="batchFilter.selectedBatch" dataField="selectedBatch.userCreated" [label]="{text:'Created By'}" [disabled]="true"></dxi-item>
+      </dxi-item>
+    </dx-form>
+    <div style="width:100%; display:inline-block; margin-top: 10px">
+      <div style="float:left">
+        <dx-button [width]="90"
+          [text]="'Cancel'"
+          [icon]="'arrowleft'"
+          [type]="'default'"
+          (onClick)="cancelPopUp()">
+        </dx-button>
+      </div>
+      <div style="float:right">
+        <dx-button [width]="90"
+          [text]="'OK'"
+          [type]="'default'"
+          (onClick)="onLoadBatch()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

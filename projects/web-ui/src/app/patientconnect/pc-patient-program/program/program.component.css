@@ -1,0 +1,39 @@
+::ng-deep .list-item-deleted {
+  text-decoration: line-through;
+}
+
+::ng-deep table tbody tr.dx-row.dx-data-row.dx-row-lines.dx-column-lines.dx-selection.dx-row > td {
+  background-color: chartreuse;
+}
+
+.custom{
+  flex-wrap: unset !important;
+}
+
+.custom-col{
+  flex: 0 0 72%;
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  max-width: 72%;
+}
+
+@media screen and (min-width: 1280px) {
+  .custom-col{
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+}
+@media screen and (min-width: 1490px) {
+  .custom-col{
+    flex: 0 0 79%;
+    max-width: 79%;
+  }
+}
+@media screen and (min-width: 1825px) {
+  .custom-col{
+    flex: 0 0 83%;
+    max-width: 83%;
+  }
+}

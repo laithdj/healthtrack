@@ -1,0 +1,32 @@
+<dx-popup
+  class="popup"
+  [width]="580"
+  [height]="'auto'"
+  title="Active Patient Connects"
+  [showTitle]="true"
+  [dragEnabled]="true"
+  [(visible)]="patientsOnProgramPopupVisible">
+  <div *dxTemplate="let data of 'content'">
+    <div style="padding-bottom: 10px;">
+      <span><b>{{ title }}</b></span>
+    </div>
+    <dx-data-grid
+      id="gridContainer"
+      [dataSource]="patientsOnProgram"
+      [showRowLines]="true"
+      [showBorders]="true"
+      [height]="450"
+      [rowAlternationEnabled]="true">
+      <dxo-sorting mode="none"></dxo-sorting>
+      <dxo-scrolling mode="standard" showScrollbar="onHover"></dxo-scrolling>
+      <dxo-paging [enabled]="true" pageSize="20" ></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true"
+        [allowedPageSizes]="[20, 50]" [showInfo]="true">
+      </dxo-pager>
+      <dxi-column dataField="actionDate" [width]="90" [fixed]="true" dataType="date" ></dxi-column>
+      <dxi-column dataField="step" [width]="50" [fixed]="true"></dxi-column>
+      <dxi-column dataField="action" caption="Action" [width]="'auto'" [fixed]="true"></dxi-column>
+      <dxi-column dataField="patientName"></dxi-column>
+    </dx-data-grid>
+  </div>
+</dx-popup>

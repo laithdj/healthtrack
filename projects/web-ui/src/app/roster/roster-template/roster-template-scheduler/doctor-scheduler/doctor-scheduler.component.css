@@ -1,0 +1,80 @@
+.dr-hours {
+  width: 50px;
+  text-align: right;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-group-table,
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-sidebar-scrollable,
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-sidebar-scrollable:before {
+  width: 200px;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-timeline .dx-scheduler-group-header,
+::ng-deep #doctorScheduler .dx-scheduler-timeline .dx-scheduler-group-header-content {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-date-table-scrollable,
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-header-scrollable {
+  margin-left: 200px;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count="1"] .dx-scheduler-group-table,
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count="1"] .dx-scheduler-sidebar-scrollable,
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count="1"] .dx-scheduler-sidebar-scrollable::before {
+  width: 200px;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-date-table-scrollable,
+::ng-deep #doctorScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-header-scrollable {
+  margin-left: 200px;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-cell-sizes-vertical {
+  height: 40px;
+}
+
+::ng-deep #doctorScheduler .dx-scheduler-cell-sizes-horizontal {
+  width: 25px;
+  padding: 0px;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-group-table,
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-sidebar-scrollable,
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-sidebar-scrollable:before {
+  width: 200px;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-timeline .dx-scheduler-group-header,
+::ng-deep #staffScheduler .dx-scheduler-timeline .dx-scheduler-group-header-content {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-date-table-scrollable,
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-header-scrollable {
+  margin-left: 200px;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count="1"] .dx-scheduler-group-table,
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count="1"] .dx-scheduler-sidebar-scrollable,
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count="1"] .dx-scheduler-sidebar-scrollable::before {
+  width: 200px;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-date-table-scrollable,
+::ng-deep #staffScheduler .dx-scheduler-timeline.dx-scheduler-work-space-grouped[dx-group-column-count='1'] .dx-scheduler-header-scrollable {
+  margin-left: 200px;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-cell-sizes-vertical {
+  height: 40px;
+}
+
+::ng-deep #staffScheduler .dx-scheduler-cell-sizes-horizontal {
+  width: 25px;
+  padding: 0px;
+}

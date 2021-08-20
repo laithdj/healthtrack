@@ -1,0 +1,43 @@
+<div *ngIf="(selectedFeature$ | async) && (selectedFeature$ | async).hasSettings">
+  <dx-form id="deviceSettings" [formData]="editingDevice" [readOnly]="!(editMode$ | async)"
+    (onFieldDataChanged)="onDeviceChanged($event)">
+    <dxi-item itemType="group" [colCount]="2" caption="Settings" >
+      <dxi-item itemType="group">
+        <dxi-item dataField="modality" editorType="dxSelectBox"
+          [editorOptions]="{ items: (modalityList$ | async), displayExpr: 'displayName', valueExpr: 'modality' }">
+        </dxi-item>
+        <dxi-item dataField="deviceMode" editorType="dxRadioGroup"
+          [editorOptions]="{ items: modeItems, displayExpr: 'text', valueExpr: 'value' }">
+        </dxi-item>
+        <dxi-item dataField="preloadDays" [label]="{ text: 'Days' }" editorType="dxNumberBox"
+          [editorOptions]="{ showSpinButtons: true, minValue: 0, maxValue: 100 }">
+        </dxi-item>
+        <dxi-item dataField="mrnPreference" editorType="dxRadioGroup" [label]="{ text: 'MRN Preference' }"
+          [editorOptions]="{ items: mrnPreferenceItems, displayExpr: 'text', valueExpr: 'value' }">
+        </dxi-item>
+        <dxi-item dataField="mrnRequired" [label]="{ text: 'MRN Required' }" editorType="dxCheckBox"></dxi-item>
+      </dxi-item>
+      <dxi-item dataField="id" [label]="{ text: 'Booking Status' }">
+        <div *dxTemplate>
+          <app-bookingstatus-list></app-bookingstatus-list>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+  <div style="display: flex;">
+    <app-set-defaults></app-set-defaults>
+    <div style="margin-left: 10px; margin-right: 10px;">
+      <dx-button text="Test Configuration"
+        (onClick)="onFetchWorklist()"
+        [type]="'default'" [width]="120">
+      </dx-button>
+    </div>
+    <div>
+      <dx-button text="Clear Settings"
+        [disabled]="!(editMode$ | async)"
+        (onClick)="onClearSettings()" [width]="120"
+        [type]="'default'">
+      </dx-button>
+    </div>
+  </div>
+</div>

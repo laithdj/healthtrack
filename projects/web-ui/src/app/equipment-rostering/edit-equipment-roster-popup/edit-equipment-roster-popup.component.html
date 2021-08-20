@@ -1,0 +1,89 @@
+<dx-popup [visible]="(equipmentRosteringPopup$ | async)?.showPopup" [showTitle]="true" [width]="400" [height]="'auto'"
+  [title]="isNew ? 'New Roster' : 'Roster: ' + equipmentRoster?.resourceName" [closeOnOutsideClick]="false"
+  (onHiding)="onPopupHiding()">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <dx-form *ngIf="(equipmentRosteringPopup$ | async)?.showPopup" [formData]="equipmentRoster">
+      <dxi-item [label]="{ text: 'Location/Room' }">
+        <div *dxTemplate>
+          <dx-select-box [disabled]="true" [items]="(locationRooms$ | async)" displayExpr="displayName"
+            (onValueChanged)="onLocationRoomChanged()" [searchEnabled]="true" [(value)]="selectedLocationRoom">
+          </dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'From' }">
+        <div *dxTemplate>
+          <dx-date-box [width]="'100%'" [useMaskBehavior]="true" [disabled]="!isNew"
+            (onValueChanged)="onDateFromChanged()" [(value)]="equipmentRoster.startDate"
+            [valueChangeEvent]="'change keyup'">
+          </dx-date-box>
+        </div>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'To'}">
+        <div *dxTemplate="let data of 'content'">
+          <dx-radio-group [items]="radioOptions" [(value)]="selectedRadioOption" [itemTemplate]="'radioTemplate'"
+            (onValueChanged)="onRadioOptionChanged()">
+            <div style="display: flex" *dxTemplate="let option of 'radioTemplate'">
+              <div *ngIf="option === 'Keep in Room'">
+                {{ option }}
+              </div>
+              <div *ngIf="option !== 'Keep in Room'" style="padding-top: 4px; padding-right: 4px">
+                {{ option }}
+              </div>
+              <div style="padding: 0px 2px" *ngIf="option !== 'Keep in Room'">
+                <dx-date-box type="date" [placeholder]="'Select Date...'" [width]="'100%'" [(value)]="removeAtDate"
+                  [min]="equipmentRoster.startDate" [useMaskBehavior]="true" (onValueChanged)="onDateToChanged()"
+                  [valueChangeEvent]="'change keyup'" [disabled]="selectedRadioOption === 'Keep in Room'">
+                </dx-date-box>
+              </div>
+            </div>
+          </dx-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item itemType="empty"></dxi-item>
+      <dxi-item *ngIf="isNew" [label]="{ text: 'Equipment'}">
+        <div *dxTemplate>
+          <dx-select-box [disabled]="!isNew" [placeholder]="'Select Equipment...'"
+            [items]="(availableResources$ | async)" [valueExpr]="'resourceId'" [displayExpr]="'resourceName'"
+            [(value)]="equipmentRoster.resourceId">
+          </dx-select-box>
+        </div>
+      </dxi-item>
+      <dxi-item>
+        <div *dxTemplate="let data of 'content'" style="padding-top: 10px">
+          <!-- <div>
+            <dx-button text="Cancel" icon="close" type="default"
+              (onClick)="onPopupHiding()">
+            </dx-button>
+          </div>
+          <div style="margin-left: auto; display: flex">
+            <div *ngIf="!isNew" style="margin-right: 10px;">
+              <dx-button text="Delete"
+                icon="remove" type="danger"
+                (onClick)="onDeleteClicked()">
+              </dx-button>
+            </div>
+            <div>
+              <dx-button [text]="isNew ? 'Save' : 'Save Changes'" icon="save"
+                type="success" (onClick)="saveChangesClicked()"
+                [useSubmitBehavior]="true">
+              </dx-button>
+            </div>
+          </div>-->
+          <div *ngIf="!isNew">
+            <hms-button-set-save [includeDeleteButton]="true" (saveClicked)="saveChangesClicked()"
+              (cancelClicked)="onPopupHiding()" (deleteClicked)="onDeleteClicked()">
+            </hms-button-set-save>
+          </div>
+          <div *ngIf="isNew">
+            <hms-button-set-save [includeDeleteButton]="false" (saveClicked)="saveChangesClicked()"
+              (cancelClicked)="onPopupHiding()">
+            </hms-button-set-save>
+          </div>
+
+
+
+        </div>
+      </dxi-item>
+    </dx-form>
+  </div>
+</dx-popup>

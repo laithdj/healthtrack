@@ -1,0 +1,62 @@
+<div class="container-fluid page-top-padding" style="height:100vh">
+  <dx-form>
+    <dxi-item>
+      <div *dxTemplate>
+        <dx-data-grid id="clinicalRecords"
+          [dataSource]="classifications"
+          [showColumnLines]="true"
+          [showRowLines]="true"
+          [showBorders]="true"
+          [height]="480"
+          [rowAlternationEnabled]="true"
+          (onEditorPreparing)="onEditorPreparing($event)">
+          <dxo-paging [pageSize]="25"></dxo-paging>
+          <dxo-editing
+            mode="cell"
+            [allowUpdating]="editMode"></dxo-editing>
+        <dxi-column dataField="subCategoryDescription" caption="Clinical Record" [calculateDisplayValue]="calculateClinicalRecordDisplay" sortOrder="asc" [allowEditing]="true"></dxi-column>
+        <dxi-column dataField="editAccessGroup" caption="New/Edit Access Group" width="150">
+          <dxo-lookup [dataSource]="(userGroups$ | async)"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="finaliseGrp" caption="Finalise Records Group" width="150">
+          <dxo-lookup [dataSource]="(userGroups$ | async)"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="editLocked" width="175" caption="Edit Locked Records Group">
+          <dxo-lookup [dataSource]="(userGroups$ | async)"></dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="disableOccasionOfService" caption="Disable OS" width="80"></dxi-column>
+        <dxi-column dataField="notForDistribution" caption="Not for Distribution" width="125" dataType="boolean">
+        </dxi-column>
+        <dxi-column dataField="shouldBeBilled" caption="Should be Billed" width="125" dataType="boolean">
+        </dxi-column>
+        <dxi-column dataField="billingGroup" caption="Integrated Billing Group" width="175" [allowEditing]="true">
+            <dxo-lookup [dataSource]="(billingGroups$ | async)"></dxo-lookup>
+          </dxi-column>
+      </dx-data-grid>
+      </div>
+    </dxi-item>
+  </dx-form>
+   <!-- <dx-button class="pull-right" [type]="'success'" [text]="'Save'" [disabled]="!editMode"
+      (onClick)="onSaveClicked()" width="70px"></dx-button>
+    <dx-button class="pull-right" text="{{editMode ? 'Cancel' : 'Edit'}}" [type]="'default'"
+      (onClick)="onEditClicked()" style="padding-right: 0px" width="70px" ></dx-button>-->
+ </div>
+
+ <div class="hms-buttons-footer w-100" style="height:54px !important;display: inline-block;">
+  <hms-button-edit
+  style="float:left"
+  (editClicked)="onEditClicked()"
+  [isLast]="false"
+  [editMode]="editMode"
+  (cancelClicked)="onEditClicked()">
+ </hms-button-edit>
+ <hms-button-save
+ style="float:right"
+ [disabled]="!editMode"
+ (saveClicked)="onSaveClicked()">
+ </hms-button-save>
+ </div>
+ 
+ <!-- 
+  <div style="display:inline-block;width:100%;padding-left:14px;padding-right:14px;" class="mt-1">-->
+

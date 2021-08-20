@@ -1,0 +1,113 @@
+<div class="container-fluid" style="padding-top: 10px;">
+  <div class="row">
+    <div class="col-auto hms-highlight" style="padding: 0px 10px;">
+      <dx-data-grid class="hms-highlight"
+        [dataSource]="programs"
+        [height]="'calc(100vh - 70px)'"
+        [width]="370"
+        (onSelectionChanged)="onProgramSelected($event)"
+        [disabled]="editMode"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [rowAlternationEnabled]="true"
+        [keyExpr]="'id'"
+        (onContentReady)="gridContentReady()">
+        <dxo-selection mode="single" selectAllMode="allPages"></dxo-selection>
+        <dxo-scrolling [useNative]="true" mode="virtual"></dxo-scrolling>
+        <dxi-column
+          caption="Name"
+          [fixed]="true"
+          dataField="reason"
+          [sortIndex]="0"
+          sortOrder="asc">
+        </dxi-column>
+        <dxi-column
+          [width]="90"
+          [fixed]="true"
+          dataField="type"
+          alignment="center">
+          <dxo-lookup
+            [dataSource]="programTypes"
+            displayExpr="typeName"
+            valueExpr="id">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column
+          dataField="enabled"
+          [width]="90"
+          [fixed]="true"
+          alignment="center">
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+    <div class="col" style="padding: 0px 10px 0px 0px; overflow-y: auto; height: calc(100vh - 70px);">
+      <app-pc-program-detail
+        [(selectedProgramDO)]="selectedProgramDO"
+        [selectedActions]="selectedActions"
+        [selectedProgramDOReadOnlyCopy]="selectedProgramDOReadOnlyCopy"
+        [allEnabledPrograms]="allEnabledPrograms"
+        [allReasons]="allReasons"
+        [actionList]="actionList"
+        [letterTemplates]="letterTemplates"
+        [smsTemplates]="smsTemplates"
+        [emailTemplates]="emailTemplates"
+        [programTypes]="programTypes"
+        [bookingTypes]="bookingTypes"
+        [replyContentList]="replyContentList"
+        [programTypeColours]="programTypeColours"
+        [editMode]="editMode"
+        [allPortalMessages]="allPortalMessages"
+        [allPortalScreensList]="allPortalScreensList"
+        [allPortalDocumentsList]="allPortalDocumentsList"
+        (updateProgramsList)="updateProgramsList($event)"
+        (removeDeletedProgramFromList)="removeDeletedProgramFromList($event)"
+        (setProgramListKey)="setProgramListKey($event)"
+        (editModeChange)="editModeChanged($event)"
+        (refreshEmailTemplatesList)="refreshEmailTemplates()"
+        (refreshSMSTemplatesList)="refreshSMSTemplates()"
+        (refreshLetterTemplatesList)="refreshLetterTemplates()">
+      </app-pc-program-detail>
+    </div>
+  </div>
+</div>
+<div class="hms-buttons-footer">
+  <hms-button-new [isLast]="false" [editMode]="editMode"
+    (addNewClicked)="pcProgramDetails.onNewProgram()"    
+    (saveClicked)="pcProgramDetails.onSaveProgram()">
+  </hms-button-new>
+  <hms-button-edit [isLast]="false" [editMode]="editMode"
+    (editClicked)="pcProgramDetails.onEditProgram()"
+    (cancelClicked)="pcProgramDetails.onCancelEditProgram()">
+  </hms-button-edit>
+  <hms-button-delete [isLast]="true"
+    [disabled]="!selectedProgramDO || !editMode || selectedProgramDO.id === 0"
+    (deleteClicked)="pcProgramDetails.onDeleteProgramConfirmed()">
+  </hms-button-delete>
+  <div style="width: 100%;"></div>
+  <div style="width: auto; display: flex;">
+    <div style="margin-right: 10px;">
+      <dx-button [disabled]="selectedProgramDO?.id === 0"
+        text="View Timeline" [type]="'default'"
+        (onClick)="pcProgramDetails.showProgramTimeLinePopup()">
+      </dx-button>
+    </div>
+    <div style="margin-right: 10px;">
+      <dx-button [disabled]="selectedProgramDO?.id === 0"
+        text="View Patients" [type]="'default'"
+        (onClick)="pcProgramDetails.handleShowPopup()">
+      </dx-button>
+    </div>
+    <div style="margin-right: 10px;">
+      <dx-button [disabled]="!selectedProgramDO || editMode"
+        text="Duplicate Program" [type]="'default'"
+        (onClick)="pcProgramDetails.onDuplicateProgram()">
+      </dx-button>
+    </div>
+    <div>
+      <dx-button text="Move Patients" [type]="'default'"
+        (onClick)="pcProgramDetails.moveProgramPopup()"
+        [disabled]="editMode">
+      </dx-button>
+    </div>
+  </div>
+</div>

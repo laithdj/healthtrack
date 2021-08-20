@@ -1,0 +1,207 @@
+<div style="display: flex;">
+  <div style="width: 50%;" *ngIf="!showReportBeside"></div>
+  <div [ngClass]="showReportBeside ? 'w-100': ''">
+    <div style="display: flex; margin-bottom: 10px; width: 100%;" *ngIf="!showReportBeside">
+      <div style="margin-right: 10px;">
+        <dx-button
+          [type]="'default'"
+          [text]="showSmartText ? 'Hide Smart Text' : 'Show Smart Text'"
+          [icon]="showSmartText ? 'chevronright' : 'chevronleft'"
+          (onClick)="toggleShowSmartText()">
+        </dx-button>
+      </div>
+      <div *ngIf="showSmartText" style="margin-right: 10px;">
+        <dx-button
+          [type]="'default'"
+          [text]="'Refresh'"
+          [icon]="'refresh'"
+          (onClick)="refreshSmartTextClicked()">
+        </dx-button>
+      </div>
+      <div *ngIf="showSmartText">
+        <dx-button
+          [type]="'default'"
+          [text]="'Smart Text Configuration'"
+          [icon]="'preferences'"
+          (onClick)="openConfigScreenClicked()">
+        </dx-button>
+      </div>
+      <div style="width: 100%;"></div>
+      <div style="margin-left: 10px;">
+        <dx-button
+          [type]="'default'"
+          [text]="showReportBeside ? 'Hide Report' : 'Show Report Beside'"
+          [icon]="showReportBeside ? 'chevronleft' : 'chevronright'"
+          (onClick)="toggleShowReportBeside()">
+        </dx-button>
+      </div>
+    </div>
+    <div *ngIf="showReportBeside">
+      <div style="display: flex; margin-bottom: 10px; width: 100%;">
+        <div style="margin-right: 10px;">
+          <dx-button
+            [type]="'default'"
+            [text]="showSmartText ? 'Hide Smart Text' : 'Show Smart Text'"
+            [icon]="showSmartText ? 'chevronright' : 'chevronleft'"
+            (onClick)="toggleShowSmartText()">
+          </dx-button>
+        </div>
+        <div style="width: 100%;"></div>
+        <div style="margin-left: 10px;">
+          <dx-button
+            [type]="'default'"
+            [text]="showReportBeside ? 'Hide Report' : 'Show Report Beside'"
+            [icon]="showReportBeside ? 'chevronleft' : 'chevronright'"
+            (onClick)="toggleShowReportBeside()">
+          </dx-button>
+        </div>
+      </div>
+      <div style="display: flex; margin-bottom: 10px; width: 100%;">
+        <div *ngIf="showSmartText" style="margin-right: 10px;">
+          <dx-button
+            [type]="'default'"
+            [text]="'Refresh'"
+            [icon]="'refresh'"
+            (onClick)="refreshSmartTextClicked()">
+          </dx-button>
+        </div>
+        <div *ngIf="showSmartText">
+          <dx-button
+            [type]="'default'"
+            [text]="'Smart Text Configuration'"
+            [icon]="'preferences'"
+            (onClick)="openConfigScreenClicked()">
+          </dx-button>
+        </div>
+      </div>
+    </div>
+    <dx-drawer id="report"
+      [openedStateMode]="'shrink'"
+      [position]="'left'"
+      [revealMode]="'expand'"
+      template="template"
+      [opened]="showSmartText"
+      [height]="drawerHeight"
+      [closeOnOutsideClick]="false">
+      <div *dxTemplate="let data of 'template'" [ngClass]="'report-drawer-template'">
+        <dx-tree-list #selectTree id="selectTree" style="padding-right: 10px;"
+          [dataSource]="headerList"
+          [keyExpr]="'navID'"
+          [width]="showReportBeside ? 200 : '100%'"
+          [height]="'25vh'"
+          [rootValue]="-1"
+          [autoExpandAll]="true"
+          [showColumnLines]="true"
+          [columnAutoWidth]="true"
+          [showBorders]="true"
+          [showColumnHeaders]="false"
+          [focusedRowIndex]="0"
+          [focusedRowEnabled]="true"
+          (onRowDblClick)="goToHeaderOrAddNew($event)"
+          (onFocusedRowChanged)="nodeListSelectionChanged($event)"
+          [parentIdExpr]="'parentID'">
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-sorting [mode]="'single'"></dxo-sorting>
+          <dxo-selection [mode]="'single'"></dxo-selection>
+          <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+          <dxi-column [dataField]="'nodeText'" cellTemplate="nodeTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'nodeTemplate'">
+            <div title="{{ cell.text }}">{{ cell.text }}</div>
+          </div>
+        </dx-tree-list>
+        <div style="margin-top: 10px;">
+          <dx-tree-list *ngIf="!showTemplates && !showMeasurements"
+            id="smartTextList" style="padding-right: 10px;"
+            [dataSource]="smartTextChildren"
+            [keyExpr]="'navID'"
+            [width]="showReportBeside ? 200 : '100%'"
+            [height]="lowerListHeight"
+            [rootValue]="-1"
+            [showBorders]="true"
+            [autoExpandAll]="true"
+            [showColumnLines]="true"
+            [columnAutoWidth]="true"
+            [showColumnHeaders]="false"
+            [parentIdExpr]="'parentID'"
+            [expandedRowKeys]="expandedRowKeys"
+            (onRowDblClick)="onSmartTextSelected($event)">
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-sorting [mode]="'single'"></dxo-sorting>
+            <dxo-selection [mode]="'single'"></dxo-selection>
+            <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+            <dxi-column [dataField]="'shortDescription'" cellTemplate="stTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'stTemplate'">
+              <div title="{{ cell.text }}">{{ cell.text }}</div>
+            </div>
+          </dx-tree-list>
+          <dx-tree-list *ngIf="showTemplates && !showMeasurements"
+            id="smartTextTemplateList" style="padding-right: 10px;"
+            [dataSource]="this.smartTextBundle?.templates"
+            [keyExpr]="'templateId'"
+            [width]="showReportBeside ? 200 : '100%'"
+            [height]="lowerListHeight"
+            [autoExpandAll]="true"
+            [showBorders]="true"
+            [showColumnLines]="true"
+            [columnAutoWidth]="true"
+            [showColumnHeaders]="false"
+            (onRowDblClick)="onTemplateSelected($event)">
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-sorting [mode]="'single'"></dxo-sorting>
+            <dxo-selection [mode]="'single'"></dxo-selection>
+            <dxi-column [dataField]="'displayOrder'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+            <dxi-column [dataField]="'templateName'" [sortOrder]="'asc'" cellTemplate="tempTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'tempTemplate'">
+              <div title="{{ cell.text }}">{{ cell.text }}</div>
+            </div>
+          </dx-tree-list>
+          <dx-tree-list *ngIf="showMeasurements"
+            id="measurementList" style="padding-right: 10px;"
+            [dataSource]="measurements"
+            [keyExpr]="'referenceId'"
+            [width]="showReportBeside ? 200 : '100%'"
+            [height]="lowerListHeight"
+            [autoExpandAll]="true"
+            [showBorders]="true"
+            [showColumnLines]="false"
+            [columnAutoWidth]="false"
+            [showColumnHeaders]="false"
+            (onRowDblClick)="onMeasurementSelected($event)">
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-sorting [mode]="'single'"></dxo-sorting>
+            <dxo-selection [mode]="'single'"></dxo-selection>
+            <dxi-column [dataField]="'referenceId'" [sortOrder]="'asc'" [visible]="false"></dxi-column>
+            <dxi-column [dataField]="'description'"></dxi-column>
+            <dxi-column [dataField]="'result'" [width]="50"></dxi-column>
+            <dxi-column [dataField]="'units'" [width]="50"></dxi-column>
+          </dx-tree-list>          
+        </div>
+      </div>
+      <div id="content" style="margin-top: -25px;">
+        <div class="richTextHeader"></div>
+        <lib-rich-text-editor style="margin-top: -25px;" #rich_edit id="rich_edit"
+          [(templateContent)]="reportContent"
+          [measurements]="measurements"
+          [listAvailableHeaders]="headerList"
+          [smartTextList]="smartTextBundle?.smartTextPackage?.smartTextNodes"
+          [smartTextNodeList]="headerList"
+          [smartTextStyleProperties]="smartTextBundle?.styleProperties"
+          [userName]="userName"
+          [editorSize]="richEditorSize"
+          (fetchLetterTagValues)="fetchLetterTagValues($event)"
+          [hmsLetterTagValues]="hmsLetterTemplateTagValues">
+        </lib-rich-text-editor>
+      </div>
+    </dx-drawer>
+  </div>
+  <div style="width: 50%;" *ngIf="!showReportBeside"></div>
+</div>
+<dx-load-panel #loadPanel
+  shadingColor="rgba(0,0,0,0.4)"
+  [position]="{ of: '#report' }"
+  [visible]="false"
+  [showIndicator]="true"
+  [showPane]="true"
+  [shading]="true"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>

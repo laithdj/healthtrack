@@ -1,0 +1,102 @@
+<div class="row" style="padding: 0px 0px 5px 0px; margin: 0px">
+  <div class="col-auto" style="padding: 0px 0px 0px 15px; margin: 0px">
+    <dx-form>
+      <dxi-item>
+        <div *dxTemplate>
+          <dx-radio-group
+            [items]="dataViews"
+            layout="horizontal"
+            [value]="currentDataView"
+            (onValueChanged)="onDataViewChanged($event)">
+          </dx-radio-group>
+        </div>
+      </dxi-item>
+    </dx-form>
+  </div>
+  <div class="col"></div>
+  <div class="col-auto" style="padding: 0px 0px 5px 0px; margin: -5px 0px 0px 0px">
+    <dx-button [text]="'Add Reply'" (onClick)="onAddReplyClicked()"
+    [disabled]="!editMode" type="default">
+  </dx-button>
+  </div>
+</div>
+<dx-data-grid style="padding-left: 10px" id="replyContentGrid"
+  [dataSource]="selectedProgram.replyContent"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [rowAlternationEnabled]="true"
+  [visible]="currentDataView === 'Data'">
+  <dxi-column dataField="contentField" [width]="70"
+    caption="Content" dataType="boolean">
+  </dxi-column>
+  <dxi-column dataField="dateReceived" caption="Received"
+    sortOrder="desc" dataType="date">
+  </dxi-column>
+  <dxi-column dataField="contentValue"
+    caption="Value" dataType="number">
+  </dxi-column>
+  <dxi-column dataField="lowRangeValue"
+    dataType="number">
+  </dxi-column>
+  <dxi-column dataField="highRangeValue"
+    dataType="number">
+  </dxi-column>
+</dx-data-grid>
+<dx-form [visible]="currentDataView === 'Graph'">
+  <dxi-item >
+    <div *dxTemplate>
+      <dx-chart [dataSource]="selectedProgram.replyContent">
+        <dxo-size
+        [width]="'100%'">
+        </dxo-size>
+        <dxi-value-axis
+          [min]="0"
+          [max]="200"
+          [tickInterval]="10"
+          [valueMarginsEnabled]="false">
+        </dxi-value-axis>
+        <dxi-series
+          type="rangeArea"
+          rangeValue1Field="lowRangeValue"
+          rangeValue2Field="highRangeValue"
+          name="Range"
+          color="#00cc00">
+        </dxi-series>
+        <dxi-series *ngFor="let series of graphSeries"
+          valueField="contentValue" [name]="series" type="line">
+        </dxi-series>
+        <dxo-common-series-settings argumentField="dateReceived">
+        </dxo-common-series-settings>
+        <dxo-margin [bottom]="20"></dxo-margin>
+        <dxo-argument-axis [valueMarginsEnabled]="false"
+          discreteAxisDivisionMode="crossLabels">
+          <dxo-grid [visible]="true"></dxo-grid>
+        </dxo-argument-axis>
+        <dxo-legend verticalAlignment="bottom"
+          horizontalAlignment="center"
+          itemTextPosition="bottom">
+        </dxo-legend>
+        <dxo-title text="Reply content"></dxo-title>
+        <dxo-export [enabled]="editMode"></dxo-export>
+      </dx-chart>
+    </div>
+  </dxi-item>
+</dx-form>
+<dx-popup
+  class="popup"
+  [width]="300"
+  [height]="310"
+  [showTitle]="true"
+  title="Review SMS Reply"
+  [dragEnabled]="true"
+  [closeOnOutsideClick]="true"
+  [(visible)]="showReplyPopup">
+  <div *dxTemplate="let data of 'content'" >
+    <app-replycontent-dialog [reply]="newReplyContent"
+      [dateReceivedDisabled]="false"
+      (onConfirmFunction)="onSaveReplyClicked($event)"
+      (onCancelFunction)="showReplyPopup = false">
+    </app-replycontent-dialog>
+  </div>
+</dx-popup>

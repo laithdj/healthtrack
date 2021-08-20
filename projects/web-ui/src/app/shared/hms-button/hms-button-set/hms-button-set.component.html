@@ -1,0 +1,22 @@
+<div style="display: flex;">
+  <hms-button-new
+    [editMode]="editMode"
+    [isLast]="false"
+    (addNewClicked)="onAddNewClicked()"
+    (saveClicked)="onSaveClicked()">
+  </hms-button-new>
+  <hms-button-edit
+    [editMode]="editMode"
+    [isLast]="false"
+    (cancelClicked)="onCancelClicked()"
+    (editClicked)="onEditClicked()">
+  </hms-button-edit>
+  <hms-button-delete
+    [disabled]="!editMode || editMode && addNew"
+    (deleteClicked)="onDeleteClicked()">
+  </hms-button-delete>
+  <div style="width: 100%"></div>
+  <hms-button-close
+    (closeClicked)="onCloseClicked()">
+  </hms-button-close>
+</div>

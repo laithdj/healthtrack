@@ -1,0 +1,19 @@
+.pc-banner {
+  font-size: 18px;
+  padding: 4px 8px 6px 10px;
+  line-height: unset;
+  margin: -10px -10px 5px -10px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: rgba(221, 221, 221, 0.6);
+}
+
+.freq-btns .dx-button {
+  margin-right: 2px;
+}
+
+.form-panel {
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(221, 221, 221, 0.6);
+}

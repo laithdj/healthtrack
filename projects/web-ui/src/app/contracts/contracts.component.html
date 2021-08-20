@@ -1,0 +1,32 @@
+<div class="container-fluid page-top-padding padding">
+    <div class="row">
+      <div class="col-xs-12">
+          <app-contract-type></app-contract-type>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+          <div>
+            <i class="dx-icon-info" id="infoMessage" (mouseenter)="toggleAuditTip()" (mouseleave)="toggleAuditTip()"></i>
+          </div>
+        </div>
+      </div>
+    <div class="row">
+      <div class="col-xs-12">
+          <app-contract-list></app-contract-list>
+      </div>
+    </div>
+    <hr/>
+    <div class="row">
+      <div class="col-xs-12">
+          <app-contract-detail (openFees)="onOpenFees()"></app-contract-detail>
+          <!--<dx-button text="Add/Modify Bill Items" class="mr-1" [type]="'default'" class="pull-right" (onClick)="onOpenFees()"></dx-button>-->
+      </div>
+    </div>
+    <hr/>
+  </div>
+  <dx-tooltip #tooltip target="#infoMessage" [(visible)]="message" [closeOnOutsideClick]="true">
+    <div *dxTemplate="let data = data of 'content'">
+      Select a contract below to modify, or create a new contract with the New Contract button
+    </div>
+  </dx-tooltip>

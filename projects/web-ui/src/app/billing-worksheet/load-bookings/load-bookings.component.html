@@ -1,0 +1,98 @@
+<dx-popup [(visible)]="showPopup"
+  [showTitle]="true" [title]="'Load Bookings'"
+  [width]="'auto'" [height]="'auto'"
+  (onHiding)="onPopupHiding()"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <div style="display: flex;">
+      <div style="width: auto;">
+        <dx-form *ngIf="filter"
+          [width]="300"
+          [formData]="filter">
+          <dxi-item [label]="{ text: 'Location' }">
+            <div *dxTemplate="let data of 'content'">
+              <dx-select-box
+                [items]="locations$ | async"
+                displayExpr="name"
+                valueExpr="locationId"
+                [noDataText]="'No Locations Available'"
+                [(value)]="filter.locationId">
+              </dx-select-box>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text: 'Doctor' }">
+            <div *dxTemplate="let data of 'content'">
+              <dx-select-box
+                [items]="doctors$ | async"
+                displayExpr="doctorName"
+                valueExpr="doctorId"
+                [noDataText]="'No Doctors at this location'"
+                [(value)]="filter.doctorId">
+              </dx-select-box>
+            </div>
+          </dxi-item>
+        </dx-form>
+      </div>
+      <div style="width: auto; padding-left: 10px;">
+        <dx-form *ngIf="filter"
+          [width]="'auto'" 
+          [formData]="filter">
+          <dxi-item [label]="{ text: 'From' }">
+            <div *dxTemplate="let data of 'content'" style="display: flex;">
+              <dx-date-box
+                [useMaskBehavior]="true"
+                [width]="120"
+                (onValueChanged)="onFromDateChanged()"
+                [(value)]="fromDate">
+              </dx-date-box>
+              <dx-button style="margin-left: 10px;"
+                [icon]="'event'"
+                (onClick)="showDateSelector = true"
+                [width]="100" [text]="'Select'">
+              </dx-button>
+            </div>
+          </dxi-item>
+          <dxi-item [label]="{ text: 'To' }">
+            <div *dxTemplate="let data of 'content'">
+              <dx-date-box
+                [useMaskBehavior]="true"
+                [width]="120"
+                (onValueChanged)="onToDateChanged()"
+                [(value)]="toDate">
+              </dx-date-box>
+            </div>
+          </dxi-item>
+        </dx-form>
+      </div>
+    </div>
+    <div style="padding-top: 10px; display: flex;">
+      <div style="width: auto">
+        <dx-button
+          [text]="'Cancel'" [icon]="'arrowleft'"
+          [width]="100" [type]="'default'"
+          (onClick)="onPopupHiding()">
+        </dx-button>
+      </div>
+      <div style="width: 100%;"></div>
+      <div style="width: auto;">
+        <dx-button [text]="'Reset Filters'"
+          (onClick)="resetFilters()"
+          [width]="100" [type]="'default'">
+        </dx-button>
+      </div>
+      <div style="width: auto; padding-left: 10px;">
+        <dx-button [text]="'Load Bookings'"
+          (onClick)="loadBookingsClicked()"
+          [width]="100" [type]="'success'">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>
+<app-date-selector-popup *ngIf="filter"
+  [showPopup]="showDateSelector"
+  [fromDate]="fromDate"
+  [toDate]="toDate"
+  (dateRangeSelected)="onDateRangeSelected($event)"
+  (popupClosed)="showDateSelector = false">
+</app-date-selector-popup>

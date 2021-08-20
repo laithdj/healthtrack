@@ -1,0 +1,16 @@
+.booking-types-content {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.booking-types-content-scrollable {
+  overflow-x: scroll;
+  max-width: 1000px;
+  padding-bottom: 44px;
+  width: -webkit-fill-available !important;
+}
+
+.booking-types-columns {
+  width: 220px;
+  display: inline-block;
+}

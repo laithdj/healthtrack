@@ -1,0 +1,385 @@
+<!-- <dx-form>
+  <dxi-item itemType="group" caption="MMode/2D">
+    <dxi-item *ngFor="let measurement of measurements; let i = index">
+      <dxo-label [text]="measurements[i].measurementName"></dxo-label>
+        <div *dxTemplate style="display: flex;">
+          <dx-number-box [(value)]="measurements[i].editedMeasurementValue" [width]="50"></dx-number-box>
+          <div style="padding: 5px 5px 0px 2px;">{{ measurements[i].measurementUnit }}</div>
+          <div style="padding-top: 5px;" *ngIf="measurements[i].rangeLow">({{ measurements[i].rangeLow }}-</div>
+          <div style="padding-top: 5px;" *ngIf="measurements[i].rangeHigh">{{ measurements[i].rangeHigh }})</div>
+        </div>
+      </dxi-item>
+  </dxi-item>
+</dx-form>
+
+<dx-form>
+  <dxi-item itemType="group" caption="MMode/2D">
+    <dxi-item *ngFor="let meas of simpleMeasurements; let i = index">
+      <dxo-label [text]="measurements[i].measurementName"></dxo-label>
+        <div *dxTemplate style="display: flex;">
+          <dx-number-box [(value)]="simpleMeasurements[i].measurementValue" [width]="50"></dx-number-box>
+          <div style="padding: 5px 5px 0px 2px;">{{ measurements[i].measurementUnit }}</div>
+          <div style="padding-top: 5px;" *ngIf="measurements[i].rangeLow">({{ measurements[i].rangeLow }}-</div>
+          <div style="padding-top: 5px;" *ngIf="measurements[i].rangeHigh">{{ measurements[i].rangeHigh }})</div>
+        </div>
+      </dxi-item>
+  </dxi-item>
+</dx-form> -->
+<div class="row">
+  <div class="col-auto">
+    <div class="form-panel">
+    <dx-form [width]="600">
+      <dxi-item [colCount]="8" itemType="group" caption="MMode/2D">
+        <dxi-item [colSpan]="4" [itemType]="'empty'"></dxi-item>
+        <dxi-item [colSpan]="2">
+          <div style="font-weight: bold; padding-top: 2px; padding-bottom: 3px;">Index(BSA)</div>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <div style="font-weight: bold;">/Height</div>
+        </dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'LV Diastole' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvDiastole$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="4" [rangeHigh]="5.5">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvDiastoleIndex$ | async)"
+            [measurementUnit]="measurementUnit.cmm2"
+            [rangeLow]="2.2" [rangeHigh]="3">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvDiastoleHeight$ | async)"
+            [measurementUnit]="measurementUnit.cmm2"
+            [rangeLow]="2.2" [rangeHigh]="3">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'LV Systole' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvSystole$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="2" [rangeHigh]="3.8">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvSystoleIndex$ | async)"
+            [measurementUnit]="measurementUnit.cmm2"
+            [rangeLow]="1.3" [rangeHigh]="2.1">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="2"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'IV Septum' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(ivSeptum$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="0.7" [rangeHigh]="1.1">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Inferolateral Wall' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(inferolateralWall$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="0.7" [rangeHigh]="1.1">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'RV Diastole' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(rvDiastole$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeHigh]="3.0">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'TAPSE' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(TAPSE$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="1.5">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Aortic Root' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(aorticRoot$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="2.2" [rangeHigh]="3.8">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Asc Aorta' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(ascAorta$ | async)"
+            [measurementUnit]="measurementUnit.cm">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Left Atrium' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(leftAtrium$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="3" [rangeHigh]="4">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(leftAtriumIndex$ | async)"
+            [measurementUnit]="measurementUnit.cmm2">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="2"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Ejection Fraction' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(ejectionFraction$ | async)"
+            [measurementUnit]="measurementUnit.percentage"
+            [rangeLow]="50">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'EF Corrected' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(efCorrected$ | async)"
+            [measurementUnit]="measurementUnit.percentage">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Fractional Shortening' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(fractionalShortening$ | async)"
+            [measurementUnit]="measurementUnit.percentage">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'LV Mass' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvMass$ | async)"
+            [measurementUnit]="measurementUnit.g">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+      </dxi-item>
+    </dx-form>
+    </div>
+  </div>
+  <div class="col-auto">
+    <dx-data-grid style="margin-top: 15px;" [width]="600"
+      [dataSource]="mMode2DMeasurements$ | async"
+      [rowAlternationEnabled]="true">
+    </dx-data-grid>
+  </div>
+  <div class="col-auto">
+    <dx-data-grid [width]="500" style="margin-top: 15px;" [dataSource]="mMode2DMeasurements$ | async" [rowAlternationEnabled]="true"
+      [noDataText]="'No Measurements Found'" [showBorders]="true" [showRowLines]="true">
+      <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="false"
+        [selectTextOnEditStart]="true" [startEditAction]="'click'">
+      </dxo-editing>
+      <dxi-column dataField="measurementName" caption="MMode/2D" [allowEditing]="false"></dxi-column>
+      <dxi-column dataField="measurementValue" caption="" [width]="50"></dxi-column>
+      <dxi-column dataField="measurementUnit" caption="" [allowEditing]="false" [width]="'auto'"></dxi-column>
+      <dxi-column dataField="range" caption="" [allowEditing]="false" [width]="'auto'"></dxi-column>
+      <dxi-column dataField="indexValue" caption="Index" [allowEditing]="false" [width]="'auto'"></dxi-column>
+      <dxi-column dataField="indexUnit" caption="" [allowEditing]="false" [width]="'auto'"></dxi-column>
+      <dxi-column dataField="heightValue" caption="/Height" [allowEditing]="false" [width]="'auto'"></dxi-column>
+      <dxi-column dataField="heightUnit" caption="" [allowEditing]="false" [width]="'auto'"></dxi-column>
+  <!-- <dxi-column dataField="fullFee" [width]="'auto'" [allowEditing]="false" [dataType]="'number'" [format]="'$#0.00'">
+  </dxi-column>
+  <dxi-column dataField="cover" caption="Cover %" [editCellTemplate]="'editCoverTemplate'" [width]="'auto'" [dataType]="'number'" 
+    [format]="'#0.##%'">
+    <div *dxTemplate="let data of 'editCoverTemplate'">
+      <dx-number-box [(value)]="data.value" [min]="0" [format]="'#0.##%'"
+        (onValueChanged)="onCoverChanged($event, data)">
+      </dx-number-box>
+    </div>
+  </dxi-column>
+  <dxi-column dataField="coverFee" [width]="'auto'" [dataType]="'number'" 
+    [allowEditing]="false" [format]="'$#0.00'">
+  </dxi-column>
+  <dxi-column dataField="coPayment" caption="Co-Payment" [width]="'auto'" [format]="'$#0.00'"
+    [allowEditing]="false" [dataType]="'number'" [editorOptions]="{ min: 0, format: '$#0.00' }">
+  </dxi-column>
+  <dxi-column dataField="coPaymentOverride" caption="Override" [dataType]="'number'" [width]="100"
+    [format]="'$#0.00'" [editorOptions]="{ min: 0, format: '$#0.00', showClearButton: true }">
+  </dxi-column>
+  <dxi-column dataField="serviceId" [cellTemplate]="'overrideTemplate'" caption="" 
+    [width]="'auto'" [allowSorting]="false" [allowEditing]='false'>
+    <div *dxTemplate="let data of 'overrideTemplate'">
+      <dx-button [text]="'Zero'" [disabled]="!data" [type]="'default'" [width]="80"
+        (onClick)="onZeroOverride($event, data)">
+      </dx-button>
+    </div>
+  </dxi-column>
+  <dxi-column dataField="serviceId" [cellTemplate]="'editTemplate'" caption="" [width]="'auto'"
+    [allowSorting]="false" [allowEditing]='false'>
+    <div *dxTemplate="let data of 'editTemplate'">
+      <dx-button [text]="'Delete'" [disabled]="!data" [type]="'danger'" [icon]="'remove'" [width]="80"
+        (onClick)="onRemoveService(data)">
+      </dx-button>
+    </div>
+  </dxi-column> -->
+    </dx-data-grid>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-auto">
+    <div class="measurement-panel" style="margin-top: 15px;">
+    <dx-form [width]="600">
+      <dxi-item [colCount]="8" itemType="group" caption="MMode/2D">
+        <dxi-item [colSpan]="4" [itemType]="'empty'"></dxi-item>
+        <dxi-item [colSpan]="2">
+          <div style="font-weight: bold; padding-top: 2px; padding-bottom: 3px;">Index(BSA)</div>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <div style="font-weight: bold;">/Height</div>
+        </dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'LV Diastole' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvDiastole$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="4" [rangeHigh]="5.5">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvDiastoleIndex$ | async)"
+            [measurementUnit]="measurementUnit.cmm2"
+            [rangeLow]="2.2" [rangeHigh]="3">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvDiastoleHeight$ | async)"
+            [measurementUnit]="measurementUnit.cmm2"
+            [rangeLow]="2.2" [rangeHigh]="3">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'LV Systole' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvSystole$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="2" [rangeHigh]="3.8">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvSystoleIndex$ | async)"
+            [measurementUnit]="measurementUnit.cmm2"
+            [rangeLow]="1.3" [rangeHigh]="2.1">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="2"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'IV Septum' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(ivSeptum$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="0.7" [rangeHigh]="1.1">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Inferolateral Wall' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(inferolateralWall$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="0.7" [rangeHigh]="1.1">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'RV Diastole' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(rvDiastole$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeHigh]="3.0">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'TAPSE' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(TAPSE$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="1.5">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Aortic Root' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(aorticRoot$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="2.2" [rangeHigh]="3.8">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Asc Aorta' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(ascAorta$ | async)"
+            [measurementUnit]="measurementUnit.cm">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Left Atrium' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(leftAtrium$ | async)"
+            [measurementUnit]="measurementUnit.cm"
+            [rangeLow]="3" [rangeHigh]="4">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [colSpan]="2">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(leftAtriumIndex$ | async)"
+            [measurementUnit]="measurementUnit.cmm2">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="2"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Ejection Fraction' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(ejectionFraction$ | async)"
+            [measurementUnit]="measurementUnit.percentage"
+            [rangeLow]="50">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'EF Corrected' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(efCorrected$ | async)"
+            [measurementUnit]="measurementUnit.percentage">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'Fractional Shortening' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(fractionalShortening$ | async)"
+            [measurementUnit]="measurementUnit.percentage">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+        <dxi-item [colSpan]="4" [label]="{ text: 'LV Mass' }">
+          <app-measurement-template [editMode]="!(editMode$ | async)"
+            [measurement]="(lvMass$ | async)"
+            [measurementUnit]="measurementUnit.g">
+          </app-measurement-template>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'" [colSpan]="4"></dxi-item>
+      </dxi-item>
+    </dx-form>
+    </div>
+  </div>
+</div>
+<!-- 
+<dx-form>
+  <dxi-item itemType="group" caption="MMode/2D">
+    <dxi-item *ngFor="let measurement of measurements; let i = index">
+      <dxo-label [text]="measurements[i].measurementName"></dxo-label>
+        <div *dxTemplate style="display: flex;">
+          <dx-number-box [(value)]="measurements[i].editedMeasurementValue" [width]="50"></dx-number-box>
+          <div style="padding: 5px 5px 0px 2px;">{{ measurements[i].measurementUnit }}</div>
+          <div style="padding-top: 5px;" *ngIf="measurements[i].rangeLow">({{ measurements[i].rangeLow }}-</div>
+          <div style="padding-top: 5px;" *ngIf="measurements[i].rangeHigh">{{ measurements[i].rangeHigh }})</div>
+        </div>
+      </dxi-item>
+  </dxi-item>
+</dx-form> -->

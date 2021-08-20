@@ -1,0 +1,78 @@
+<div class="outer">
+  <div>
+    <div *ngIf="widget" class="widget-container">
+      <div [ngSwitch]="widget">
+        <div *ngSwitchCase="dashboardWidget.Diary">
+          <app-diary-widget [inactive]="inactive" [doctorId]="doctorId"></app-diary-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.Tasks">
+          <app-tasks-widget [inactive]="inactive"></app-tasks-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.Documents">
+          <app-documents-widget [inactive]="inactive"></app-documents-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.Incoming">
+          <app-incoming-widget [inactive]="inactive"></app-incoming-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.Patient">
+          <app-patient-widget [inactive]="inactive"></app-patient-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.InternalReview">
+          <app-internal-review-widget [inactive]="inactive"></app-internal-review-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.ClinicalRecords">
+          <app-clinical-records-widget [inactive]="inactive"></app-clinical-records-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.InitialContact">
+          <app-initial-contact-widget [inactive]="inactive"></app-initial-contact-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.Triage">
+          <app-triage-widget [inactive]="inactive"></app-triage-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.IncomingMatching">
+          <app-incoming-matching-widget [inactive]="inactive"></app-incoming-matching-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.Messenger">
+          <app-messenger-widget [inactive]="inactive"></app-messenger-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.PatientConnect">
+          <app-patient-connect-widget [inactive]="inactive"></app-patient-connect-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.LocationDiary">
+          <app-location-diary-widget *ngIf="selectedLocationId" [location]="selectedLocationId" [inactive]="inactive">
+          </app-location-diary-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.ManualMatching">
+          <app-manual-matching-widget [inactive]="inactive"></app-manual-matching-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.DistributionList">
+          <app-distribution-list-widget [inactive]="inactive"></app-distribution-list-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.IncomingRSD">
+          <app-incoming-rsd-widget [inactive]="inactive"></app-incoming-rsd-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.BillingWorksheet">
+          <app-worksheet-widget [inactive]="inactive"></app-worksheet-widget>
+        </div>
+        <div *ngSwitchCase="dashboardWidget.NewRequest">
+          <app-new-request-widget [inactive]="inactive"></app-new-request-widget>
+        </div>
+
+        <div *ngIf="!widget"></div>
+      </div>
+    </div>
+    <div *ngIf="!widget && editMode && !systemDefault" style="text-align: center">
+      <div class="available" (click)="addWidgetClicked()" *ngIf="!widget && editMode">
+        Add Widget
+      </div>
+    </div>
+    <div *ngIf="!widget && (systemDefault || !editMode)" class="empty-widget-container"></div>
+  </div>
+  <div *ngIf="!noRelocateButtons" class="btn-container">
+    <div *ngIf="widget && !noRelocateButtons">
+      <dx-button icon="remove" class="large-button" type="danger" (onClick)="moveWidgetClicked()" [height]="60"
+        [width]="60">
+      </dx-button>
+    </div>
+  </div>
+</div>

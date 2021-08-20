@@ -1,0 +1,34 @@
+<dx-popup [visible]="showPopup" [width]="'auto'" [height]="'auto'" [title]="'Default Dashboard Settings'"
+  (onHiding)="closePopupNoChanges()">
+  <div *dxTemplate="let data of 'content'" class="container-fluid">
+    <div class="row" *ngIf="editRoles">
+      <div class="col-auto table-container">
+        <table>
+          <tr *ngFor="let role of editRoles">
+            <td>{{ role.roleName }}:</td>
+            <td>
+              <dx-select-box [items]="dashboards" displayExpr="dashboardName" valueExpr="id"
+                [(value)]="role.dashboardId">
+              </dx-select-box>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row justify-content-left" style="margin-top: 10px">
+      <div class="col-auto" style="padding: 0px 0px 0px 5px">
+        <dx-button text="Cancel" (onClick)="closePopupNoChanges()" [width]="80" type="default">
+        </dx-button>
+      </div>
+      <div class="col"></div>
+      <div class="col-auto" style="padding: 0px">
+        <dx-button text="Undo" icon="undo" (onClick)="undoChanges()" [width]="80" type="default">
+        </dx-button>
+      </div>
+      <div class="col-auto ml-2" style="padding: 0px">
+        <dx-button text="Save" icon="save" (onClick)="updateRoleDashboards()" [width]="80" type="success">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

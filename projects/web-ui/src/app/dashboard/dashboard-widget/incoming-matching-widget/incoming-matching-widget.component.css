@@ -1,0 +1,46 @@
+::ng-deep .large-button .dx-button-content .dx-icon {
+    font-size: 40px;
+  }
+  
+  ::ng-deep .icon-button .dx-button-content .dx-icon {
+    font-size: 40px;
+    background-size: 35px;
+    background-attachment: fixed;
+    background-position: center;
+    width:100% !important;
+    height:100% !important;
+  }
+
+  .incoming-matching-header {
+    font-size: 20px;
+    background-color: #94cc92;
+    padding: 0px 10px 5px 10px;
+ }
+  
+  .incoming-matching-content {
+    background-color: #f7f7f7;
+    font-size: 14px;
+    padding: 4px 10px;
+    height: 103px;
+  }
+
+  .incoming-matching-explanation {
+    background-color: #f7f7f7;
+    font-size: 12px;
+    padding: 1px 13px;
+    height: 10px;
+  }
+  
+  .left-content {
+    margin-top: 5px;
+  }
+  
+  .right-content {
+    margin-top: 5px;
+  }
+  
+  .outer {
+    display:flex;
+    justify-content: center;
+  }
+  

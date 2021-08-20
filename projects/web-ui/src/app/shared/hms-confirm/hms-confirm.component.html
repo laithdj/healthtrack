@@ -1,0 +1,25 @@
+<dx-popup [(visible)]="showPopup"
+  [showTitle]="true"
+  [title]="title"
+  [width]="350"
+  [height]="'auto'"
+  (onHiding)="onCloseClicked()"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <div style="text-align: center;" [innerHTML]="content">
+    </div>
+    <div style="width: 100%; display: flex; padding-top: 10px;">
+      <div>
+        <dx-button [width]="90" [text]="'OK'"
+          [type]="'success'" (onClick)="onConfirmClicked()">
+        </dx-button>
+      </div>
+      <div style="width: 100%;"></div>
+      <div>
+        <dx-button [text]="cancelButtonText" [width]="90"
+          [type]="'default'" (onClick)="onCancelClicked()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

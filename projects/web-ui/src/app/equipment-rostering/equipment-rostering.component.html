@@ -1,0 +1,68 @@
+<div id="equipment-rostering">
+  <div class="roster-header">
+    <div style="font-size: 12px; padding: 3px 5px 0px 0px;">Location/Room:</div>
+    <dx-select-box [width]="300"
+      [items]="(locationRooms$ | async)"
+      displayExpr="displayName"
+      [searchEnabled]="false"
+      [placeholder]="'Select a Location/Room...'"
+      [noDataText]="'No locations/rooms available'"
+      [value]="(selectedLocationRoom$ | async)"
+      (onValueChanged)="onLocationRoomChanged($event)">
+    </dx-select-box>
+  </div>
+  <dx-scheduler
+    #locationRoomScheduler id="locationRoomScheduler"
+    style="max-height: calc(100vh - 12px)"
+    [width]="'100%'" [height]="'calc(100vh - 12px)'"
+    [min]="minDate" [max]="maxDate"
+    [currentDate]="currentDate"
+    [views]="['timelineMonth', 'month']"
+    [currentView]="'month'"
+    [firstDayOfWeek]="1"
+    appointmentTemplate="equipment-template"
+    appointmentTooltipTemplate="equipment-tooltip-template"
+    (onAppointmentClick)="onEquipmentRosterClick($event)"
+    (onAppointmentDblClick)="onEquipmentRosterDblClick($event)"
+    (onCellClick)="onCellClick($event)"
+    (onContentReady)='onSchedulerContentReady($event)'
+    [(dataSource)]="equipmentRosters">
+    <dxo-editing [allowAdding]="false" [allowDragging]="false"
+      [allowUpdating]="false" [allowResizing]="false" [allowDeleting]="false">
+    </dxo-editing>
+    <dxi-resource fieldExpr="resourceId"
+      valueExpr="resourceId" colorExpr="colour"
+      [allowMultiple]="false" [useColorAsDefault]="true"
+      [dataSource]="(equipmentResources$ | async)">
+  </dxi-resource>
+    <div *dxTemplate="let template of 'equipment-template'">
+      {{ template.appointmentData.resourceName }}
+    </div>
+    <div *dxTemplate="let template of 'equipment-tooltip-template'" (click)="stopPropagation($event)">
+      <div style="display: flex; width: 100%">
+        <div style="width: 100%">
+          <div style="font-weight: bold;">{{ template.appointmentData.resourceName }}</div>
+          <div>
+            {{ (template.appointmentData.startDate | date) }} <span *ngIf="template.appointmentData.endDate.getFullYear() < 9999"> - {{ template.appointmentData.endDate | date }}</span>
+            <span *ngIf="!template.appointmentData.startDate || template.appointmentData.endDate.getFullYear() >= 9999"> - Always</span>
+          </div>
+        </div>
+        <div style="width: auto">
+          <div style="margin-top: 3px">
+            <dx-button [text]="'Edit Roster'" [type]="'default'"
+              (onClick)="onTooltipEditClicked($event, template.appointmentData)">
+            </dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dx-scheduler>
+</div>
+<dx-load-panel #loadPanel
+  [position]="{ of: '#equipment-rostering' }"
+  [visible]="(loading$ | async)"
+  [showIndicator]="(loading$ | async)"
+  [showPane]="(loading$ | async)"
+  [closeOnOutsideClick]="false">
+</dx-load-panel>
+<app-edit-equipment-roster-popup></app-edit-equipment-roster-popup>

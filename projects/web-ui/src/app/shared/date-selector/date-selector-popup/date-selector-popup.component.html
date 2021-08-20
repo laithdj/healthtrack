@@ -1,0 +1,53 @@
+<dx-popup [(visible)]="showPopup"
+  [showTitle]="true" [title]="'Select Date Range'"
+  [width]="'auto'" [height]="'auto'"
+  (onHiding)="onPopupHiding()"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <dx-form *ngIf="editFromDate && editToDate" [width]="'auto'" [colCount]="2">
+      <dxi-item [label]="{ text: 'From' }">
+        <div *dxTemplate="let data of 'content'" style="display: flex;">
+          <dx-date-box
+            [useMaskBehavior]="true"
+            [width]="120"
+            [(value)]="editFromDate">
+          </dx-date-box>
+        </div>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'To' }">
+        <div *dxTemplate="let data of 'content'">
+          <dx-date-box
+            [useMaskBehavior]="true"
+            [width]="120"
+            [(value)]="editToDate">
+          </dx-date-box>
+        </div>
+      </dxi-item>
+    </dx-form>
+    <div style="width: 100%; display: flex; padding-top: 10px;">
+      <div style="width: 100%"></div>
+      <div style="width: auto">
+        <app-date-selector 
+          [fromDate]="editFromDate" [toDate]="editToDate"
+          (dateRangeSelected)="onDateRangeSelected($event)">
+        </app-date-selector>
+      </div>
+      <div style="width: 100%"></div>
+    </div>
+    <div style="width: 100%; display: flex; padding-top: 10px;">
+      <div style="width: auto;">
+        <dx-button [text]="'Cancel'" [icon]="'arrowleft'"
+          [type]="'default'" [width]="90"
+          (onClick)="onPopupHiding()">
+        </dx-button>
+      </div>
+      <div style="width: 100%"></div>
+      <div style="width: auto;">
+        <dx-button [text]="'Select'"
+          [type]="'default'" [width]="90"
+          (onClick)="onSelectClicked()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

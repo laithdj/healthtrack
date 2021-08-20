@@ -1,0 +1,29 @@
+.dash-style{
+    margin: 3px;
+    margin-top: 6px;
+}
+
+:host ::ng-deep .details .dx-field-item-label-content{
+    width:80px !important;
+}
+:host ::ng-deep .expand-span .dx-item .dx-box-item{
+    min-width: auto !important;
+}
+
+.ml-91{
+margin-left:91px;
+}
+
+:host ::ng-deep .title .dx-item{
+    flex: none !important;
+    
+}
+:host ::ng-deep .title  .dx-box-item-content {
+    width: 121px !important;
+}
+
+:host ::ng-deep .box .dx-item{
+    flex: 4.1 1 0px !important;
+    
+}
+

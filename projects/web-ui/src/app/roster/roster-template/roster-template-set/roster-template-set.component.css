@@ -1,0 +1,7 @@
+::ng-deep .dx-button-mode-outlined.dx-button-default {
+  background-color: #fff;
+}
+
+::ng-deep .dx-field-item-label-location-left {
+  padding-right: 5px;
+}

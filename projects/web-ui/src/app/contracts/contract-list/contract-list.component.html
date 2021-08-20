@@ -1,0 +1,27 @@
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="(contractsState | async).contracts"
+    [columnAutoWidth]="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [showBorders]="true"
+    [height]="200"
+    [hoverStateEnabled]="true"
+    [rowAlternationEnabled]="true"
+    (onSelectionChanged)="onSelectionChanged($event)"
+    [disabled]="!allowSelection">
+    <dxo-scrolling mode="virtual" showScrollbar="always"></dxo-scrolling>
+    <dxo-selection mode="single">
+    </dxo-selection>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxi-column
+        caption="Company"
+        alignment="center"
+        [width]="230"
+        [fixed]="true"
+        dataField="company.companyName"
+    ></dxi-column>
+    <dxi-column dataField="contractName" alignment="center" sortOrder="asc"></dxi-column>
+    <dxi-column dataField="validityStart" alignment="center" dataType="date" ></dxi-column>
+    <dxi-column dataField="validityEnd" alignment="center" dataType="date" ></dxi-column>
+</dx-data-grid>

@@ -1,0 +1,35 @@
+<div *ngIf="(showDicomWorklist$ | async)" >
+  <div class="row">
+    <div>
+      <span style="padding-left: 16px; padding-bottom: 10px" >Current Worklist for <b>{{aeTitle}}</b>: {{queryCount}} records</span>
+      <span style="padding-left: 16px">
+        <dx-button text="Close" [type]="'default'" (onClick)="onClose()" ></dx-button>
+      </span>
+    </div>
+  </div>
+  <div style="padding-top: 6px">
+    <dx-data-grid
+      id="grid"
+      [dataSource]="(dicomworklist$ | async)"
+      [showRowLines]="true"
+      [showBorders]="true"
+      [rowAlternationEnabled]="true">
+      <dxo-paging [enabled]="true" pageSize="20" ></dxo-paging>
+      <dxi-column dataField="procStepDesc" ></dxi-column>
+      <dxi-column dataField="aE_Title" ></dxi-column>
+      <dxi-column dataField="procStepStartDate"></dxi-column>
+      <dxi-column dataField="procStepStartTime"></dxi-column>
+      <dxi-column dataField="modality"></dxi-column>
+      <dxi-column dataField="perfPhysName"></dxi-column>
+      <dxi-column dataField="reqProc_ID"></dxi-column>
+      <dxi-column dataField="studyInst_UID"></dxi-column>
+      <dxi-column dataField="accNumber"></dxi-column>
+      <dxi-column dataField="reqPhysician"></dxi-column>
+      <dxi-column dataField="refPhysName"></dxi-column>
+      <dxi-column dataField="patient_ID"></dxi-column>
+      <dxi-column dataField="patientName"></dxi-column>
+      <dxi-column dataField="patientDOB"></dxi-column>
+      <dxi-column dataField="patientSex"></dxi-column>
+    </dx-data-grid>
+  </div>
+</div>

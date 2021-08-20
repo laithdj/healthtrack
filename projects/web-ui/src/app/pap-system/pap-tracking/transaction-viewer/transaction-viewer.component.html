@@ -1,0 +1,162 @@
+<div class="patient-panel" >
+  <div class="col">
+    <app-patient-summary  [patient]="patient"></app-patient-summary>
+  </div>
+</div>
+<div class="device-panel">
+  <dx-form id="form" class="second-groups" [formData]="transaction">
+    <dxi-item itemType="group" [colSpan]="4" caption="Asset">
+      <div class="row">
+        <div class="col">
+          <div class="dx-fieldset">
+            <div class="dx-field">
+              <div class="dx-field-label" style="padding-left: 5px; text-align:right;">Manufacturer:</div>
+              <div class="dx-field-value">
+                <dx-text-box [value]="transaction.manufacturer.companyName" readOnly="true" style="border-style:dashed;">
+                </dx-text-box>
+              </div>
+            </div>
+            <div class="dx-field">
+              <div class="dx-field-label" style="padding-left: 5px; text-align:right;">Model:</div>
+              <div class="dx-field-value">
+                <dx-text-box [value]="transaction.model" readOnly="true" style="border-style:dashed;">
+                </dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="dx-fieldset">
+            <div class="dx-field">
+              <div class="dx-field-label" style="padding-left: 5px; text-align:right;">Type:</div>
+              <div class="dx-field-value">
+                <dx-text-box [value]="combineEquipmentTypes(transaction.equipmentType)" readOnly="true" style="border-style:dashed;">
+                </dx-text-box>
+              </div>
+            </div>
+            <div class="dx-field">
+              <div class="dx-field-label" style="padding-left: 5px; text-align:right;">Serial No.:</div>
+              <div class="dx-field-value">
+                <dx-text-box [value]="transaction.serialNumber" readOnly="true" style="border-style:dashed;">
+                </dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="row">
+            <div class="dx-fieldset" style="margin-bottom:5px">
+            <dxi-item dataField="surname" [label]="{text: 'Surname'}">
+            </dxi-item>
+            <div class="dx-field">
+                <div class="dx-field-label" style="padding-left: 6px; text-align:right;">Asset No.:</div>
+              <div class="dx-field-value">
+                <dx-text-box [value]="transaction.equipmentNumber" readOnly="true" style="border-style:dashed;">
+                </dx-text-box>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="row">
+          <dx-button *ngIf="editAssignT === false" type="default" text="Change Selection" 
+            (onClick)="changeAssetSelection()" style="align-content: center; margin-left:100px" [width]="133" [height]="26"></dx-button>
+        </div>
+      </div>
+      </div>
+    </dxi-item>
+  </dx-form>
+</div>
+<div class="notes-container">
+  <div class="patient-panel"
+    style="margin-right: 30px; margin-left: 30px; margin-bottom:0px; margin-top: 30px;">
+
+        <dx-form id="form" class="second-groups" [formData]="transaction">
+          <dxi-item itemType="group" caption="Transaction Details" [colCount]="3" style="padding-left:10%; padding-right:10%">
+            <dxi-item [label]="{ text:'Date Issued' }" #issue_dates>
+                <div *dxTemplate>
+                    <dx-date-box  [(value)]="transaction.issuingDate"  [useMaskBehavior]="true"
+                    width="155px">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-date-box>
+                  </div>
+            </dxi-item>
+            <dxi-item #return_dates [label]="{text:'Date Returned'}">
+                <div *dxTemplate>
+                    <dx-date-box    
+                    [value]="transaction.returnDate"
+                    [showClearButton]="true" width="155px" (onValueChanged)='updateReturnDate($event)'>
+                    </dx-date-box>
+                  </div>
+            </dxi-item>
+            <dxi-item [label]="{text:'Dependency'}">
+                <div *dxTemplate> 
+                    <dx-select-box [items]="dependencies" displayExpr="displayValue" 
+                    [(value)]="dependency" width="155px">
+
+                    </dx-select-box>
+
+                  </div>
+            </dxi-item>
+            <dxi-item [label]="{text:'Payment Status'}">
+                <div *dxTemplate>
+                    <dx-select-box [(value)]="transaction.paymentStatus" [items]="paymentStatuses"
+                    width="155px" displayExpr="statusName" valueExpr="statusId">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
+                  </div>
+            </dxi-item>
+            <dxi-item  [label]="{text:'Funding Source'}">
+                <div *dxTemplate>
+                    <dx-select-box [(value)]="transaction.fundingSource" [items]="fundingSources"
+                    width="155px" displayExpr="sourceName" valueExpr="sourceId">
+                    <dx-validator>
+                        <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                      </dx-validator>
+                    </dx-select-box>
+                  </div>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+  </div>
+  <div style="padding: 0px, 30px, 0px, 30px;">
+    <div class="notes-panel" style="margin-right: 30px; margin-left: 30px; margin-top:0px; margin-bottom: 5px; ">
+      <dx-form id="form" class="second-groups">
+        <dxi-item itemType="group" [colSpan]="4" caption="Notes">
+        </dxi-item>
+      </dx-form>
+                <dx-button type="default" text="Log" (onClick)="addLog()"
+                style="align-content: center; margin-right: 0px;" [width]="45" [height]="26"></dx-button>
+                <dx-text-area style="width: calc(100% - 50px); height: 90%; align-content: right; float: right;"  [(value)]="transaction.notes" dataField="notes" [maxLength]="8000">
+                  </dx-text-area>
+    </div>
+  </div>
+    <div class="mb-5" style="padding-left: 15px;padding-right:15px" *ngIf="editAssignT === true">
+      <div class="col">
+        <hms-button-set-save [includeDeleteButton]="true"
+          (saveClicked)="updateTransaction(transaction)"
+          (cancelClicked)="cancel()"
+          (deleteClicked)="deleteAsset()" >
+        </hms-button-set-save>
+      </div>
+    </div>
+    <div class="mb-5" style="padding-left: 15px;padding-right:15px" *ngIf="editAssignT === false">
+      <div class="col">
+        <hms-button-set-save [includeDeleteButton]="false"
+          (saveClicked)="updateTransaction(transaction)"
+          (cancelClicked)="cancel()">
+        </hms-button-set-save>
+      </div>
+    </div>
+    <div class="mb-5" style="padding-left: 15px;padding-right:15px" *ngIf="transactionHistory">
+      <div class="col">
+      <hms-button-set-save [includeDeleteButton]="false"
+        (saveClicked)="updateTransaction(transaction)"
+        (cancelClicked)="cancel()">
+      </hms-button-set-save>
+    </div>
+  </div>
+</div>

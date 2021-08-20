@@ -1,0 +1,41 @@
+<div class="row justify-content-center patient-panel">
+  <div class="col">
+    <dx-form [formData]="patient" [readOnly]="true" [disabled]="true">
+      <dxi-item dataField="surname"></dxi-item>
+      <dxi-item dataField="firstName"></dxi-item>
+      <dxi-item dataField="knownAs"></dxi-item>
+    </dx-form>
+  </div>
+  <div class="col-auto" style="padding: 0px;">
+    <dx-form [width]="455" [formData]="patient" [colCount]="2" [readOnly]="true" [disabled]="true">
+      <dxi-item dataField="sex" [label]="{ text: 'Gender' }"
+        [editorOptions]="{ width: 150 }">
+      </dxi-item>
+      <dxi-item itemType="empty"
+        [editorOptions]="{ width: 150 }">
+      </dxi-item>
+      <dxi-item dataField="dob" editorType="dxDateBox"
+        [label]="{ text: 'DOB' }"
+        [editorOptions]="{ width: 150 }">
+      </dxi-item>
+      <dxi-item dataField="patient_ID"
+        [label]="{ text: 'Patient ID' }"
+        [editorOptions]="{ width: 150 }"></dxi-item>
+      <dxi-item editorType="dxNumberBox"
+        [label]="{ text: 'Age' }"
+        [editorOptions]="{ value: patientAge, width: 150, format: '#0 yrs' }">
+      </dxi-item>
+      <dxi-item dataField="mrn"
+        [label]="{ text: 'MRN' }"
+        [editorOptions]="{ width: 150 }">
+      </dxi-item>
+    </dx-form>
+  </div>
+  <div class="col">
+    <dx-form [formData]="patient" [readOnly]="true" [disabled]="true">
+      <dxi-item dataField="homePhone"></dxi-item>
+      <dxi-item dataField="workPhone"></dxi-item>
+      <dxi-item dataField="mobile"></dxi-item>
+    </dx-form>
+  </div>
+</div>

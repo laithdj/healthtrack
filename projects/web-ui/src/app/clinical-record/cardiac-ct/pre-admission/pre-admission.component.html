@@ -1,0 +1,313 @@
+<dx-form [width]="'100%'" itemType="group" [colCount]="2" [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+  <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Medications" cssClass="mt-3">
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details">
+      <dxi-item [label]="{text: 'Allergies to Medications'}" cssClass="radio-width" [colSpan]="2">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17000" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            (toggle)="toggle($event,0,17000)" [layout]="'horizontal'" class="radio-align">
+          </hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'Details' , visible:hiddenField[0] }" [visible]="hiddenField[0]" [colSpan]="1"
+        cssClass="mb5">
+        <div *dxTemplate>
+          <hms-text-area [referenceId]="17132"></hms-text-area>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item [label]="{ text: 'Medications List' }">
+        <div *dxTemplate>
+
+          <hms-text-area [referenceId]="17001" [class]="'med-width'"></hms-text-area>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1 label-width" [label]="{text: 'Erectile Medication'}"
+        [visible]="(patient$ | async)?.sex !== 'F'">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17002" [items]="erectileOption" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align">
+          </hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Iodine History and Allergies" cssClass="mt-3">
+    <dxi-item itemType="group" [colSpan]="6">
+      <dxi-item cssClass="mt-1 label-width" [label]="{text: 'History of Iodine Based Contrast'}"
+        cssClass="radio-allergy">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17003" [items]="contrastOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="4">
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details">
+      <dxi-item [label]="{text: 'Allergy or Issues with Iodine/Contrast/Xray Dye' }"
+        cssClass="label-width radio-width detail-radio" [colSpan]="2">
+        <div *dxTemplate>
+          <hms-radio-group (toggle)="toggle($event,1,17004)" [referenceId]="17004" [items]="dyeOptions"
+            [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'Details' , visible:hiddenField[1] }" [visible]="hiddenField[1]" [colSpan]="3"
+        cssClass="mb5">
+        <div *dxTemplate>
+          <hms-text-area [referenceId]="17005"></hms-text-area>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details">
+      <dxi-item [label]="{text: 'Allergy to Latex'}" cssClass="radio-width" [colSpan]="2">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17006" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" (toggle)="toggle($event,2,17006)" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item [label]="{ text: 'Details' , visible:hiddenField[2]  }" [visible]="hiddenField[2]" [colSpan]="1"
+        cssClass="mb5">
+        <div *dxTemplate>
+          <hms-text-area [referenceId]="17007"></hms-text-area>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" [colSpan]="2" [colCount]="2" caption="General Past Medical History" cssClass=" mt-3">
+    <dxi-item itemType="group" [colSpan]="2">
+      <dxi-item cssClass="mt-1" [label]="{text: 'Asthma/Airways Disease'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17008" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Hyperthyroidism/Graves Disease'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17009" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Thyroid Cancer'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17010" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Phaeochromocytoma'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17011" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Myasthenia Gravis'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17012" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Sickle Cell Disease'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17013" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Kidney Disease'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17014" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Dialysis Required'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17015" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item cssClass="mt-1" [label]="{text: 'Hepatitis B or C Positive'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17016" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+  <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Cardiac Past Medical History" cssClass=" mt-3">
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item [colSpan]="2" cssClass="mt-1" [label]="{text: 'Smoking Status'}" cssClass="smoking">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17130" [items]="smokingOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align">
+          </hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details">
+      <dxi-item [label]="{text: 'Diabetes'}" cssClass="radio-width" [colSpan]="2">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17017" [items]="commonOptions" (toggle)="toggle($event,3,17017)"
+            [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'" class="radio-align">
+          </hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="1" editorType="dxRadioGroup" [label]="{text:'Type'}" [visible]="hiddenField[3]">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17018" [items]="diabetesOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details"
+      [visible]="hiddenField[3]">
+      <dxi-item [colSpan]="2">
+        <div *dxTemplate style="width:523px">
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="1" editorType="dxRadioGroup" [label]="{text: ' Metformin'}" cssClass="radio-space metformin">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17019" [items]="metforminOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Hyperlipidaemia (High Cholesterol)'}">
+        <div *dxTemplate>
+          <hms-radio-group [referenceId]="17020" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Hypertension (High Blood Pressure)'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17021" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Family History of Heart Attack / Stents / Bypass'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17022" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1 label-width" [colSpan]="2" [label]="{text: 'Regular Exercise'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17023" [items]="exerciseOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Post Menopausal'}"
+        [visible]="(patient$ | async)?.sex === 'F'">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17131" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details">
+      <dxi-item [label]="{text: 'Cardiac Surgery'}" [colSpan]="2" cssClass="radio-width">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17024" (toggle)="toggle($event, 4, 17024)" [items]="commonOptions"
+            [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'" class="radio-align">
+          </hms-radio-group>
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="1" [label]="{visible:false}" [visible]="hiddenField[4]">
+        <div *dxTemplate [ngClass]="(showReportBeside$ | async)?'cardiac-width':''">
+            <hms-radio-group [referenceId]="17025" [items]="cardiacSurgeryOptions" [displayEx]="'name'" [valueEx]="'id'"
+              [layout]="'horizontal'">
+            </hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10" [colCount]="(showReportBeside$ | async)?1:3" cssClass="radio-details" [visible]="hiddenField[4]">
+      <dxi-item [colSpan]="2">
+        <div *dxTemplate style="width:523px">
+        </div>
+      </dxi-item>
+      <dxi-item [colSpan]="1" [label]="{visible: false}">
+        <div *dxTemplate [ngClass]="(showReportBeside$ | async)?'cardiac-details':''">
+          <hms-text-area [referenceId]="17026"></hms-text-area>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Myocardial Infarction (Heart Attack)'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17027" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Abnormal Stress Test'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17028" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'PCI (Stents)'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17029" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Pacemaker'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17030" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Cardiomyopathy'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17031" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="10">
+      <dxi-item cssClass="mt-1" [colSpan]="2" [label]="{text: 'Aortic Stenosis'}">
+        <div *dxTemplate>
+
+          <hms-radio-group [referenceId]="17128" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+            [layout]="'horizontal'" class="radio-align"></hms-radio-group>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dxi-item>
+</dx-form>

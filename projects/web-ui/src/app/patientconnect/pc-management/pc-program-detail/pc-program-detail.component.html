@@ -1,0 +1,109 @@
+<div class="form-panel" *ngIf="selectedProgramDO && programTypes">
+  <div [ngStyle]="{ 'background-color': ptColour }" class="pc-banner"><b>{{ programType }} Details</b></div>
+  <div style="padding: 10px;">
+    <dx-form [formData]="selectedProgramDO" [colCount]="3">
+      <dxi-item
+        [label]="{ text: ' Name' }" [colSpan]="2"
+        [editorType]="'dxTextBox'" [dataField]="'reason'"
+        [editorOptions]="{ disabled: !editMode, maxLength: 50 }">
+      </dxi-item>
+      <dxi-item
+        [editorType]="'dxCheckBox'" [dataField]="'enabled'"
+        [editorOptions]="{ disabled: !editMode }">
+      </dxi-item>
+      <dxi-item [itemType]="'empty'" [colSpan]="3"></dxi-item>
+      <dxi-item [itemType]="'group'" [caption]="'Cycles'" [colSpan]="3">
+        <dxi-item [label]="{ text: 'Number of Cycles' }"
+          [editorType]="'dxNumberBox'" [dataField]="'recurringCount'"
+          [editorOptions]="{
+            disabled: !editMode || selectedProgramDO.type === programTypeEnum.Booking
+              || selectedProgramDO.type ===  programTypeEnum.Referral,
+            max: (selectedProgramDO.type === programTypeEnum.Recall || selectedProgramDO.type === programTypeEnum.Program
+              || selectedProgramDO.type === programTypeEnum.General) ? undefined : 1,
+            min: 1, format: '#0', width: 90, showSpinButtons: true }">
+        </dxi-item>
+        <dxi-item [label]="{ text: 'Frequency' }" [colSpan]="3">
+          <div *dxTemplate style="display: flex;">
+            <div>
+              <dx-number-box [showSpinButtons]="true" [min]="1" [format]="'#0'" [(value)]="selectedProgramDO.frequencyValue"
+                [width]="90" [disabled]="!editMode">
+                <dx-validator [validationRules]="[{ type: 'required'}]" name="Value"></dx-validator>
+              </dx-number-box>
+            </div>
+            <div style="padding-left: 10px; padding-top: 4px;">
+              <dx-radio-group [layout]="'horizontal'" [items]="frequencyRadioGroupItems" [displayExpr]="'name'"
+                [valueExpr]="'id'" [(value)]="selectedProgramDO.frequencyUnit" [disabled]="!editMode">
+              </dx-radio-group>
+            </div>
+            <div style="display: inline-flex; padding-left: 10px;">
+              <div *ngFor="let i of [1,2,3,4,5,6];" class="freq-btns">
+                <dx-button text={{i}} [disabled]="!editMode" (click)="onSetFrequency(i)"></dx-button>
+              </div>
+            </div>
+          </div>
+        </dxi-item>
+      </dxi-item>
+      <dxi-item [itemType]="'empty'" [colSpan]="3"></dxi-item>
+    </dx-form>
+    <app-pc-action-list id="actionList"
+      [editMode]="editMode"
+      [selectedProgramDO]="selectedProgramDO"
+      [actionList]="actionList"
+      [letterTemplates]="letterTemplates"
+      [smsTemplates]="smsTemplates"
+      [emailTemplates]="emailTemplates"
+      [(selectedActions)]="selectedActions"
+      [replyContentList]="replyContentList"
+      [allPortalMessages]="allPortalMessages"
+      [allPortalScreensList]="allPortalScreensList"
+      [allPortalDocumentsList]="allPortalDocumentsList"
+      (updateActionOnSelectedProgramDO)="updateActionOnSelectedProgramDO($event)"
+      (addActionToSelectedProgramDO)="addActionToSelectedProgramDO($event)"
+      (refreshSMSTemplatesList)="refreshSMSTemplates()"
+      (refreshEmailTemplatesList)="refreshEmailTemplates()"
+      (refreshLetterTemplatesList)="refreshLetterTemplates()">
+    </app-pc-action-list>
+    <app-pc-bookingtypes-list
+      [(selectedProgramDO)]="selectedProgramDO"
+      [programTypes]="programTypes"
+      [bookingTypes]="bookingTypes"
+      [editMode]="editMode">
+    </app-pc-bookingtypes-list>
+  </div>
+  <div class="row" *ngIf="(error.length > 0) && (editMode)" style="padding-left:34px">
+    <span class="warningMessage">{{ error }}</span>
+  </div>
+  <div>
+    <div style="display: grid; grid-template-columns: 35% 65%;">
+      <div style="text-align: right;">
+        <app-pc-program-timeline
+          [selectedProgramDO]="selectedProgramDO"
+          [actionList]="actionList">
+        </app-pc-program-timeline>
+        <app-pc-patients-on-program [selectedProgramDO]="selectedProgramDO"></app-pc-patients-on-program>
+        <app-pc-program-move
+          [selectedProgramDO]="selectedProgramDO"
+          [allEnabledPrograms]="allEnabledPrograms"
+          [editMode]="editMode"
+          (initialiseMovingStepPopup)="initialiseMovingStepPopup($event)">
+        </app-pc-program-move>
+      </div>
+    </div>
+  </div>
+</div>
+<app-pc-action-changed id="actionChanges"></app-pc-action-changed>
+<app-moving-step-select
+  [movingConnects]="movingConnects"
+  [(movingStepSelectPopupVisible)]="movingStepSelectPopupVisible"
+  [username]="username"
+  [disableMovingFrom]="disableMovingFrom"
+  [selectedProgramDO]="selectedProgramDO"
+  [(error)]="error">
+</app-moving-step-select>
+<app-pc-program-wizard
+  [(showWizard)]="showWizard"
+  [selectedProgramDO]="newProgram"
+  [programTypes]="programTypes"
+  (loadNewProgram)="loadNewProgram($event)"
+  [frequencyRadioGroupItems]="frequencyRadioGroupItems">
+</app-pc-program-wizard>

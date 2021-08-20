@@ -1,0 +1,9 @@
+<div [ngStyle]="{ 'margin-right': isLast ? '0px' : '10px' }">
+  <dx-button [width]="90"
+    [text]="text"
+    [icon]="'arrowleft'"
+    [disabled]="disabled"
+    [type]="'default'"
+    (onClick)="onCancelClicked()">
+  </dx-button>
+</div>

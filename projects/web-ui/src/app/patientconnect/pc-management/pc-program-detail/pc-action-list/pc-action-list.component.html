@@ -1,0 +1,74 @@
+<dx-form>
+  <dxi-item itemType="group" caption="Actions">
+    <dxi-item>
+      <dx-data-grid
+        id="gridContainer"
+        [dataSource]="selectedActions"
+        [showRowLines]="true"
+        [showBorders]="true"
+        [rowAlternationEnabled]="true">
+        <dxo-sorting mode="none"></dxo-sorting>
+        <dxo-paging [enabled]="false"></dxo-paging>
+        <dxo-selection mode="single" selectAllMode="allPages"></dxo-selection>
+        <dxi-column dataField="step" [width]="66" [allowEditing]="false"
+          [sortIndex]="0" sortOrder="asc" [allowSorting]="false">
+        </dxi-column>
+        <dxi-column dataField="action" [width]="116" [allowSorting]="false">
+          <dxo-lookup [dataSource]="actionList"
+            displayExpr="actionName" valueExpr="id">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="when" [width]="116" [allowSorting]="false"></dxi-column>
+        <dxi-column dataField="description" [allowSorting]="false"></dxi-column>
+        <dxi-column dataField="content" [width]="62" [allowSorting]="false"></dxi-column>
+        <dxi-column cellTemplate="cellTemplate" [width]="69">
+          <div *dxTemplate="let cell of 'cellTemplate'">
+            <dx-button icon="edit" (click)="onEditAction(cell)" [disabled]="!editMode"></dx-button>
+            <dx-button icon="remove" (click)="onDeleteAction(cell)" [disabled]="!editMode"></dx-button>
+          </div>
+        </dxi-column>
+      </dx-data-grid>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate style="padding-top:5px; padding-left:26px;">
+        <dx-button text="Add Action" [type]="'default'"
+          [disabled]="!editMode" (onClick)="onAddAction()">
+        </dx-button>
+      </div>
+    </dxi-item>
+  </dxi-item>
+</dx-form>
+<dx-popup
+  class="popup"
+  [width]="800"
+  [height]="'auto'"
+  title="Patient Connect Action"
+  [showTitle]="true"
+  [showCloseButton]="false"
+  [dragEnabled]="true"
+  [(visible)]="actionDetailPopupVisible">
+  <div *dxTemplate="let data of 'content'">
+    <app-pc-action-detail
+      [selectedAction]="selectedAction"
+      [(selectedActions)]="selectedActions"
+      [actionList]="actionList"
+      [letterTemplates]="letterTemplates"
+      [smsTemplates]="smsTemplates"
+      [emailTemplates]="emailTemplates"
+      [replyContentList]="replyContentList"
+      [selectedProgramDO]="selectedProgramDO"
+      [disableSaveReplyContent]="disableSaveReplyContent"
+      [(actionDetailPopupVisible)]="actionDetailPopupVisible"
+      [editMode]="editMode"
+      [allPortalMessages]="allPortalMessages"
+      [allPortalScreensList]="allPortalScreensList"
+      [allPortalDocumentsList]="allPortalDocumentsList"
+      (addActionToSelectedProgram)="addActionToSelectedProgram($event)"
+      (updateActionOnSelectedProgram)="updateActionOnSelectedProgram($event)"
+      (closeActionDetailPopup)="closeActionDetailPopup()"
+      (refreshEmailTemplatesList)="refreshEmailTemplates()"
+      (refreshSMSTemplatesList)="refreshSMSTemplates()"
+      (refreshLetterTemplatesList)="refreshLetterTemplates()">
+    </app-pc-action-detail>
+  </div>
+</dx-popup>

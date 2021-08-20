@@ -1,0 +1,22 @@
+::ng-deep .svd_toolbox{
+    overflow: scroll !important;
+    height: calc(100vh - 381px) !important;
+  }
+::ng-deep #svd-save{
+  display: none !important;
+}
+::ng-deep #svd-survey-settings
+{
+  display: none !important;
+}
+
+:host ::ng-deep .dx-field-item-label-content{
+  width:unset !important;
+}
+
+
+@media only screen and (min-width: 1760px) {
+  .expire-width{
+    width:100px
+  }
+}

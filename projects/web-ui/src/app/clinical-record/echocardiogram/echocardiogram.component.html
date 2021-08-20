@@ -1,0 +1,58 @@
+<dx-toolbar>
+  <dxi-item location="before" [widget]="'dxButton'" [options]="btnOptions"></dxi-item>
+  <dxi-item location="after" [widget]="'dxButton'"
+    [options]="{ text: showSmartText ? 'Hide Smart Text' : 'View Smart Text', type: 'default', width: 130,
+      icon: showSmartText ? 'chevronright' : 'chevronleft', onClick: toggleShowSmartText }">
+  </dxi-item>
+  <!-- <dxi-item location="after" [widget]="'dxButton'"
+    [options]="{ icon: (showReport$ | async) ? 'chevronright' : 'chevronleft', type: 'default', width: 130,
+      text: (showReport$ | async) ? 'Hide Report' : 'View Report', onClick: toggleShowReport }">
+  </dxi-item> -->
+</dx-toolbar>
+<div style="display: flex; padding-right: 0px;">
+  <dx-drawer
+    [openedStateMode]="'shrink'"
+    [position]="'left'"
+    [revealMode]="'slide'"
+    template="template"
+    [(opened)]="openNav"
+    [height]="'calc(100vh - 86px)'"
+    [closeOnOutsideClick]="false">
+    <div *dxTemplate="let data of 'template'" style="width: 200px">
+      <dx-list class="panel-list"
+        [height]="'calc(100vh - 86px)'"
+        [dataSource]="navigation"
+        [hoverStateEnabled]="false"
+        [activeStateEnabled]="false"
+        [focusStateEnabled]="false">
+      </dx-list>
+    </div>
+    <!-- <dx-scroll-view>
+      <div class="container-fluid" style="padding-top: 15px; padding-bottom: 15px;">
+        <app-echocardiogram-content></app-echocardiogram-content>
+      </div>
+    </dx-scroll-view> -->
+  </dx-drawer>
+  <div>
+  <!-- <div *ngIf="showReport$ | async"> -->
+    <!-- <app-smart-text-report
+      [reportContent]="newClinicalRecordPlaceholder.reportContent">
+    </app-smart-text-report> -->
+  </div>
+</div>
+<div class="hms-buttons-footer">
+  <hms-button-new [editMode]="editMode$ | async" [isLast]="false" (addNewClicked)="toggleEditMode(true)"></hms-button-new>
+  <hms-button-edit [editMode]="(editMode$ | async)" [isLast]="false"
+    (editClicked)="toggleEditMode(true)" (cancelClicked)="toggleEditMode(false)">
+  </hms-button-edit>
+  <hms-button-delete [disabled]="!(editMode$ | async)"></hms-button-delete>
+  <div style="width: 100%;"></div>
+  <div style="width: auto;  padding-left: 15px;">
+    <dx-button text="Compare" [width]="90"
+      type="default" [disabled]="true">
+    </dx-button>
+  </div>
+  <div style="width: auto; padding-left: 15px;">
+    <dx-button text="Print" type="default" [width]="90" [disabled]="false"></dx-button>
+  </div>
+</div>

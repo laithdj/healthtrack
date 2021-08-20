@@ -1,0 +1,74 @@
+<div *ngIf="!selectedTemplate" class="no-template-detail-container">&nbsp;</div>
+<div *ngIf="selectedTemplate" class="template-detail-container">
+  <div id="content" style="width: auto;">
+    <div style="display: flex;">
+      <div class="input-caption">Template Name:</div>
+      <div style="z-index: 5;">
+        <dx-text-box #templateNameTextBox id="templateNameTextBox" [readOnly]="!editMode"
+          [width]="300" [maxLength]="99" [(value)]='selectedTemplate.templateName'>
+        </dx-text-box>
+      </div>
+      <div style="width: 100%;"></div>
+      <div class="input-caption">Visible To:</div>
+      <div style="z-index: 5;">
+        <dx-select-box [items]="visibilityOptions" displayExpr="display" valueExpr="doctorId"
+          [(value)]="selectedTemplate.doctorId" [readOnly]="!editMode" [width]="240">
+        </dx-select-box>
+      </div>
+    </div>
+    <div style="margin-top: -14px;">
+      <div class="richTextHeader"></div>
+      <lib-rich-text-editor style="margin-top: -19px;" #rich_edit id="rich_edit"
+        [(templateContent)]="selectedTemplate.fullText"
+        [readOnly]="!editMode"
+        [measurements]="[]"
+        [listAvailableHeaders]="listAvailableHeaders"
+        [smartTextStyleProperties]="smartTextStyleProperties"
+        [smartTextList]="[]"
+        [smartTextNodeList]="[]"
+        [userName]="userName"
+        [editorSize]="richEditorSize">
+      </lib-rich-text-editor>
+      <!-- <lib-rich-text-editor style="margin-top: -25px;" #rich_edit id="rich_edit"
+          [(templateContent)]="reportContent"
+          [measurements]="measurements"
+          [listAvailableHeaders]="headerList"
+          [smartTextList]="smartTextBundle?.smartTextPackage?.smartTextNodes"
+          [smartTextNodeList]="headerList"
+          [smartTextStyleProperties]="smartTextBundle?.styleProperties"
+          [userName]="userName"
+          [editorSize]="richEditorSize">
+        </lib-rich-text-editor> -->
+    </div>
+  </div>
+  <div style="display: flex; width: 100%; margin-top: 10px;">
+    <div [ngStyle]="{ 'margin-right': '10px' }">
+      <dx-button [width]="90"
+        [text]="editMode ? 'Cancel' : 'Edit'"
+        [icon]="editMode ? 'arrowleft' : 'edit'"
+        [type]="'default'"
+        (onClick)="editMode ? cancelEdit() : editClicked()">
+      </dx-button>
+    </div>
+    <div [ngStyle]="{ 'margin-right': '10px' }">
+      <dx-button [width]="90"
+        [disabled]="!editMode"
+        [text]="'Delete'"
+        [icon]="'remove'"
+        [type]="'danger'"
+        (onClick)="deleteTemplate()">
+      </dx-button>
+    </div>
+    <div style="width: 100%;"></div>
+    <div [ngStyle]="{ 'margin-right': '0px' }">
+      <dx-button [width]="90"
+        [text]="'Save'"
+        [icon]="'save'"
+        [type]="'success'"
+        [disabled]="!editMode"
+        [useSubmitBehavior]="true"
+        (onClick)="saveTemplate()">
+      </dx-button>
+    </div>
+  </div>
+</div>

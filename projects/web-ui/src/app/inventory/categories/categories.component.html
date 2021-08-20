@@ -1,0 +1,114 @@
+<div class="panel mt-2 ml-2 mr-2">
+  <dx-form id="form"  >
+    <dxi-item itemType="group" [colCount]="10">
+      <dxi-item itemType="group" [label]="{ text:'Name' }" [colSpan]="4">
+        <div *dxTemplate>
+          <dx-text-box [(value)]="searchTerm.searchTerm" (onEnterKey)="filterCategory(searchTerm)" (onValueChanged)="getAllCategories()"
+            showClearButton= true>
+          </dx-text-box>
+        </div>            
+      </dxi-item>
+      <dxi-item itemType="group"  [colSpan]="3">
+        <div *dxTemplate>
+          <dx-button text='Search' [type]="'default'" style="width:80px;" icon="search" (onClick)="filterCategory(searchTerm)">
+          </dx-button>
+        </div>            
+      </dxi-item>
+      <dxi-item itemType="group" [colSpan]="3" style="float:right">
+        <div *dxTemplate>
+          <dx-button text='Add New Category' style="float:right" [useSubmitBehavior]="false" class="" icon="add" [type]="'default'" (onClick)="addCategory()">
+          </dx-button>
+        </div>
+      </dxi-item>
+    </dxi-item>
+  </dx-form>
+</div>
+  <dx-tree-list
+    id="tasks"
+    [dataSource]="categories"
+    keyExpr="categoryId"
+    parentIdExpr="parentCategory"
+    [columnAutoWidth]="true"
+    [showBorders]="true"
+    [allowColumnResizing]="true"
+    [columnHidingEnabled]="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [hoverStateEnabled]="true" 
+    [rowAlternationEnabled]="true"
+    [selectedRowKeys]="[]"
+    style="padding-left: 10px; padding-right:10px;padding-top: 0px; padding-bottom:20px; max-height:calc(100vh - 90px);"
+    class="mt-2">
+    <dxo-scrolling mode="standard"></dxo-scrolling>
+    <dxi-column dataField="categoryName"></dxi-column>
+    <dxi-column cellTemplate="actionsCellTemplate" caption="" [width]="80">
+      <div *dxTemplate="let cell of 'actionsCellTemplate'">
+        <!--<dx-button type="default" icon="edit" text="Edit" (onClick)="editCategory(cell.data.categoryId)">
+        </dx-button>-->
+        <hms-button-edit (editClicked)="editCategory(cell.data.categoryId)"></hms-button-edit>
+      </div>
+    </dxi-column>
+  </dx-tree-list>
+  <dx-popup class="popup" [height]="'auto'" [width]="500" title='{{popupTitle}}' [showTitle]="true" [showCloseButton]="false"
+    [visible]="addEditCategory">
+    <br>
+    <div id="form-container">
+      <dx-form id="form" >
+        <dxi-item itemType="group">
+          <dxi-item [label]="{ text:'Parent Category' }">
+            <dx-drop-down-box
+              [(value)]="category.parentCategory"
+              valueExpr="categoryId"
+              displayExpr="categoryName"
+              placeholder="Select a value..."
+              [showClearButton]="true"
+              [dataSource]="categoriesDropdown"
+              (onValueChanged)="syncTreeViewSelection()">
+              <div *dxTemplate="let data of 'content'">
+                <dx-tree-view
+                  [dataSource]="categoriesDropdown"
+                  dataStructure="plain"
+                  keyExpr="categoryId"
+                  parentIdExpr="parentCategory"
+                  selectionMode="single"
+                  displayExpr="categoryName"
+                  [selectByClick]="true"
+                  (onContentReady)="$event.component.selectItem(category.parentCategory)"
+                  (onItemSelectionChanged)="TreeViewItemSelectionChanged($event)">
+                </dx-tree-view>
+              </div>
+            </dx-drop-down-box>
+          </dxi-item>
+            <!--<dxi-item  [label]="{ text:'Parent Category' }">
+                  <div *dxTemplate>
+                    <dx-select-box  [(value)]="category.parentCategory" [items]="categories" searchEnabled=true displayExpr="categoryName"
+                    valueExpr="categoryId" showClearButton= true  >
+                    </dx-select-box>
+                    </div>
+            </dxi-item>-->
+            <dxi-item [label]="{ text:'Category Name' }" >
+              <div *dxTemplate>
+                <dx-text-box [(value)]="category.categoryName" [maxLength]="50">
+                  <!--<dx-validator>
+                  <dxi-validation-rule type="required" message=""></dxi-validation-rule>
+                  </dx-validator>-->
+                </dx-text-box>
+              </div>
+            </dxi-item>   
+          </dxi-item>  
+      </dx-form>
+   </div>
+  <div *ngIf="createCategorybool == false" class="mt-1">
+    <hms-button-set-save [includeDeleteButton]="true"
+      (saveClicked)="updateCategory(category)"
+      (cancelClicked)="cancel()"
+      (deleteClicked)="deleteCategory(category)" >
+    </hms-button-set-save>
+  </div>
+  <div *ngIf="createCategorybool == true" class="mt-1">
+    <hms-button-set-save [includeDeleteButton]="false"
+      (saveClicked)="createCategory()"
+      (cancelClicked)="cancel()">
+    </hms-button-set-save>
+  </div>
+</dx-popup>

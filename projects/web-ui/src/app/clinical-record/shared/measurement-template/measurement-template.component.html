@@ -1,0 +1,8 @@
+<div style="display: flex;">
+  <dx-number-box [readOnly]="editMode" [value]="measurement" [width]="50"></dx-number-box>
+  <div style="padding: 5px 5px 0px 2px;" [innerHTML]="measurementUnit"></div>
+  <div style="padding-top: 5px;" *ngIf="rangeLow && rangeHigh">({{ rangeLow }}-</div>
+  <div style="padding-top: 5px;" *ngIf="rangeLow && !rangeHigh">(>{{ rangeLow }})</div>
+  <div style="padding-top: 5px;" *ngIf="rangeHigh && rangeLow">{{ rangeHigh }})</div>
+  <div style="padding-top: 5px;" *ngIf="rangeHigh && !rangeLow">(<{{ rangeHigh }})</div>
+</div>

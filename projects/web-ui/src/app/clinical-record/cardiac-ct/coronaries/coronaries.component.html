@@ -1,0 +1,432 @@
+<dx-form [width]="'100%'" [colCount]="2" [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="2" cssClass="mt-3 " caption="CT">
+        <dxi-item cssClass="mt-1 ml-5r" [colSpan]="2" [label]="{text: 'Image Quality'}" editorType="dxRadioGroup">
+            <hms-radio-group [referenceId]="17046" [items]="imgOptions" [displayEx]="'name'" [valueEx]="'id'"
+                [layout]="'horizontal'"  [default]="false"></hms-radio-group>
+        </dxi-item>
+        <dxi-item [colSpan]="2" [label]="{ text:'Reduced Image Quality Reason'}" cssClass="ml-5r">
+            <div style="display: flex;">
+                <div class="d-flex flex-column mr-16 p1" style="position:relative; bottom:1px;">
+                    <hms-check-box [text]="'Motion'" [referenceId]="17047"></hms-check-box>
+                    <hms-check-box [text]="'Noise'" [referenceId]="17049"></hms-check-box>
+                </div>
+                <div class="d-flex flex-column mr-2 p1">
+                    <hms-check-box [text]="'Step Artefact'" [referenceId]="17048"></hms-check-box>
+                    <hms-check-box [text]="'Poor Contrast Opacification'" [referenceId]="17050"></hms-check-box>
+                </div>
+            </div>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="2" cssClass="mt-3" caption="Medications">
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2" cssClass="ml-5r">
+            <dxi-item cssClass="checkboxes" 
+            [colSpan]="(showReportBeside$ | async) ? 2 : 1">
+                <div class="d-flex flex-column mr-2">
+                    <hms-check-box [text]="'Aspirin'" [referenceId]="17070"></hms-check-box>
+                    <hms-check-box [text]="'Clopidogrel/Ticagrelor'" [referenceId]="17071"></hms-check-box>
+                    <hms-check-box [text]="'ACE/ARB Inhibitor'" [referenceId]="17072"></hms-check-box>
+                    <hms-check-box [text]="'B-Blocker'" [referenceId]="17073"></hms-check-box>
+                    <hms-check-box [text]="'Ca-Channel Blocker'" [referenceId]="17074">
+                    </hms-check-box>
+                    <hms-check-box [text]="'Statin'" [referenceId]="17075"></hms-check-box>
+                    <hms-check-box [text]="'Ezetimibe'" [referenceId]="17076"></hms-check-box>
+                    <hms-check-box [text]="'Nitrates/Nicorandil'" [referenceId]="17077"></hms-check-box>
+                </div>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Medication Notes' }" [colSpan]="(showReportBeside$ | async) ? 2 : 1" cssClass="med-notes">
+                <hms-text-area [height]="100" [referenceId]="17078"></hms-text-area>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="2" cssClass="mt-3" caption="Coronary Anatomy">
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2" cssClass="ml-5r">
+            <dxi-item itemType="group" [colSpan]="2">
+                <dxi-item [label]="{text: 'Coronary Dominance'}" editorType="dxRadioGroup">
+                    <div *dxTemplate>
+                        <hms-radio-group [default]="false" [referenceId]="17079" [items]="coronaryDom" [displayEx]="'name'"
+                            [valueEx]="'id'" [layout]="'horizontal'" ></hms-radio-group>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="(showReportBeside$ | async)?2:1" cssClass="radio-details">
+                <dxi-item [label]="{text: 'Coronary Anomaly'}" editorType="dxRadioGroup" cssClass="radio-width">
+                    <div *dxTemplate>
+                        <hms-radio-group [default]="false" [referenceId]="17080" (toggle)="displayHiddenField($event,12,17080)" class="'d-flex justify-content-between'"
+                         [items]="coronaryAno" [displayEx]="'name'"
+                            [valueEx]="'id'" [layout]="'horizontal'" [width]="260"></hms-radio-group>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+                <dxi-item [label]="{ text: 'Please Describe', visible:hiddenField[12] }" [visible]="hiddenField[12]" [colSpan]="(showReportBeside$ | async)?2:1"
+                    >
+                    <div *dxTemplate>
+                        <hms-text-area [referenceId]="17081" [height]="100"></hms-text-area>
+                    </div>
+                </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2" >
+            <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+                <dxi-item [colSpan]="2">
+                    <div *dxTemplate class="dx-field-label w-100 font-weight-bold" >Modified Calcium Score
+                    </div>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="1" [colCount]="(showReportBeside$ | async) ? 1 : 2" cssClass='ml-5r'>
+
+                    <dxi-item [label]="{ text: 'Value' }" [colSpan]="1">
+                        <div *dxTemplate class="d-flex flex-row">
+                            <hms-number-box [referenceId]="17846" [width]="70" >
+                            </hms-number-box>
+                        </div>
+                    </dxi-item>
+                    <dxi-item [label]="{ text: 'Percentile' }" [colSpan]="1">
+                        <div *dxTemplate class="d-flex flex-row">
+                            <hms-number-box [referenceId]="17847" [width]="70">
+                            </hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2" >
+            <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+                <dxi-item [colSpan]="2">
+                    <div *dxTemplate class="dx-field-label w-100 font-weight-bold" >Standard Calcium Score
+                    </div>
+                </dxi-item>
+                <dxi-item itemType="group" [colSpan]="1" [colCount]="(showReportBeside$ | async) ? 1 : 2" cssClass='ml-5r'>
+
+                    <dxi-item [label]="{ text: 'Value' }" [colSpan]="1">
+                        <div *dxTemplate class="d-flex flex-row">
+                            <hms-number-box [referenceId]="17848" [width]="70" >
+                            </hms-number-box>
+                        </div>
+                    </dxi-item>
+                    <dxi-item [label]="{ text: 'Percentile' }" [colSpan]="1">
+                        <div *dxTemplate class="d-flex flex-row">
+                            <hms-number-box [referenceId]="17849" [width]="70">
+                            </hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2"
+            [ngClass]="(showReportBeside$ | async) ? '' : 'ml-10p mr-10p ml-5r'">
+            <dxi-item itemType="group" [colSpan]="2" [cssClass]="(showReportBeside$ | async) ? '' : 'ml-7-c'">
+                <div *dxTemplate>
+                    <dx-button type="default" [width]="140" text="Mark All as Normal" class="mr-1 ml-1"
+                        (onClick)="markAllNormal()"></dx-button>
+                    <dx-button type="default" [width]="120" text="Clear Selections" (onClick)="clearSelection()">
+                    </dx-button>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2"
+            [ngClass]="(showReportBeside$ | async) ? '' : 'ml-10p mr-10p'">
+            <dx-tree-list #coronaryGrid [dataSource]="grid" keyExpr="categoryId" parentIdExpr="parentCategory"
+                [autoExpandAll]="true" [rootValue]="-1" [columnAutoWidth]="true" [showBorders]="true"
+                [allowColumnResizing]="false" [columnHidingEnabled]="false" [showColumnLines]="true"
+                [showRowLines]="true" [hoverStateEnabled]="true" [rowAlternationEnabled]="false"
+                (onRowPrepared)="rowColourControl($event)" [selectedRowKeys]="[]" [wordWrapEnabled]="true"
+                (onRowDblClick)="showSegmentOnDblClick($event)"
+                style="padding-top: 0px; padding-bottom:20px; max-height:calc(100vh - 90px);" class="mt-2">
+                <dxo-scrolling mode="standard"></dxo-scrolling>
+                <dxi-column dataField="categoryName" caption="" [width]="200"></dxi-column>
+                <dxi-column dataField="Normal" cellTemplate="normal" alignment="center" caption="Normal" [width]="100">
+                    <div *dxTemplate="let cell of 'normal';" style="margin-left:40%">
+                        <hms-radio-group [referenceId]="cell.data.refId" [items]="normal" [valueEx]="'id'"
+                            (toggle)="toggle($event,cell, cell)" [layout]="'horizontal'" >
+                        </hms-radio-group>
+                    </div>
+                </dxi-column>
+                <dxi-column dataField="Abnormal" cellTemplate="abnormal" alignment="center" caption="Abnormal"
+                    [width]="100">
+                    <div *dxTemplate="let cell of 'abnormal'" style="margin-left:40%">
+                        <hms-radio-group [referenceId]="cell.data.refId" [items]="abnormal" [valueEx]="'id'"
+                            [layout]="'horizontal'"></hms-radio-group>
+                    </div>
+                </dxi-column>
+                <dxi-column cellTemplate="description" alignment="center" cssClass="word-wrapper">
+                    <div *dxTemplate="let cell of 'description'" style="word-wrap: break-word;">
+                        <description [refIDs]="cell.data.desc" [normalisedResults]='normalisedResults' [text]="description"></description>
+                    </div>
+                </dxi-column>
+                <dxi-column dataField="Not Assessed" cellTemplate="non" alignment="center" caption="Not Assessed"
+                    [width]="100">
+                    <div *dxTemplate="let cell of 'non'" style="margin-left:40%">
+                        <hms-radio-group [referenceId]="cell.data.refId" [items]="non" [valueEx]="'id'"
+                            [layout]="'horizontal'" ></hms-radio-group>
+                    </div>
+                </dxi-column>
+            </dx-tree-list>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="2" cssClass="ml-5r">
+            <dxi-item [label]="{text: 'CAD-RADS'}" editorType="dxRadioGroup">
+                <div *dxTemplate>
+                    <hms-radio-group [default]="false" [referenceId]="17714" [items]="cadOptions" [displayEx]="'name'" [valueEx]="'id'"
+                        [layout]="'horizontal'"></hms-radio-group>
+                </div>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="2" cssClass="mt-5" caption="Grafts">
+        <dxi-item itemType="group" [colSpan]="2" [colCount]="2"
+            [ngClass]="(showReportBeside$ | async) ? '' : 'ml-10p mr-10p'">
+            <div style="display: flex;margin-bottom:5px">
+                <div class="w-100"></div>
+                <dx-button text='Add Graft' icon="add" (onClick)="addGraft()" [type]="'default'">
+                </dx-button>
+            </div>
+            <dx-data-grid [columnAutoWidth]="false" [columnHidingEnabled]="false" [showColumnLines]="true"
+                cssCLass="mt-1" [showRowLines]="true" [showBorders]="true" [hoverStateEnabled]="false"
+                [rowAlternationEnabled]="false" [dataSource]="grafts" [showBorders]="true"
+                style="max-height:calc(100vh - 90px); max-width:calc(100vw - 20px)"
+                (onRowPrepared)="rowColourControl($event)">
+                <dxi-column cellTemplate="type" caption="Type" dataField="type" alignment="left" >
+                    <div *dxTemplate="let cell of 'type'">
+                        <dx-select-box [items]="graftType$ | async" [displayExpr]="'itemValue'" [valueExpr]="'itemID'"
+                            [(value)]="cell.data.type" (onValueChanged)="updateGraft(cell)"></dx-select-box>
+                    </div>
+                </dxi-column>
+                <dxi-column cellTemplate="anastamosis" caption="Anastamosis" dataField="anastamosis" alignment="left">
+                    <div *dxTemplate="let cell of 'anastamosis'">
+                        <dx-select-box [items]="graftAnastamosis$ | async" [displayExpr]="'itemValue'" [valueExpr]="'itemID'"
+                            [(value)]="cell.data.anastamosis" (onValueChanged)="updateGraft(cell)">
+                        </dx-select-box>
+                    </div>
+                </dxi-column>
+                <dxi-column cellTemplate="severity" caption="Severity" dataField="severity" alignment="left">
+                    <div *dxTemplate="let cell of 'severity'">
+                        <dx-select-box [items]="graftSeverity$ | async" [displayExpr]="'itemValue'" [valueExpr]="'itemID'"
+                            [(value)]="cell.data.severity" (onValueChanged)="updateGraft(cell)">
+                        </dx-select-box>
+                    </div>
+                </dxi-column>
+                <dxi-column cellTemplate="location" caption="Location" dataField="location" alignment="left" >
+                    <div *dxTemplate="let cell of 'location'">
+                        <dx-select-box [items]="graftLocation$ | async" [displayExpr]="'itemValue'" [valueExpr]="'itemID'"
+                            [(value)]="cell.data.location" (onValueChanged)="updateGraft(cell)">
+                        </dx-select-box>
+                    </div>
+                </dxi-column>
+                <dxi-column cellTemplate="comments" caption="Comments" dataField="comments" alignment="left" [width]="'20%'">
+                    <div *dxTemplate="let cell of 'comments'">
+                        <dx-text-area [(value)]="cell.data.comments" (onValueChanged)="updateGraft(cell)"></dx-text-area>
+                    </div>
+                </dxi-column>
+                <dxi-column cellTemplate="removeGraft" caption="" [width]="100" alignment="left">
+                    <div *dxTemplate="let cell of 'removeGraft'">
+                        <dx-button text="Remove" type="danger" icon="remove" alignment="right"
+                            (onClick)="removeGraft(cell)" [width]="100">
+                        </dx-button>
+                    </div>
+                </dxi-column>
+            </dx-data-grid>
+        </dxi-item>
+    </dxi-item>
+</dx-form>
+<dx-popup #segment class="popup" [height]="'auto'" [width]="850"
+    title={{segmentTitle}} [showTitle]="true" [deferRendering]="false"
+    [showCloseButton]="false" [visible]="segmentShow">
+    <div>
+        <div style="display: flex;">
+            <div>
+                <dx-form id="form">
+                    <dxi-item [label]="{text: 'Vessel Calibre'}" editorType="dxRadioGroup" cssClass="segment">
+                        <hms-radio-group [default]="false" [items]="vesselCalibreOptions" [getText]="true"
+                            [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'" [referenceId]="desRefIds[12]">
+                        </hms-radio-group>
+                    </dxi-item>
+                    <dxi-item ></dxi-item>
+                    <dxi-item [label]="{text: 'Plaque Type'}" editorType="dxRadioGroup" cssClass="segment">
+                        <hms-radio-group [default]="false" [items]="plaqueOptions" [getText]="true"
+                            [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'" [referenceId]="desRefIds[6]">
+                        </hms-radio-group>
+                    </dxi-item>
+                    <dxi-item [label]="{text: 'Quantitative Stenosis Grading'}">
+                        <hms-radio-group [default]="false" [items]="quantitativeOptions" [displayEx]="'name'" [valueEx]="'id'" [getText]="true"
+                            [layout]="'vertical'" [referenceId]="desRefIds[0]" (getValue)="checkStenosis($event)">
+                        </hms-radio-group>
+                    </dxi-item>
+                    <dxi-item>
+                        <div style="display: flex; width: 100%">
+                            <div style="width: 100%"></div>
+                            <div style="width: auto; padding-right: 30px;">
+                                <div>
+                                    <hms-check-box class="mt-1" text='Motion' [referenceId]="desRefIds[1]"
+                                        [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                                <div>
+                                    <hms-check-box class="mt-1" text='Noise' [referenceId]="desRefIds[2]"
+                                        [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                            </div>
+                            <div style="width: auto; padding-right: 20px">
+                                <div>
+                                    <hms-check-box class="mt-1" text='Calcium' [referenceId]="desRefIds[3]"
+                                        [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                                <div>
+                                    <hms-check-box class="mt-1" text='Stent' [referenceId]="desRefIds[4]"
+                                        [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                                <div>
+                                    <hms-check-box class="mt-1" text='Other' [referenceId]="desRefIds[5]"
+                                        [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                            </div>
+                        </div>
+                    </dxi-item>
+                </dx-form>
+            </div>
+            <div style="padding-top: 52px">
+                <div>
+                    <dx-form>
+                        <dxi-item [label]="{text: 'High Risk Plaque Features'}">
+                            <div class="d-flex flex-column mr-2">
+                                <hms-check-box text='Positive Re-Modelling' [referenceId]="desRefIds[7]" [getText]="true"></hms-check-box>
+                                <hms-check-box text='Low-Attenuation Plaque' [referenceId]="desRefIds[8]" [getText]="true"></hms-check-box>
+                                <hms-check-box text='Spotty Calcification' [referenceId]="desRefIds[9]" [getText]="true"></hms-check-box>
+                                <hms-check-box text='Napkin Ring' [referenceId]="desRefIds[10]" [getText]="true"></hms-check-box>
+                            </div>
+                        </dxi-item>
+                    </dx-form>
+                </div>
+                <div style="padding-top: 30px; padding-left: 40px;">
+                    <dx-form>
+                        <dxi-item [label]="{text: 'Pattern of Disease'}">
+                            <hms-radio-group [default]="false" [items]="diseaseOptions" [displayEx]="'name'"
+                                [valueEx]="'id'" [layout]="'vertical'" [getText]="true" [referenceId]="desRefIds[11]">
+                            </hms-radio-group>
+                        </dxi-item>                    
+                    </dx-form>
+                </div>
+            </div>
+        </div>
+        <div style="padding-left: 130px;">
+            <dx-form>
+                <dxi-item [label]="{text: 'Stent'}">
+                    <div style="display: flex;">
+                        <div>
+                            <hms-radio-group [default]="false" [items]="stentOptions" [displayEx]="'name'"
+                                [valueEx]="'id'" [layout]="'vertical'" [getText]="true"
+                                [referenceId]="desRefIds[13]" (getValue)="checkStentSelection($event)">
+                            </hms-radio-group>
+                        </div>
+                        <div style="padding-top: 21px;">
+                            <hms-text-box [width]="300"  [getText]="true" [disabled]="!stentSevereISRSelected" [referenceId]="desRefIds[14]"></hms-text-box>
+                            <hms-text-box [width]="300"  [getText]="true" [disabled]="!stentPeriStentRestenosisSelected" [referenceId]="desRefIds[15]"></hms-text-box>
+                            <div style="padding-top: 18px; margin-left: -60px">
+                                <div>
+                                    <hms-check-box class="mt-1" text='Small Stent Size' [referenceId]="desRefIds[16]"
+                                        [getText]="true" [disabled]="!stentNonEvaluableSelected" [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                                <div style="margin-top: -9px;">
+                                    <hms-check-box text='Motion' [referenceId]="desRefIds[17]"
+                                        [getText]="true" [disabled]="!stentNonEvaluableSelected" [reason]="true">
+                                    </hms-check-box>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
+                </dxi-item>
+            </dx-form>
+        </div>
+        <div>
+            <div style="width: 100%">
+                <dx-button [width]="90" text="Done" type="success" class="float-right" (onClick)="combineText()"
+                    style="margin-right: 0px">
+                </dx-button>
+            </div>
+        </div>
+    </div>
+</dx-popup>
+<!-- <dx-popup #segment class="popup" [height]="'auto'" [width]="770"
+    title={{segmentTitle}} [showTitle]="true" [deferRendering]="false"
+    [showCloseButton]="false" [visible]="segmentShow">
+    <div style="display: flex;">
+      <div>
+        <dx-form [width]="420" [colCount]="2">
+            <dxi-item [label]="{text: 'Vessel Calibre'}">
+                <hms-radio-group [default]="false" [items]="vesselCalibreOptions" [getText]="true"
+                    [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'" [referenceId]="">
+                </hms-radio-group>
+            </dxi-item>            
+            <dxi-item [label]="{text: 'Plaque Type'}">
+                <hms-radio-group [default]="false" [items]="plaqueOptions" [getText]="true"
+                    [displayEx]="'name'" [valueEx]="'id'" [layout]="'vertical'" [referenceId]="desRefIds[6]">
+                </hms-radio-group>
+            </dxi-item>
+            <dxi-item [itemType]="'empty'" [colSpan]="2"></dxi-item>
+            <dxi-item itemType="group" [colSpan]="2" [colCount]="5">
+                <dxi-item [colSpan]="4" [label]="{text: 'Quantitative Stenosis Grading'}">
+                    <hms-radio-group [default]="false" [items]="quantitativeOptions" [displayEx]="'name'" [valueEx]="'id'" [getText]="true"
+                        [layout]="'vertical'" [referenceId]="desRefIds[0]" (getValue)="checkStenosis($event)">
+                    </hms-radio-group>
+                </dxi-item>
+                <dxi-item>
+                    <div style="margin-top: 142px;">
+                        <hms-check-box class="mt-1" text='Motion' [referenceId]="desRefIds[1]" [getText]="true" [disabled]='reasonDisabled' [reason]="true"></hms-check-box>
+                        <hms-check-box class="mt-1" text='Noise' [referenceId]="desRefIds[2]" [getText]="true" [disabled]='reasonDisabled' [reason]="true"></hms-check-box>
+                        <hms-check-box class="mt-1" text='Calcium' [referenceId]="desRefIds[3]" [getText]="true" [disabled]='reasonDisabled' [reason]="true"></hms-check-box>
+                        <hms-check-box class="mt-1" text='Stent' [referenceId]="desRefIds[4]" [getText]="true" [disabled]='reasonDisabled' [reason]="true"></hms-check-box>
+                        <hms-check-box class="mt-1" text='Other' [referenceId]="desRefIds[5]" [getText]="true" [disabled]='reasonDisabled' [reason]="true"></hms-check-box>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [itemType]="'empty'" [colSpan]="2"></dxi-item>
+        </dx-form>
+        <dx-form>
+            <dxi-item itemType="group" [colCount]="5">
+
+                <dxi-item>
+                    <div>
+                        <hms-check-box class="mt-1" text='Small Stent Size' [referenceId]=""
+                            [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                        </hms-check-box>
+                        <hms-check-box class="mt-1" text='Motion' [referenceId]=""
+                            [getText]="true" [disabled]='reasonDisabled' [reason]="true">
+                        </hms-check-box>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+        </dx-form>
+        </div>
+        <dx-form [width]="330" style="margin-top: 4px;">
+          <dxi-item [label]="{text: 'High Risk Plaque Features'}">
+            <div *dxTemplate>
+                <div style="margin-top: -5px;">
+                    <hms-check-box text='Positive Re-Modelling' [referenceId]="desRefIds[7]" [getText]="true"></hms-check-box>
+                </div>
+                <div style="margin-top: -5px;">
+                    <hms-check-box text='Low-Attenuation Plaque' [referenceId]="desRefIds[8]" [getText]="true"></hms-check-box>
+                </div>
+                <div style="margin-top: -5px;">
+                    <hms-check-box text='Spotty Calcification' [referenceId]="desRefIds[9]" [getText]="true"></hms-check-box>
+                </div>
+                <div style="margin-top: -5px;">
+                    <hms-check-box text='Napkin Ring' [referenceId]="desRefIds[10]" [getText]="true"></hms-check-box>
+                </div>
+            </div>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'"></dxi-item>
+        <dxi-item [label]="{text: 'Pattern of Disease'}">
+            <hms-radio-group [default]="false" [items]="diseaseOptions" [displayEx]="'name'"
+                [valueEx]="'id'" [layout]="'vertical'" [getText]="true" [referenceId]="desRefIds[11]">
+            </hms-radio-group>
+        </dxi-item>
+        <dxi-item [itemType]="'empty'"></dxi-item>
+        </dx-form>
+    </div>
+    <div style="width: 100%; margin-top: 10px">
+        <dx-button [width]="90" text="Done" type="success"
+            class="float-right" (onClick)="combineText()">
+        </dx-button>
+    </div>
+</dx-popup> -->

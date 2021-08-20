@@ -1,0 +1,6 @@
+<dx-check-box text={{text}}
+  [value]="(normalizedResult$ | async) ? (normalizedResult$ | async).result : 0"
+  [disabled]='disabled'
+  (onOptionChanged)="disableValue()"
+  (onValueChanged)="changeValue($event)">
+</dx-check-box>

@@ -1,0 +1,157 @@
+<dx-form [width]="'100%'" [colCount]="2" [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" cssClass="mt-3" caption="Initial Observations">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+            <dxi-item [label]="{ text: 'Heart Rate' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate>
+                    <div class="d-flex flex-row">
+                        <dx-number-box [width]="70" [value]="heartRate$ | async" (onValueChanged)="heartRateChanged($event)"></dx-number-box>
+                        <span class="m-1">bpm</span>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [label]="{ text: 'Blood Pressure' }" [colSpan]="(showReportBeside$ | async) ? 2 : 1">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [width]="40" [value]="bloodPressureSystolic$ | async"></dx-number-box><span
+                        class="dash-style">/</span>
+                    <dx-number-box [width]="40" [value]="bloodPressureDiastolic$ | async"></dx-number-box>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+            <dxi-item [label]="{ text: 'Height' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [width]="70" [(value)]="height" (onValueChanged)="heightChanged()" format="0#.0"></dx-number-box><span class="m-1"
+                        style="margin-right:14px!important;width:16px;">{{heightUnit}}</span>
+                    <div *ngIf="feetEnabled" class="d-flex flex-row">
+                        <dx-number-box [width]="70" [(value)]="inches" (onValueChanged)="heightChanged()" format="0#.0"></dx-number-box><span class="m-1" style="width:10px;">inches</span>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="(showReportBeside$ | async) ? 3 : 2">
+                <div *dxTemplate class="d-flex flex-row">
+                    <div style="width:91px"></div>
+                    <dx-button [text]="heightBtn" class="float-right" (onClick)="enableFeet(height, inches)" [width]="92">
+                    </dx-button>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+
+            <dxi-item [label]="{ text: 'Weight' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate class="d-flex flex-row">
+                    <dx-number-box [width]="70" [(value)]="weight" (onValueChanged)="weightChanged()" format={{formatWeight}}></dx-number-box><span class="m-1"
+                        style="margin-right:14px!important;width:17px;">{{weightUnit}}</span>
+                    <div *ngIf="stoneEnabled" class="d-flex flex-row">
+                        <dx-number-box [width]="70" [(value)]="pounds" (onValueChanged)="weightChanged()" format="0#.0"></dx-number-box><span class="m-1" style="width:10px;">pounds</span>
+                    </div>
+                </div>
+            </dxi-item>
+            <dxi-item [colSpan]="(showReportBeside$ | async) ? 3 : 2">
+                <div *dxTemplate class="d-flex flex-row">
+                    <div style="width:91px"></div>
+                    <dx-button [text]="weightBtn" class="float-right" (onClick)="enableStone(weight, pounds)" [width]="92">
+                    </dx-button>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" >
+            <dxi-item itemType="group" [colSpan]="3" [colCount]="2" cssClass="title">
+                <dxi-item [colSpan]="(showReportBeside$ | async) ? 2 : 1">
+                    <div *dxTemplate class="dx-field-label w-100 font-weight-bold" style="text-align: left">Renal Function
+                    </div>
+                </dxi-item>
+                <dxi-item [label]="{ text: 'Creatinine' }" [colSpan]="2" cssClass="ml-4r">
+                    <div *dxTemplate class="d-flex flex-row">
+                        <hms-number-box [referenceId]="17035" [width]="70" [unit]="'mmol/L'" [includeUnit]="true">
+                        </hms-number-box>
+                    </div>
+                </dxi-item>
+            </dxi-item>
+
+            <dxi-item [itemType]="'empty'" [visible]="(showReportBeside$ | async)" [colSpan]="5">
+            </dxi-item>
+                <dxi-item [label]="{ text: 'eGFR' }" [colSpan]="2" [cssClass]="(showReportBeside$ | async) ? 'ml-4r' : 'ml-3r'">
+                    <div *dxTemplate class="d-flex flex-row">
+                        <!--add a sub unit in there -->
+                        <hms-number-box [referenceId]="17036" [width]="70" [unit]="'mL/min/1.73m'" [sup]="'2'"
+                            [includeUnit]="true">
+                        </hms-number-box>
+                    </div>
+                </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Administered Medications" cssClass=" mt-3">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+
+            <dxi-item cssClass="mt-1" [colSpan]="(showReportBeside$ | async) ? 5 : 3"  editorType="dxRadioGroup" [label]="{text: 'GTN Administered'}">
+                <hms-radio-group [referenceId]="17037" [items]="gtnOptions" [displayEx]="'name'" [valueEx]="'id'"
+                    [layout]="'horizontal'"  ></hms-radio-group>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+ 
+            <dxi-item [label]="{ text: 'Total Oral Metoprolol (mg)' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate>
+                    <hms-select-box [items]="oralMetoprolol" [searchEnabled]="true" [acceptCustomValue]="true" (customVal)="validate($event)" [referenceId]="17038" [width]="100"></hms-select-box>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+            <dxi-item [label]="{ text: 'Total IV Metoprolol (mg)' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate>
+                    <hms-select-box [items]="ivMetoprolol" [searchEnabled]="true" [acceptCustomValue]="true" (customVal)="validate($event)" [referenceId]="17039" [width]="100"></hms-select-box>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+            <dxi-item [label]="{ text: 'Total Ivabradine (mg)' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate>
+                    <hms-select-box [items]="ivabradine" [searchEnabled]="true" [acceptCustomValue]="true" (customVal)="validate($event)" [referenceId]="17040" [width]="100"></hms-select-box>
+                </div>
+            </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+            <dxi-item [label]="{ text: 'Total Oral Verapamil (mg)' }" [colSpan]="(showReportBeside$ | async) ? 5 : 3">
+                <div *dxTemplate>
+                    <hms-number-box [referenceId]="17041" [width]="100"></hms-number-box>
+                </div>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Adverse Events" cssClass="mt-3">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="8" cssClass="ml-4r">
+
+            <dxi-item [colSpan]="(showReportBeside$ | async) ? 5 : 3" [label]="{text: 'Adverse Event while in Cardiac CT'}">
+                <!--<hms-radio-group (toggle)="toggle($event,5)" [referenceId]="17042" [items]="adverseOptions" [displayEx]="'name'" [valueEx]="'id'"
+                    [layout]="'vertical'"  ></hms-radio-group>-->
+                <div class="d-flex flex-column mr-2">
+                    <hms-check-box [referenceId]="17134" [text]="'Hypotension'" ></hms-check-box>
+                    <hms-check-box [referenceId]="17135" [text]="'Anaphylaxis'" ></hms-check-box>
+                    <hms-check-box [referenceId]="17136" [text]="'Rash'" ></hms-check-box>
+                    <hms-check-box [referenceId]="17137" [text]="'Vomiting (expanded)'" ></hms-check-box>
+                </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="3" cssClass="details p12">
+                <dxi-item itemType="group">
+                    <dxi-item [colSpan]="5" [label]="{ text: 'Details'}">
+                        <div *dxTemplate>
+                            <hms-text-area [referenceId]="17126" [height]="'92'"></hms-text-area>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+</dx-form>
+        <!--  // HIDING DETAILS BOX 
+        <dxi-item itemType="group" [colSpan]="5" cssClass="details">
+            <dxi-item itemType="group" [visible]="hiddenField[5]">
+                <dxi-item [colSpan]="5" [label]="{ text: 'Details'}">
+                    <div *dxTemplate>
+                        <hms-text-area [referenceId]="17126" [height]="'115'"></hms-text-area>
+                    </div>was there a reason why your soft deleting grafts? because it would be easier if i only send you whats selected
+                    instead of sending you flagged deleted
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+        -->

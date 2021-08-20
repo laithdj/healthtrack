@@ -1,0 +1,72 @@
+<dx-form *ngIf="selectedProgramDO" [formData]="selectedProgramDO">
+  <dxi-item [itemType]="'empty'"></dxi-item>
+  <dxi-item itemType="group" [caption]="'Booking Types to Complete Cycle'">
+    <dxi-item>
+      <div *dxTemplate style="display: flex;">
+        <div style="padding: 0px 10px 0px 20px; white-space: nowrap;">
+          <dx-radio-group
+            [items]="selectedProgramDO.type === programType.Recall || selectedProgramDO.type === programType.Program
+              || selectedProgramDO.type === programType.General ? bookingToCompleteListWithIgnore : bookingToCompleteList"
+            [displayExpr]="'option'"
+            [disabled]="!editMode"
+            [valueExpr]="'id'"
+            [(value)]="selectedProgramDO.bookingToCompleteType">
+          </dx-radio-group>
+          <div *ngIf="selectedProgramDO.bookingToCompleteType === selectedBookingToComplete" style="margin-top: 10px;">
+            <dx-button text="Select Booking Types" [type]="'default'"
+              [disabled]="!editMode" (onClick)="onClickSelectBookingTypes()">
+            </dx-button>
+          </div>
+        </div>
+        <div *ngIf="selectedProgramDO.bookingToCompleteType === selectedBookingToComplete" >
+          <div style="padding-bottom: 4px; padding-top: 5px;">Selected Booking Types:</div>
+          <span style="padding: 10px 10px 0 0;">{{hint}}</span>
+        </div>
+      </div>
+    </dxi-item>
+  </dxi-item>
+</dx-form>
+<dx-popup class="popup"
+  [height]="numberOfColumns > 1 ? (columnsLength + 1) * 26 + 130 : (sortedBookingTypes.length + 1) * 26  + 130"
+  [width]="columnsWidth > 280 ? columnsWidth : 280"
+  title="Select Booking Type/s"
+  [showTitle]="true"
+  [showCloseButton]="false"
+  [(visible)]="popupSelectBookingTypes">
+  <div [className]="numberOfColumns > 4 ? 'booking-types-content booking-types-content-scrollable' : 'booking-types-content'" *dxTemplate="let data of 'content'">
+    <div *ngFor="let item of sortedBookingTypesColumns" [className]="'booking-types-columns'">
+      <dx-list
+        [dataSource]="item.columnData"
+        [height]="numberOfColumns > 1 ? (columnsLength) * 26 + 10 : (sortedBookingTypes.length) * 26 + 10"
+        [showSelectionControls]="true"
+        keyExpr="bookingType"
+        selectionMode="multiple"
+        (onSelectionChanged)="onBookingTypeChecked($event)"
+        [selectedItemKeys]="selectedBookingTypes">
+        <div *dxTemplate="let bookingType of 'item'">
+          <span>{{bookingType.longName}}</span>
+        </div>
+      </dx-list>
+    </div>
+    <div style="height: 24px; padding-left: 2px;">
+      <span *ngIf="atLeastOneBookingTypeMode && selectedBookingTypes.length === 0" class="warningMessage" >At least one Booking Type must be selected</span>
+    </div>
+    <div style="display: block;">
+      <div style="position: absolute; bottom: 0; left: 0; margin: 0 0 40px 16px;">
+        <dx-button style="margin-right: 10px;" text="Cancel" type="default"
+          (onClick)="onSelectBookingTypesCancel()" [width]="90" [icon]="'arrowleft'">
+        </dx-button>
+        <dx-button style="margin-right: 10px;" [type]="'default'" [text]="'Select All'"
+          [width]="90" (onClick)="onSelectAllBookingTypes($event)">
+        </dx-button>
+        <dx-button [type]="'default'" [text]="'Clear'"
+          [width]="90" (onClick)="onClearAllBookingTypes($event)">
+        </dx-button>
+      </div>
+      <div style="position: absolute; bottom: 0; right: 0; margin: 0 16px 40px 0;">
+        <dx-button [type]="'success'" [text]="'OK'" (onClick)="onSelectBookingTypesOK()" [width]="90"
+          [disabled]="atLeastOneBookingTypeMode && selectedBookingTypes.length === 0" ></dx-button>
+      </div>
+    </div>
+  </div>
+</dx-popup>

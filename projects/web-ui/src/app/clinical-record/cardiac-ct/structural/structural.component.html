@@ -1,0 +1,220 @@
+<dx-form [width]="'100%'" [formData]="structural" [colCount]="2" [ngClass]="(showReportBeside$ | async) ? '' : 'side-padding'">
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" caption="Ventricle" [cssClass]="(showReportBeside$ | async) ? 'list mt-3' : 'mt-3'">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="21" [cssClass]="(showReportBeside$ | async) ? '':'mr-10p-s ml-4-1r'">
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Left Ventricle Size'}">
+                    <hms-radio-group (toggle)="toggle($event,6,17107)" [referenceId]="17107" [items]="sizeOptions"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[6]" cssClass="details">
+                    <dxi-item [label]="{ text: 'Size' }">
+                        <div *dxTemplate>
+                            <hms-number-box [width]="100" [referenceId]="17119"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="21" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'LV Wall Thickness'}">
+                    <hms-radio-group [referenceId]="17850" [items]="LvOptions"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Right Ventricle Size'}">
+                    <hms-radio-group [referenceId]="17851" [items]="sizeOptions"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" cssClass="mt-3" caption="Valves" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="21" [cssClass]="(showReportBeside$ | async) ? '':'mr-10p-s ml-4-1r'">
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Aortic Valve Morphology'}">
+                    <hms-radio-group (toggle)="toggle($event,7,17109)" [referenceId]="17109" [items]="morphOptions"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[7]">
+                    <dxi-item [label]="{ text: 'Size'}">
+                        <div *dxTemplate>
+                            <hms-number-box [width]="100" [referenceId]="17120"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colSpan]="21" [label]="{text: 'Aortic Valve Disease'}">
+                <div class="d-flex flex mr-2">
+                    <hms-check-box [text]="'Calcification'" [referenceId]="17110"></hms-check-box>
+                    <hms-check-box [text]="'Thickening'" class="ml-1" [referenceId]="17129"></hms-check-box>
+                </div>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Aorta Size'}">
+                    <hms-radio-group (toggle)="toggle($event,8,17111)" [referenceId]="17111" [items]="sizeOptions"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[8]">
+                    <dxi-item [label]="{ text: 'Root Dimensions' }">
+                        <div *dxTemplate>
+                            <hms-number-box [width]="100" [referenceId]="17121"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8" cssClass="details mb-11">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details">
+                <dxi-item itemType="group" [visible]="hiddenField[8]">
+                    <dxi-item [label]="{ text: 'Ascending Aorta Dimensions'}">
+                        <div *dxTemplate>
+                            <hms-number-box [referenceId]="17122" [width]="100"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="21" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Mitral Annular Calcification'}">
+                    <hms-radio-group [referenceId]="17112" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+                        [layout]="'horizontal'"   ></hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" cssClass="mt-5" caption="Left Atrium" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="21" [cssClass]="(showReportBeside$ | async) ? '':'mr-10p-s ml-4-1r'">
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Left Atrium Size'}">
+                    <hms-radio-group (toggle)="toggle($event,9,17113)" [referenceId]="17113" [items]="sizeOptions"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'"   >
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[9]">
+                    <dxi-item [label]="{ text: 'LA Dimensions'}">
+                        <div *dxTemplate>
+                            <hms-number-box [width]="100" [referenceId]="17123"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item [colSpan]="21" itemType="group" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Left Atrial Appendage Thrombus'}">
+                    <hms-radio-group [referenceId]="17114" [items]="atrialOptions" [displayEx]="'name'" [valueEx]="'id'"
+                        [layout]="'horizontal'"   ></hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Atrial Septal Defect'}">
+                    <hms-radio-group (toggle)="toggle($event,10,17115)" [referenceId]="17115" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+                        [layout]="'horizontal'"   ></hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[10]">
+                    <dxi-item [label]="{ text: 'ASD Size' }" >
+                        <div *dxTemplate class="d-flex flex-row">
+                                <hms-number-box [width]="100" [includeUnit]="true" [referenceId]="17133" [unit]="'mm'"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="21" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Patent Foramen Ovale'}">
+                    <hms-radio-group [referenceId]="17116" [items]="commonOptions" [displayEx]="'name'" [valueEx]="'id'"
+                        [layout]="'horizontal'"   ></hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" cssClass="mt-5" caption="Pericardium" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="21" [cssClass]="(showReportBeside$ | async) ? '':'mr-10p-s ml-4-1r'">
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width long-text">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Normal Pericardial Contour and No Pericardial Effusion'}">
+                    <hms-radio-group (toggle)="toggle($event,13,17715)" [referenceId]="17715" [items]="commonOptions" [width]="267"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'">
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[13]">
+                    <dxi-item [label]="{ text: 'Details' }">
+                        <div *dxTemplate >
+                            <hms-text-area [referenceId]="17716"></hms-text-area>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+    <dxi-item itemType="group" [colSpan]="2" [colCount]="10" cssClass="mt-5" caption="Non-Cardiac Findings" [cssClass]="(showReportBeside$ | async) ? 'list' : ''">
+        <dxi-item itemType="group" [colSpan]="10" [colCount]="21" [cssClass]="(showReportBeside$ | async) ? '':'mr-10p-s ml-4-1r'">
+            <dxi-item itemType="group" [colSpan]="8" cssClass="radio-width">
+                <dxi-item editorType="dxRadioGroup" [label]="{text: 'Significant Non-Cardiac Findings'}">
+                    <hms-radio-group (toggle)="toggle($event,11,17117,true)" [referenceId]="17117"  [default]="false" [items]="nonCardiac" [width]="267"
+                        [displayEx]="'name'" [valueEx]="'id'" [layout]="'horizontal'"   >
+                    </hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-10">
+                <dxi-item itemType="group" [visible]="hiddenField[11]">
+                    <dxi-item [cssClass]="(showReportBeside$ | async) ? '' : 'findings'" editorType="dxRadioGroup" [label]="{text: 'Lung Nodule'}">
+                        <div *dxTemplate class="d-flex flex-row">
+                        <hms-radio-group [referenceId]="17124" [items]="nonCardiac" [displayEx]="'name'" 
+                            [valueEx]="'id'" [layout]="'horizontal'"   [default]="false"></hms-radio-group>
+                            </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[11]">
+                    <dxi-item [label]="{ text: 'Largest Lung Nodule Size' }">
+                        <div *dxTemplate class="d-flex flex-row">
+                            <hms-number-box [includeUnit]="true" [unit]="'mm'" [referenceId]="17125" [width]="100"></hms-number-box>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8">
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[11]">
+                    <dxi-item [label]="{ text: 'Details' }">
+                        <div *dxTemplate >
+                            <hms-text-area [referenceId]="17717"></hms-text-area>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="8"  cssClass="radio-width">
+                <dxi-item [colSpan]="1" editorType="dxRadioGroup" [label]="{text: 'Significant Abdominal Pathology'}">
+                    <hms-radio-group [referenceId]="17118" [default]="false" [items]="nonCardiac" [displayEx]="'name'" [valueEx]="'id'" [width]="267"
+                        [layout]="'horizontal'"  (toggle)="toggle($event,14,17117,true)" ></hms-radio-group>
+                </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="13" cssClass="details mb-11">
+                <dxi-item itemType="group" [visible]="hiddenField[14]">
+                    <dxi-item [label]="{ text: 'Details' }">
+                        <div *dxTemplate >
+                            <hms-text-area [referenceId]="17718"></hms-text-area>
+                        </div>
+                    </dxi-item>
+                </dxi-item>
+            </dxi-item>
+        </dxi-item>
+    </dxi-item>
+</dx-form>

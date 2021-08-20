@@ -1,0 +1,159 @@
+<dx-popup *ngIf="(selectedSet$ | async)"
+  [(visible)]="showApplyPopup"
+  [showTitle]="true"
+  [width]="444" [height]="'auto'"
+  [title]="'Diary Actions'"
+  (onHiding)="onPopupHiding()"
+  [closeOnOutsideClick]="false">
+  <div *dxTemplate="let data of 'content'" class="hms-popup-content">
+    <dx-form>
+      <dxi-item itemType="tabbed">
+        <dxi-tab [title]="'Apply Templates'" *ngIf="(templates$ | async)?.length > 0">
+          <div>
+            <div>
+              <div>
+                Apply all templates from the {{ (selectedSet$ | async)?.templateSetName }} Set to the Diary for the
+                selected period.
+              </div>
+              <div style="padding-top: 10px;">
+                Any current roster entries in the diary for the selected period for the
+                {{ (selectedSet$ | async)?.templateSetName }} Set will be deleted and recreated.
+              </div>
+              <div style="padding-top: 10px;">
+                Deleted roster entries cannot be recovered.
+              </div>
+            </div>
+            <div style="display: flex; padding: 8px 0px 10px 0px;">
+              <div style="padding-top: 7px;">First Day:</div>
+              <div *ngIf="(selectedSet$ | async)" style="margin-left: 5px;">
+                <div *ngFor="let week of (selectedSet$ | async)?.weeks" style="display: flex; padding-top: 2px;">
+                  <div class="week-lbl">
+                    {{ week }}:
+                  </div>
+                  <div *ngFor="let day of daysInWeek" style="margin-right: 1px; margin-left: 1px">
+                    <dx-button
+                      [width]="34" type="default" [text]="getDayOfWeek(day)"
+                      (onClick)="cycleStartDayChanged(week, day)"
+                      [stylingMode]="(cycleDay === day && cycleWeek === week) ? 'contained' : 'outlined'">
+                    </dx-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <dx-form [width]="'100%'" [colCount]="2">
+              <dxi-item [label]="{ text: 'From' }">
+                <div *dxTemplate>
+                  <dx-date-box type="date" [width]="'100%'"
+                    [(value)]="applyFromDate" [useMaskBehavior]="true"
+                    [valueChangeEvent]="'change keyup'"
+                    [dateOutOfRangeMessage]="''"
+                    (onValueChanged)="applyDateChanged($event)">
+                  </dx-date-box>
+                </div>
+              </dxi-item>
+              <dxi-item [label]="{ text: 'To' }">
+                <div *dxTemplate>
+                  <dx-date-box type="date" [width]="'100%'"
+                    [min]="applyFromDate" [(value)]="applyToDate"
+                    [valueChangeEvent]="'change keyup'"
+                    [dateOutOfRangeMessage]="''"
+                    [useMaskBehavior]="true">
+                  </dx-date-box>
+                </div>
+              </dxi-item>
+            </dx-form>
+            <div style="display:flex; padding-top: 5px">
+              <dx-check-box [(value)]="includePublicHolidays"></dx-check-box>
+                <div style="padding-top: -1px; padding-left: 5px">Apply on Public Holidays</div>
+            </div>
+            <div style="display: flex; padding-top: 10px">
+              <hms-button-close (closeClicked)="onCloseClicked()"></hms-button-close>
+              <div style="width: 100%"></div>
+              <div style="width: auto">
+                <dx-button [text]="'Apply'" type="success"
+                  [width]="90" (onClick)="onApplyClicked()">
+                </dx-button>
+              </div>
+            </div>
+          </div>
+        </dxi-tab>
+        <dxi-tab [title]="'Delete'">
+          <div>
+            <div>
+              Delete any current roster entries in the diary for the selected period for the
+              {{ (selectedSet$ | async)?.templateSetName }} Set.
+            </div>
+            <div style="padding-top: 10px;">
+              Deleted roster entries cannot be recovered.
+            </div>
+            <dx-form [width]="'100%'" [colCount]="2" style="padding-top: 10px">
+              <dxi-item [label]="{ text: 'From' }">
+                <div *dxTemplate>
+                  <dx-date-box type="date" [width]="'100%'" [(value)]="deleteFromDate"
+                    [valueChangeEvent]="'change keyup'" [dateOutOfRangeMessage]="''"
+                    (onValueChanged)="deleteDateChanged($event)" [useMaskBehavior]="true">
+                  </dx-date-box>
+                </div>
+              </dxi-item>
+              <dxi-item [label]="{ text: 'To' }">
+                <div *dxTemplate>
+                  <dx-date-box type="date" [width]="'100%'" [dateOutOfRangeMessage]="''"
+                    [valueChangeEvent]="'change keyup'" [min]="deleteFromDate"
+                    [(value)]="deleteToDate" [useMaskBehavior]="true">
+                  </dx-date-box>
+                </div>
+              </dxi-item>
+            </dx-form>
+            <div style="display: flex; padding-top: 10px">
+              <hms-button-close (closeClicked)="onCloseClicked()"></hms-button-close>
+              <div style="width: 100%"></div>
+              <div style="width: auto">
+                <dx-button [text]="'Delete'" type="danger"
+                  [width]="90" (onClick)="onDeleteClicked(false)">
+                </dx-button>
+              </div>
+            </div>
+          </div>
+        </dxi-tab>
+        <dxi-tab [title]="'Power Delete'">
+          <div>
+            <div>
+              Delete <span style="font-weight: bold">ALL</span> current roster entries in the diary for
+              the selected period.
+            </div>
+            <div style="padding-top: 10px;">
+              Deleted roster entries cannot be recovered.
+            </div>
+            <dx-form [width]="'100%'" [colCount]="2" style="padding-top: 10px">
+              <dxi-item [label]="{ text: 'From' }">
+                <div *dxTemplate>
+                  <dx-date-box type="date" [width]="'100%'" [(value)]="deleteFromDate"
+                    [valueChangeEvent]="'change keyup'" [dateOutOfRangeMessage]="''"
+                    [useMaskBehavior]="true" (onValueChanged)="deleteDateChanged($event)">
+                  </dx-date-box>
+                </div>
+              </dxi-item>
+              <dxi-item [label]="{ text: 'To' }">
+                <div *dxTemplate>
+                  <dx-date-box type="date" [width]="'100%'" [dateOutOfRangeMessage]="''"
+                    [valueChangeEvent]="'change keyup'" [min]="deleteFromDate"
+                    [(value)]="deleteToDate" [useMaskBehavior]="true">
+                  </dx-date-box>
+                </div>
+              </dxi-item>
+            </dx-form>
+            <div style="display: flex; padding-top: 10px">
+              <hms-button-close (closeClicked)="onCloseClicked()"></hms-button-close>
+              <div style="width: 100%"></div>
+              <div style="width: auto">
+                <dx-button [text]="'Delete'" type="danger"
+                  [width]="90" (onClick)="onDeleteClicked(true)">
+                </dx-button>
+              </div>
+            </div>
+          </div>
+        </dxi-tab>
+      </dxi-item>
+    </dx-form>
+  </div>
+</dx-popup>

@@ -1,0 +1,77 @@
+<div class="background">
+    <div style="padding:10px;height: 37%;text-align: center;">
+        <form action="your-action">
+            <div class="dx-fieldset">
+                <div class="dx-fieldset-header">Patient Details</div>
+                <div class="dx-field">
+                    <div class="dx-field-label">First Name:</div>
+                    <div class="dx-field-value">
+                        <dx-text-box [readOnly]="token">
+                        </dx-text-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Last Name:</div>
+                    <div class="dx-field-value">
+                        <dx-text-box>
+                        </dx-text-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Date of Birth:</div>
+                    <div class="dx-field-value">
+                        <dx-date-box>
+                        </dx-date-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Mobile:</div>
+                    <div class="dx-field-value">
+                        <dx-text-box [readOnly]="token" mask="+61 (X) 0000-0000" [maskRules]="phoneRules"
+                            maskInvalidMessage="The phone must have a correct Australian phone format"
+                            [useMaskedValue]="true">
+                        </dx-text-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="dx-field-label">Medicare No.:</div>
+                    <div class="dx-field-value" style="display:flex">
+                        <dx-text-box [maxLength]="10" [width]="'173px'" [readOnly]="medDisabled">
+                        </dx-text-box>
+                        <div class="w-100 dx-field-label">Reference No.</div>
+                        <dx-text-box [maxLength]="2" [width]="'76px'" [readOnly]="medDisabled">
+                        </dx-text-box>
+                    </div>
+                </div>
+                <div class="dx-field">
+                    <div class="checkbox float-left">
+                        <dx-check-box [(value)]="medCheck" (onValueChanged)="medFieldChange()" [readOnly]="token"
+                            text="I do not have a Medicare card">
+                        </dx-check-box>
+                    </div>
+                </div>
+                <div class="dx-field" style="height: 50px;">
+                    <div class="dx-field-label"></div>
+                    <div class="dx-field-value" style="display:flex">
+                        <div style="position: relative;right: 6px;">
+                            <dx-file-uploader #referralBtn selectButtonText="Upload Referral" labelText=""
+                                [width]="'120px'" accept="image/*" uploadMode="useForm">
+                            </dx-file-uploader>
+                        </div>
+                        <div class="mt-2">
+                            <dx-check-box [(value)]="referral" (onValueChanged)="referralChange($event)"
+                                [readOnly]="token" text="I do not have a Referral">
+                            </dx-check-box>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="dx-fieldset w-100 bottom-buttons">
+      <div class="mid-w"></div>
+      <dx-button id="button" text="Next" class="submit dx-field-btn" [width]="150" type="default" (onClick)="next()"
+        [useSubmitBehavior]="true">
+      </dx-button>
+    </div>
+</div>
